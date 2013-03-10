@@ -1,4 +1,10 @@
-wallbreaker
+Wallbreaker
 ===========
 
-Breakout clone written in C++ and SFML 2
+Wallbreaker is a clone of the famous Breakout/Arkanoid games, written in C++/SFML 2.
+
+
+How to play?
+------------
+
+Move your mouse to catch the ball.
