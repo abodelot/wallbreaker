@@ -302,16 +302,16 @@ bool Wallbreaker::loadNextLevel()
 		printf("%02d. ", i);
 		for (int j = 0; j < m_brick_cols && j < length; ++j)
 		{
+			Brick& brick = m_bricks[i][j];
 			// Set brick type
 			int type = line[j];
-			m_bricks[i][j].setType(type);
+			brick.setType(type);
 			if (type != BRICK_NONE && type != BRICK_UNBREAKABLE)
 				++m_nb_active_bricks;
 			// Reset brick position and rotation
-			float y = i * Brick::HEIGHT;
-			float x = j * Brick::WIDTH;
-			m_bricks[i][j].setPosition(x, y);
-			m_bricks[i][j].setRotation(0);
+			brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
+			brick.setRotation(0);
+			brick.setScale(1, 1);
 			printf("%c", line[j]);
 		}
 		puts("");

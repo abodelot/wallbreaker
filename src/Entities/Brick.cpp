@@ -14,8 +14,8 @@ Brick::Brick():
 	setTexture(Resources::getTexture("bricks.png"));
 	setParticleCount(20);
 	Emitter::m_type = Emitter::TRAIL;
-	Emitter::m_speed = 30;
-	Emitter::m_speed_variation = 10;
+	Emitter::m_speed = 15;
+	Emitter::m_speed_variation = 5;
 	Emitter::m_angle = 0.f;
 	Emitter::m_angle_variation = 2 * math::PI;
 	Emitter::m_time_to_live = 5.f;
@@ -52,7 +52,7 @@ bool Brick::isActive() const
 }
 
 
-void Brick::takeDamage(bool force_destruction)
+bool Brick::takeDamage(bool force_destruction)
 {
 	switch (m_type)
 	{
@@ -66,19 +66,15 @@ void Brick::takeDamage(bool force_destruction)
 			break;
 		default:
 			m_broken = true;
+			Easing::move(*this, {getPosition().x, getPosition().y + math::rand(20, 40)}, 1);
+			Easing::fadeOut(*this, 1);
+			Easing::rotate(*this, math::rand(-60, 60), 1);
+			Easing::scale(*this, 1, 0.5, 1);
 			SoundSystem::playSound("brick-destroyed.ogg");
 			launchParticles();
 			break;
 	}
-
-	if (m_broken)
-	{
-		sf::Vector2f to(getPosition());
-		to.y += 20;
-		Easing::move(*this, getPosition(), to, 1);
-		Easing::fadeOut(*this, 1);
-		Easing::rotate(*this, math::rand(-60, 60), 1);
-	}
+	return m_broken;
 }
 
 

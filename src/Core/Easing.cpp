@@ -22,30 +22,31 @@ void Easing::scaleAndReset(sf::Sprite& target, float from, float to, float durat
 }
 
 
-void Easing::move(sf::Sprite& target, const sf::Vector2f& from, const sf::Vector2f to, float duration)
+void Easing::move(sf::Sprite& target, const sf::Vector2f& pos, float duration)
 {
 	Object::Data data;
-	data.move.from_x = from.x;
-	data.move.from_y = from.y;
-	data.move.to_x = to.x;
-	data.move.to_y = to.y;
+	data.move.from_x = target.getPosition().x;
+	data.move.from_y = target.getPosition().y;
+	data.move.to_x = pos.x;
+	data.move.to_y = pos.y;
 
-	data.move.speed_x = (to.x - from.x) / duration;
-	data.move.speed_y = (to.y - from.y) / duration;
+	data.move.speed_x = (pos.x - data.move.from_x) / duration;
+	data.move.speed_y = (pos.y - data.move.from_y) / duration;
 	pushObject(data, MOVE, target, duration);
 }
 
 
-void Easing::moveAndReset(sf::Sprite& target, const sf::Vector2f& from, const sf::Vector2f to, float duration)
+void Easing::moveAndReset(sf::Sprite& target, const sf::Vector2f& pos, float duration)
 {
 	Object::Data data;
-	data.move.from_x = from.x;
-	data.move.from_y = from.y;
-	data.move.to_x = to.x;
-	data.move.to_y = to.y;
+	data.move.from_x = target.getPosition().x;
+	data.move.from_y = target.getPosition().y;
+	data.move.to_x = pos.x;
+	data.move.to_y = pos.y;
 
-	data.move.speed_x = (to.x - from.x) / duration;
-	data.move.speed_y = (to.y - from.y) / duration;
+	data.move.speed_x = (pos.x - data.move.from_x) / duration;
+	data.move.speed_y = (pos.y - data.move.from_y) / duration;
+	pushObject(data, MOVE, target, duration);
 	pushObject(data, MOVE_AND_RESET, target, duration);
 }
 
@@ -85,9 +86,9 @@ void Easing::update(float frametime)
 				break;
 				case MOVE_AND_RESET:
 				{
-					sf::Vector2f from(it->data.move.to_x, it->data.move.to_y);
-					sf::Vector2f to(it->data.move.from_x, it->data.move.from_y);
-					Easing::move(*it->target, from, to, it->duration);
+					it->target->setPosition(it->data.move.to_x, it->data.move.to_y);
+					sf::Vector2f pos(it->data.move.from_x, it->data.move.from_y);
+					Easing::move(*it->target, pos, it->duration);
 				}
 				break;
 

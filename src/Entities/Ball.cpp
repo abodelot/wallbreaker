@@ -10,13 +10,14 @@
 #define MAX_ANGLE 45
 
 
-int Ball::m_instance_count = 0;
+int Ball::s_instance_count = 0;
 
 Ball::Ball():
-	m_angle(math::PI / 2)
+	m_angle(math::PI / 2),
+	m_velocity(140)
 {
 	setTexture(Resources::getTexture("ball.png"));
-	++m_instance_count;
+	++s_instance_count;
 
 	setParticleCount(100);
 	Emitter::m_color = sf::Color::Red;
@@ -32,13 +33,13 @@ Ball::Ball():
 Ball::~Ball()
 {
 	Emitter::clearParticles();
-	--m_instance_count;
+	--s_instance_count;
 }
 
 
 void Ball::onUpdate(float frametime)
 {
-	float delta = 200 * frametime;
+	float delta = m_velocity * frametime;
 	move(delta * std::cos(m_angle), -delta * std::sin(m_angle));
 }
 
@@ -49,7 +50,6 @@ void Ball::onWallHit()
 	ParticleSystem::Emitter::m_angle = m_angle;
 	//spawn();
 	SoundSystem::playSound("wall.ogg");
-	//Easing::scaleAndReset(*this, 1, 2, 0.2);
 }
 
 
@@ -65,7 +65,8 @@ void Ball::onCeilHit()
 
 void Ball::onBrickHit(Brick& brick)
 {
-	brick.takeDamage();
+	if (brick.takeDamage())
+		m_velocity += 5;
 }
 
 

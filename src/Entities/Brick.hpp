@@ -32,7 +32,7 @@ public:
 	// override
 	sf::Vector2f getSpawnPosition() const;
 
-	void takeDamage(bool force_destruction=false);
+	bool takeDamage(bool force_destruction=false);
 
 private:
 	sf::Color getBaseColor() const;

@@ -10,8 +10,8 @@ public:
 	static void scale(sf::Sprite& target, float from, float to, float duration);
 	static void scaleAndReset(sf::Sprite& target, float from, float to, float duration);
 
-	static void move(sf::Sprite& target, const sf::Vector2f& from, const sf::Vector2f to, float duration);
-	static void moveAndReset(sf::Sprite& target, const sf::Vector2f& from, const sf::Vector2f to, float duration);
+	static void move(sf::Sprite& target, const sf::Vector2f& pos, float duration);
+	static void moveAndReset(sf::Sprite& target, const sf::Vector2f& pos, float duration);
 
 	static void rotate(sf::Sprite& target, float to_angle, float duration);
 

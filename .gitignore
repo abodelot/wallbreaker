@@ -1,3 +1,6 @@
+# Executable
+bin/wallbreaker
+
 # Compiled Object files
 *.slo
 *.lo

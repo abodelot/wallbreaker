@@ -11,7 +11,7 @@ public:
 	Ball();
 	~Ball();
 
-	static int getCount() { return m_instance_count; };
+	static int getCount() { return s_instance_count; };
 
 	// callbacks ---------------------------------------------------------------
 
@@ -33,7 +33,8 @@ public:
 
 private:
 	float m_angle;
-	static int m_instance_count;
+	float m_velocity;
+	static int s_instance_count;
 };
 
 #endif // BALL_HPP
