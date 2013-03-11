@@ -10,10 +10,11 @@
 #define APP_NAME     "Wallbreaker"
 #define APP_VERSION  "0.2"
 
-#define ABOUT_TEXT (APP_NAME " v" APP_VERSION " - Made by " APP_AUTHOR " - Powered with SFML")
+#define ABOUT_TEXT (APP_NAME " v" APP_VERSION " - Author: " APP_AUTHOR " - Powered by SFML")
 
 MainMenu::MainMenu():
-	m_about_text(gui::Theme::getFont())
+	m_about_text(gui::Theme::getFont()),
+	m_menu(Game::getInstance().getWindow())
 {
 	const sf::Texture& t = Resources::getTexture("title.png");
 	m_title.setTexture(t);
@@ -26,7 +27,7 @@ MainMenu::MainMenu():
 	m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
 //	m_view = sf::View(sf::FloatRect(0, 0, 640, 480));
 
-	m_menu.setPosition(120, 80);
+	m_menu.setPosition(80, 80);
 	m_menu.addButton("New game", 1);
 	m_menu.addButton("Editor", 2);
 	m_menu.addButton("Quit",  3);
@@ -79,8 +80,7 @@ void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	target.draw(m_about_text);
 
-
-	target.draw(m_menu);
+	m_menu.draw();
 }
 
 

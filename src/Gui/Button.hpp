@@ -3,21 +3,19 @@
 
 #include "BitmapText.hpp"
 
-class Button: public sf::Drawable
+class Button: public sf::Drawable, public sf::Transformable
 {
 public:
 	Button(const sf::String& string, int id = -1);
 
-	const sf::Vector2f& getPosition() const;
-	float getX() const { return m_box.getPosition().x; }
-	float getY() const { return m_box.getPosition().y; }
-	void setPosition(const sf::Vector2f& position);
+	float getX() const { return getPosition().x; }
+	float getY() const { return getPosition().y; }
 
 	const sf::Vector2f& getSize() const;
 
 	void setText(const sf::String& string);
 
-	bool containsPoint(float x, float y) const;
+	bool containsPoint(const sf::Vector2f& point) const;
 
 	int getID() const;
 
@@ -30,7 +28,7 @@ private:
 
 	sf::RectangleShape m_box;
 	BitmapText         m_text;
-	int        m_type;
+	int                m_id;
 };
 
 #endif // GUI_BUTTON_HPP

@@ -5,10 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include "Button.hpp"
 
-class Menu: public sf::Drawable
+class Menu
 {
 public:
-	Menu();
+	Menu(sf::RenderTarget& window);
 	~Menu();
 
 	bool onEvent(const sf::Event& event, int& id);
@@ -17,14 +17,15 @@ public:
 
 	void setPosition(float x, float y);
 
-private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw() const;
 
+private:
 	typedef std::vector<Button*> WidgetVector;
 
-	WidgetVector m_widgets;
-	Button*      m_hover;
-	sf::Vector2f m_position;
+	sf::RenderTarget& m_window;
+	WidgetVector      m_widgets;
+	Button*           m_hover;
+	sf::Vector2f      m_position;
 };
 
 #endif // GUI_MENU_HPP

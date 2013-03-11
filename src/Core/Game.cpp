@@ -20,7 +20,6 @@ Game::Game():
 	setResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
 	//setResolution(APP_WIDTH * 3, APP_HEIGHT * 3);
 	m_app.setFramerateLimit(120);
-	//m_app.setMouseCursorVisible(false);
 }
 
 

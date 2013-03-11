@@ -1,7 +1,8 @@
 #include "Menu.hpp"
 
 
-Menu::Menu():
+Menu::Menu(sf::RenderTarget& window):
+	m_window(window),
 	m_hover(NULL)
 {
 }
@@ -24,7 +25,10 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 		for (WidgetVector::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
 		{
 			Button* button = *it;
-			if (button->containsPoint(event.mouseMove.x - button->getX(), event.mouseMove.y - button->getY()))
+			// Convert mouse position to widget coordinates system
+			sf::Vector2f mouse = m_window.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
+			mouse -= button->getPosition();
+			if (button->containsPoint(mouse))
 			{
 				if (m_hover != button)
 				{
@@ -47,10 +51,15 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 	case sf::Event::MouseButtonPressed:
 		break;
 	case sf::Event::MouseButtonReleased:
-		if (m_hover != NULL && m_hover->containsPoint(event.mouseButton.x - m_hover->getX(), event.mouseButton.y - m_hover->getY()))
+		if (m_hover != NULL)
 		{
-			id = m_hover->getID();
-			return true;
+			sf::Vector2f mouse = m_window.mapPixelToCoords({event.mouseButton.x, event.mouseButton.y});
+			mouse -= m_hover->getPosition();
+			if (m_hover->containsPoint(mouse))
+			{
+				id = m_hover->getID();
+				return true;
+			}
 		}
 		break;
 	default:
@@ -65,6 +74,7 @@ void Menu::setPosition(float x, float y)
 	m_position.x = x;
 	m_position.y = y;
 }
+
 
 void Menu::addButton(const sf::String& string, int id)
 {
@@ -85,11 +95,11 @@ void Menu::addButton(const sf::String& string, int id)
 }
 
 
-void Menu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Menu::draw() const
 {
 	for (WidgetVector::const_iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
 	{
 		const Button& button = **it;
-		target.draw(button, states);
+		m_window.draw(button);
 	}
 }
