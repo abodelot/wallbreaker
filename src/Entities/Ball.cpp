@@ -47,19 +47,14 @@ void Ball::onUpdate(float frametime)
 void Ball::onWallHit()
 {
 	m_angle = math::PI - m_angle;
-	SoundSystem::playSound("wall.ogg");
-	//ParticleSystem::Emitter::m_angle = m_angle;
-	//spawn();
+	SoundSystem::playSound("ball.ogg", 0.8f);
 }
 
 
 void Ball::onCeilHit()
 {
 	m_angle = -m_angle;
-	SoundSystem::playSound("wall.ogg");
-	//ParticleSystem::Emitter::m_angle = m_angle;
-	//spawn();
-	//Easing::scaleAndReset(*this, 1, 2, 0.2);
+	SoundSystem::playSound("ball.ogg", 0.6f);
 }
 
 
@@ -73,9 +68,9 @@ void Ball::onBrickHit(Brick& brick)
 	brick_rect.intersects(getCollisionRect(), intersection);
 
 	if (intersection.height > intersection.width)
-		onWallHit();
+		m_angle = math::PI - m_angle;
 	else
-		onCeilHit();
+		m_angle = -m_angle;
 }
 
 
@@ -86,10 +81,7 @@ void Ball::onCollide(const PlayerPad& pad)
 	float angle_diff = (range * x / (float) pad.getWidth()) - PAD_ANGLE;
 
 	m_angle = math::to_rad(90 - angle_diff);
-	//ParticleSystem::Emitter::m_angle = m_angle;
-	//spawn();
-	SoundSystem::playSound("pad.ogg");
-	//Easing::scaleAndReset(*this, 1, 2, 0.2);
+	SoundSystem::playSound("ball.ogg", 0.4f);
 }
 
 

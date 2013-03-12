@@ -54,6 +54,10 @@ bool Brick::isActive() const
 
 bool Brick::takeDamage(bool force_destruction)
 {
+	// The higher the ID, the higher the pitch
+	float pitch = 1.f + (float)(m_type - BRICK_START) / 8;
+	SoundSystem::playSound("ball.ogg", pitch);
+
 	switch (m_type)
 	{
 		case BRICK_UNBREAKABLE:
@@ -69,8 +73,7 @@ bool Brick::takeDamage(bool force_destruction)
 			Easing::move(*this, {getPosition().x, getPosition().y + math::rand(20, 40)}, 1);
 			Easing::fadeOut(*this, 1);
 			Easing::rotate(*this, math::rand(-60, 60), 1);
-			Easing::scale(*this, 1, 0.5, 1);
-			SoundSystem::playSound("brick-destroyed.ogg");
+			Easing::scale(*this, 1, 2, 1);
 			launchParticles();
 			break;
 	}

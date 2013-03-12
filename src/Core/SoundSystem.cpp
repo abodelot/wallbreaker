@@ -66,7 +66,7 @@ void SoundSystem::pauseMusic()
 }
 
 
-void SoundSystem::playSound(const std::string& sound_name)
+void SoundSystem::playSound(const std::string& sound_name, float pitch)
 {
 	if (m_enable_sound)
 	{
@@ -80,6 +80,7 @@ void SoundSystem::playSound(const std::string& sound_name)
 			sound.stop();
 		}
 		sound.setBuffer(Resources::getSoundBuffer(sound_name));
+		sound.setPitch(pitch);
 		sound.play();
 		++m_last_sound_played;
 	}

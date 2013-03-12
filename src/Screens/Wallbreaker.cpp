@@ -266,7 +266,7 @@ void Wallbreaker::updateEntities(float frametime)
 			if (Ball::getCount() == 0)
 			{
 				HUD::getInstance().setLiveCount(--m_player_lives);
-				SoundSystem::playSound("ball-lost.ogg");
+				SoundSystem::playSound("life-lost.ogg");
 				setStatus(m_player_lives == 0 ? GAME_OVER : READY);
 				break;
 			}
