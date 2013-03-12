@@ -16,7 +16,7 @@ bool Entity::collidesWith(const Entity& other) const
 }
 
 
-sf::IntRect Entity::getSurface() const
+sf::IntRect Entity::getCollisionRect() const
 {
 	sf::IntRect rect = getTextureRect();
 	rect.left = getPosition().x;

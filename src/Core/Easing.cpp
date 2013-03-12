@@ -83,15 +83,14 @@ void Easing::update(float frametime)
 			{
 				case SCALE_AND_RESET:
 					Easing::scale(*it->target, it->data.scale.to, it->data.scale.from, it->duration);
-				break;
+					break;
 				case MOVE_AND_RESET:
 				{
 					it->target->setPosition(it->data.move.to_x, it->data.move.to_y);
 					sf::Vector2f pos(it->data.move.from_x, it->data.move.from_y);
 					Easing::move(*it->target, pos, it->duration);
+					break;
 				}
-				break;
-
 				// When effect ends, make sure to stop at the actual value
 				case FADE_IN:
 					it->target->setColor({255, 255, 255, 255});
@@ -101,6 +100,8 @@ void Easing::update(float frametime)
 					break;
 				case ROTATE:
 					it->target->setRotation(it->data.rotate.angle);
+					break;
+				default:
 					break;
 			}
 			it = m_objects.erase(it);
@@ -115,34 +116,33 @@ void Easing::update(float frametime)
 					Object::Data::Scale& s = it->data.scale;
 					float new_scale = elapsed * (s.to - s.from) / it->duration + s.from;
 					it->target->setScale(new_scale, new_scale);
+					break;
 				}
-				break;
 				case MOVE:
 				case MOVE_AND_RESET:
 				{
 					Object::Data::Move& move = it->data.move;
 					it->target->move(move.speed_x * frametime, move.speed_y * frametime);
+					break;
 				}
-				break;
 				case FADE_IN:
 				{
 					sf::Uint8 delta = elapsed * 255 / it->duration;
 					it->target->setColor(sf::Color(255, 255, 255, delta));
+					break;
 				}
-				break;
 				case FADE_OUT:
 				{
 					sf::Uint8 delta = elapsed * 255 / it->duration;
 					it->target->setColor(sf::Color(255, 255, 255, 255 - delta));
+					break;
 				}
-				break;
 				case ROTATE:
 				{
 					float delta = elapsed * it->data.rotate.angle / it->duration;
 					it->target->setRotation(delta);
+					break;
 				}
-				break;
-
 			}
 			++it;
 		}

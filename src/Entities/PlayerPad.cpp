@@ -15,13 +15,9 @@ PlayerPad::PlayerPad()
 
 void PlayerPad::onUpdate(float frametime)
 {
-
 	const sf::RenderWindow& window = Game::getInstance().getWindow();
-
 	int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
 	setPosition(x - getWidth() / 2, getPosition().y);
-
-
 }
 
 

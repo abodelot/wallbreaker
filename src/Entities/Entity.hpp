@@ -20,9 +20,6 @@ public:
 
 	virtual void onUpdate(float frametime) = 0;
 
-	virtual void resolveCollision(Entity&) const {}
-
-	virtual void onCollide(const Ball&) {}
 	virtual void onCollide(const PlayerPad&) {}
 
 	bool collidesWith(const Entity& other) const;
@@ -33,7 +30,7 @@ public:
 
 	virtual void onWallHit() {}
 
-	sf::IntRect getSurface() const;
+	sf::IntRect getCollisionRect() const;
 
 	// position helpers --------------------------------------------------------
 

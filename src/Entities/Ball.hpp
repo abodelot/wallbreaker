@@ -19,8 +19,6 @@ public:
 
 	void onBrickHit(Brick& brick);
 
-	void resolveCollision(Entity& entity) const { entity.onCollide(*this); }
-
 	void onCollide(const PlayerPad& pad);
 
 	void onWallHit();
@@ -28,7 +26,6 @@ public:
 	void onCeilHit();
 
 
-	float getAngle() const { return m_angle; }
 	sf::Vector2f getSpawnPosition() const;
 
 private:

@@ -10,10 +10,8 @@
 #include "Core/HUD.hpp"
 #include "Gui/Theme.hpp"
 
-#define POWER_UP_RATIO 70
-#define COMBO_DELAY 0.5
 
-#define BORDER_SIZE 10 // frame around the playground
+#define BORDER_SIZE 10 // frame around the playground (game_texture)
 
 
 Wallbreaker::Wallbreaker():
@@ -21,15 +19,15 @@ Wallbreaker::Wallbreaker():
 	m_status(READY),
 	m_player_lives(5),
 	m_current_level(0),
-	m_particles(ParticleSystem::instance()),
-	m_info_text(gui::Theme::getFont())
+	m_info_text(gui::Theme::getFont()),
+	m_particles(ParticleSystem::instance())
 {
 	sf::Texture& texture = Resources::getTexture("background-blue.gif");
 	texture.setRepeated(true);
 	m_background.setTexture(texture);
 	m_background.setTextureRect(sf::IntRect(0, 0, APP_WIDTH, APP_HEIGHT));
 
-	// Initialize render textures
+	// Initialize render texture
 	m_game_texture.create(m_width, m_height);
 
 	m_hud.setTexture(HUD::getInstance().getTexture());
@@ -125,9 +123,9 @@ void Wallbreaker::update(float frametime)
 
 	// Update player pad and make sure it remains inside bounds
 	m_player_pad.onUpdate(frametime);
-	if (m_player_pad.getPosition().x < 0)
+	if (m_player_pad.getX() < 0)
 		m_player_pad.setX(0);
-	else if (m_player_pad.getPosition().x + m_player_pad.getWidth() > m_width)
+	else if (m_player_pad.getX() + m_player_pad.getWidth() > m_width)
 		m_player_pad.setX(m_width - m_player_pad.getWidth());
 
 	switch (m_status)
@@ -135,85 +133,16 @@ void Wallbreaker::update(float frametime)
 		case READY:
 		{
 			Entity* ball = m_entities.front();
-			// Keep the ball on the player pad
-			ball->setPosition(m_player_pad.getPosition().x + (m_player_pad.getWidth() - ball->getWidth()) / 2,
+			// Keep the ball centered on the player pad
+			ball->setPosition(m_player_pad.getX() + (m_player_pad.getWidth() - ball->getWidth()) / 2,
 				              m_height - m_player_pad.getHeight() - ball->getHeight());
-		}
-
 			break;
-		case PLAYING:
-		{
-			// Update entities
-			for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
-			{
-				Entity& entity = **it;
-				if (entity.isAlive())
-				{
-					sf::Vector2f previous_pos = entity.getPosition();
-					entity.onUpdate(frametime);
-
-
-					// Check if entity is still inside the bounds
-					if (entity.getPosition().y < 0)
-					{
-						entity.onCeilHit();
-						entity.setY(0);
-					}
-					else if (entity.getPosition().x < 0)
-					{
-						entity.onWallHit();
-						entity.setX(0);
-					}
-					else if (entity.getPosition().x + entity.getWidth() > m_width)
-					{
-						entity.onWallHit();
-						entity.setX(m_width - entity.getWidth());
-					}
-					else if (entity.getPosition().y + entity.getHeight() > m_height)
-					{
-						entity.kill();
-					}
-					// Check if ball collides with player pad
-					else if (entity.collidesWith(m_player_pad))
-					{
-						entity.onCollide(m_player_pad);
-						entity.setY(m_height - m_player_pad.getHeight() - entity.getHeight());
-					}
-					// Check if ball collides with brick
-					else if (getCollidingBrick(entity) != NULL)
-					{
-						entity.setPosition(previous_pos);
-						if (m_nb_active_bricks == 0)
-						{
-							if (loadNextLevel())
-							{
-								setStatus(READY);
-							}
-							else
-							{
-								setStatus(GAME_OVER);
-							}
-							break;
-						}
-					}
-					++it;
-				}
-				else
-				{
-					delete *it;
-					it = m_entities.erase(it);
-					if (Ball::getCount() == 0)
-					{
-						HUD::getInstance().setLiveCount(--m_player_lives);
-						SoundSystem::playSound("ball-lost.ogg");
-						setStatus(m_player_lives == 0 ? GAME_OVER : READY);
-						break;
-					}
-				}
-			}
 		}
-
-		break;
+		case PLAYING:
+			updateEntities(frametime);
+			break;
+		default:
+			break;
 	}
 
 	m_particles.update(frametime);
@@ -263,6 +192,104 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_hud);
 }
 
+
+void Wallbreaker::updateEntities(float frametime)
+{
+	// For each entity
+	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
+	{
+		Entity& entity = **it;
+		if (entity.isAlive())
+		{
+			sf::Vector2f previous_entity_pos = entity.getPosition();
+			entity.onUpdate(frametime);
+
+			// Ensure entity doesn't go beyond the walls
+			if (entity.getY() < 0)
+			{
+				entity.onCeilHit();
+				entity.setY(0);
+			}
+			else if (entity.getPosition().x < 0)
+			{
+				entity.onWallHit();
+				entity.setX(0);
+			}
+			else if (entity.getX() + entity.getWidth() > m_width)
+			{
+				entity.onWallHit();
+				entity.setX(m_width - entity.getWidth());
+			}
+			// Kill entities if they go beyond the bottom line
+			else if (entity.getY() + entity.getHeight() > m_height)
+			{
+				entity.kill();
+			}
+			// Check if entity collides with player pad
+			else if (entity.collidesWith(m_player_pad))
+			{
+				entity.onCollide(m_player_pad);
+				entity.setY(m_height - m_player_pad.getHeight() - entity.getHeight());
+			}
+			// Check if entity is colliding with a brick
+			else
+			{
+				// Get corners
+				int left =   (int) entity.getX() / Brick::WIDTH;
+				int top =    (int) entity.getY() / Brick::HEIGHT;
+				int right =  (int) (entity.getX() + entity.getWidth() - 1)  / Brick::WIDTH;
+				int bottom = (int) (entity.getY() + entity.getHeight() - 1) / Brick::HEIGHT;
+
+				if (checkBrick(entity, top, left)
+				 || checkBrick(entity, top, right)
+				 || checkBrick(entity, bottom, left)
+				 || checkBrick(entity, bottom, right))
+				{
+					entity.setPosition(previous_entity_pos);
+					if (m_nb_active_bricks == 0)
+					{
+						if (loadNextLevel())
+							setStatus(READY);
+						else
+							setStatus(GAME_OVER);
+						break;
+					}
+				}
+			}
+			++it;
+		}
+		else
+		{
+			// Remove dead entity from entity list
+			delete *it;
+			it = m_entities.erase(it);
+			if (Ball::getCount() == 0)
+			{
+				HUD::getInstance().setLiveCount(--m_player_lives);
+				SoundSystem::playSound("ball-lost.ogg");
+				setStatus(m_player_lives == 0 ? GAME_OVER : READY);
+				break;
+			}
+		}
+	}
+}
+
+
+bool Wallbreaker::checkBrick(Entity& entity, int i, int j)
+{
+	Brick& brick = m_bricks[i][j];
+	if (brick.isActive())
+	{
+		entity.onBrickHit(m_bricks[i][j]);
+		if (!brick.isActive())
+		{
+			--m_nb_active_bricks;
+			HUD::getInstance().setBrickCount(m_nb_active_bricks);
+		}
+		return true;
+	}
+	return false;
+}
 
 bool Wallbreaker::loadNextLevel()
 {
@@ -350,79 +377,6 @@ void Wallbreaker::setStatus(Status status)
 		m_level_file.close();
 	}
 }
-
-
-Brick* Wallbreaker::getCollidingBrick(Entity& entity)
-{
-	sf::IntRect rect = entity.getSurface();
-	sf::IntRect brick_rect;
-
-	// on calcule les indices de chaque coin
-	int left = (int) rect.left / Brick::WIDTH;
-	int top = (int) rect.top / Brick::HEIGHT;
-	int right = (int) (rect.left + rect.width - 1) / Brick::WIDTH;
-	int bottom = (int) (rect.top + rect.height - 1) / Brick::HEIGHT;
-
-	//printf("cds at top %d left %d bottom %d right %d\n", top, left, bottom, right);
-
-	Brick* collision[4] = {NULL, NULL, NULL, NULL};
-	if (m_bricks[top][left].isActive())     collision[0] = &m_bricks[top][left];
-	if (m_bricks[top][right].isActive())    collision[1] = &m_bricks[top][right];
-	if (m_bricks[bottom][left].isActive())  collision[2] = &m_bricks[bottom][left];
-	if (m_bricks[bottom][right].isActive()) collision[3] = &m_bricks[bottom][right];
-
-	// search for larger surface
-	Brick* brick = NULL;
-	float max_surface = 0;
-	bool is_vertical = false;
-	for (int i = 0; i < 4; ++i)
-	{
-		if (collision[i] != NULL)
-		{
-			brick_rect.top = collision[i]->getPosition().y;
-			brick_rect.left = collision[i]->getPosition().x;
-			brick_rect.width = Brick::WIDTH;
-			brick_rect.height = Brick::HEIGHT;
-			sf::IntRect overlapp;
-			rect.intersects(brick_rect, overlapp);
-
-			float surface = overlapp.width * overlapp.height;
-			if (surface > max_surface)
-			{
-				is_vertical = overlapp.height > overlapp.width;
-				max_surface = surface;
-				brick = collision[i];
-			}
-		}
-	}
-
-	// if collision detected
-	if (brick != NULL)
-	{
-		is_vertical ? entity.onWallHit() : entity.onCeilHit();
-		//brick->takeDamage();
-		entity.onBrickHit(*brick);
-
-		if (!brick->isActive())
-		{
-			--m_nb_active_bricks;
-			HUD::getInstance().setBrickCount(m_nb_active_bricks);
-
-			if (math::rand(0, 100) < POWER_UP_RATIO)
-			{
-				/*PowerUp* power_up = new PowerUp(PowerUp::EXTRA_BALL);
-				power_up->setPosition(brick->getPosition().x, brick->getPosition().y + brick->getHeight());
-				m_entities.push_back(power_up);*/
-			}
-
-
-		}
-
-		return brick;
-	}
-	return NULL;
-}
-
 
 
 void Wallbreaker::clearEntities()

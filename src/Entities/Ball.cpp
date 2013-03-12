@@ -6,8 +6,8 @@
 #include "Core/SoundSystem.hpp"
 #include "Utils/Math.hpp"
 
-#define MIN_ANGLE -45
-#define MAX_ANGLE 45
+// When hitting the pad, the ball bounces from -PAD_ANGLE to +PAD_ANGLE
+#define PAD_ANGLE 45
 
 
 int Ball::s_instance_count = 0;
@@ -47,9 +47,9 @@ void Ball::onUpdate(float frametime)
 void Ball::onWallHit()
 {
 	m_angle = math::PI - m_angle;
-	ParticleSystem::Emitter::m_angle = m_angle;
-	//spawn();
 	SoundSystem::playSound("wall.ogg");
+	//ParticleSystem::Emitter::m_angle = m_angle;
+	//spawn();
 }
 
 
@@ -67,14 +67,23 @@ void Ball::onBrickHit(Brick& brick)
 {
 	if (brick.takeDamage())
 		m_velocity += 5;
+
+	sf::IntRect intersection;
+	sf::IntRect brick_rect(brick.getPosition().x, brick.getPosition().y, Brick::WIDTH, Brick::HEIGHT);
+	brick_rect.intersects(getCollisionRect(), intersection);
+
+	if (intersection.height > intersection.width)
+		onWallHit();
+	else
+		onCeilHit();
 }
 
 
 void Ball::onCollide(const PlayerPad& pad)
 {
 	float x = getPosition().x + getWidth() / 2 - pad.getPosition().x;
-	float range = MAX_ANGLE - MIN_ANGLE;
-	float angle_diff = (range * x / (float) pad.getWidth()) + MIN_ANGLE;
+	float range = PAD_ANGLE * 2;
+	float angle_diff = (range * x / (float) pad.getWidth()) - PAD_ANGLE;
 
 	m_angle = math::to_rad(90 - angle_diff);
 	//ParticleSystem::Emitter::m_angle = m_angle;
@@ -91,3 +100,4 @@ sf::Vector2f Ball::getSpawnPosition() const
 	center.y += getHeight() / 2;
 	return center;
 }
+

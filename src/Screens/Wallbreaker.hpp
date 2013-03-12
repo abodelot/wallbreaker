@@ -31,6 +31,10 @@ private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	void updateEntities(float frametime);
+
+	bool checkBrick(Entity& entity, int i, int j);
+
 	/**
 	 * Load the next level in the level file
 	 */
@@ -38,7 +42,6 @@ private:
 
 	void setStatus(Status status);
 
-	Brick* getCollidingBrick(Entity& ball);
 
 	// Delete all entities
 	void clearEntities();

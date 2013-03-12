@@ -5,7 +5,7 @@
 #include <stack>
 #include <SFML/Graphics.hpp>
 
-#define APP_TITLE  "SFML"
+#define APP_TITLE  "Wallbreaker"
 #define APP_WIDTH  240
 #define APP_HEIGHT 320
 
@@ -39,7 +39,7 @@ public:
 	/// Set application window dimension
 	void setResolution(int width, int height);
 
-	/// Get processus current directory
+	/// Get execution current directory
 	const std::string& getCurrentDir() const;
 
 	/// Get application render window
