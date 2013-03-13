@@ -3,7 +3,7 @@
 
 #include "Entity.hpp"
 #include "Core/ParticleSystem.hpp"
-class PlayerPad;
+
 
 class Ball: public Entity, public ParticleSystem::Emitter
 {
@@ -19,7 +19,7 @@ public:
 
 	void onBrickHit(Brick& brick);
 
-	void onCollide(const PlayerPad& pad);
+	void onCollide(const Paddle& paddle);
 
 	void onWallHit();
 

@@ -16,22 +16,21 @@
 
 Wallbreaker::Wallbreaker():
 	m_nb_active_bricks(0),
+	m_particles(ParticleSystem::instance()),
+	m_info_text(gui::Theme::getFont()),
 	m_status(READY),
 	m_player_lives(5),
-	m_current_level(0),
-	m_info_text(gui::Theme::getFont()),
-	m_particles(ParticleSystem::instance())
+	m_current_level(0)
 {
-	sf::Texture& texture = Resources::getTexture("background-blue.gif");
-	texture.setRepeated(true);
-	m_background.setTexture(texture);
-	m_background.setTextureRect(sf::IntRect(0, 0, APP_WIDTH, APP_HEIGHT));
-
 	// Initialize render texture
 	m_game_texture.create(m_width, m_height);
 
-	m_hud.setTexture(HUD::getInstance().getTexture());
-	m_hud.setPosition(0, m_height + BORDER_SIZE);
+	// Sprites used for render textures
+	m_game_sprite.setTexture(m_game_texture.getTexture());
+	m_game_sprite.setPosition(BORDER_SIZE, BORDER_SIZE);
+
+	m_hud_sprite.setTexture(HUD::getInstance().getTexture());
+	m_hud_sprite.setPosition(0, m_height + BORDER_SIZE);
 }
 
 
@@ -59,8 +58,8 @@ void Wallbreaker::onEvent(const sf::Event& event)
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					LaserBeam* beam = new LaserBeam();
-					beam->setPosition(m_player_pad.getPosition().x + (m_player_pad.getWidth() - beam->getWidth()) / 2,
-					           m_height - m_player_pad.getHeight() - beam->getHeight());
+					beam->setPosition(m_paddle.getPosition().x + (m_paddle.getWidth() - beam->getWidth()) / 2,
+					           m_height - m_paddle.getHeight() - beam->getHeight());
 					m_entities.push_back(beam);
 				}
 				else if (event.mouseButton.button == sf::Mouse::Right)
@@ -103,9 +102,8 @@ void Wallbreaker::onFocus()
 	m_current_level = 0;
 	loadNextLevel();
 
-	// Player pad positioned at the bottom-center
-	m_player_pad.setPosition((m_width - m_player_pad.getWidth()) / 2,
-							 m_height - m_player_pad.getHeight());
+	// Player paddle positioned at the bottom-center
+	m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
 
 	m_player_lives = 5;
 	HUD::getInstance().setLiveCount(m_player_lives);
@@ -121,12 +119,12 @@ void Wallbreaker::update(float frametime)
 {
 	Easing::update(frametime);
 
-	// Update player pad and make sure it remains inside bounds
-	m_player_pad.onUpdate(frametime);
-	if (m_player_pad.getX() < 0)
-		m_player_pad.setX(0);
-	else if (m_player_pad.getX() + m_player_pad.getWidth() > m_width)
-		m_player_pad.setX(m_width - m_player_pad.getWidth());
+	// Update player paddle and make sure it remains inside bounds
+	m_paddle.onUpdate(frametime);
+	if (m_paddle.getX() < 0)
+		m_paddle.setX(0);
+	else if (m_paddle.getX() + m_paddle.getWidth() > m_width)
+		m_paddle.setX(m_width - m_paddle.getWidth());
 
 	switch (m_status)
 	{
@@ -134,8 +132,8 @@ void Wallbreaker::update(float frametime)
 		{
 			Entity* ball = m_entities.front();
 			// Keep the ball centered on the player pad
-			ball->setPosition(m_player_pad.getX() + (m_player_pad.getWidth() - ball->getWidth()) / 2,
-				              m_height - m_player_pad.getHeight() - ball->getHeight());
+			ball->setPosition(m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
+				              m_height - m_paddle.getHeight() - ball->getHeight());
 			break;
 		}
 		case PLAYING:
@@ -151,8 +149,6 @@ void Wallbreaker::update(float frametime)
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//target.draw(m_background, states);
-
 	// Draw bricks
 	m_game_texture.clear({0x16, 0x1e, 0x26});
 	for (int i = 0; i < m_brick_lines; ++i)
@@ -168,7 +164,7 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	m_game_texture.draw(m_particles, states);
 
 	// Draw entities
-	m_game_texture.draw(m_player_pad);
+	m_game_texture.draw(m_paddle);
 	for (EntityList::const_iterator it = m_entities.begin(); it != m_entities.end(); ++it)
 	{
 		m_game_texture.draw(**it, states);
@@ -181,15 +177,11 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		m_game_texture.draw(overlay);
 		m_game_texture.draw(m_info_text, states);
 	}
-
 	m_game_texture.display();
-	sf::Sprite s;
-	s.setTexture(m_game_texture.getTexture(), true);
-	s.setPosition(10, 10);
-	target.draw(s);
 
-	// Draw HUD
-	target.draw(m_hud);
+	// Draw sprites
+	target.draw(m_hud_sprite);
+	target.draw(m_game_sprite);
 }
 
 
@@ -226,10 +218,10 @@ void Wallbreaker::updateEntities(float frametime)
 				entity.kill();
 			}
 			// Check if entity collides with player pad
-			else if (entity.collidesWith(m_player_pad))
+			else if (entity.collidesWith(m_paddle))
 			{
-				entity.onCollide(m_player_pad);
-				entity.setY(m_height - m_player_pad.getHeight() - entity.getHeight());
+				entity.onCollide(m_paddle);
+				entity.setY(m_height - m_paddle.getHeight() - entity.getHeight());
 			}
 			// Check if entity is colliding with a brick
 			else
@@ -293,7 +285,6 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j)
 
 bool Wallbreaker::loadNextLevel()
 {
-
 	if (!m_level_file.is_open())
 	{
 		std::string filename = Game::getInstance().getCurrentDir() + "resources/levels/levels.txt";
@@ -315,9 +306,8 @@ bool Wallbreaker::loadNextLevel()
 	if (line.empty())
 		return false;
 
-	sf::Texture& texture = Resources::getTexture(line);
-	texture.setRepeated(true);
-	m_background.setTexture(texture);
+	// TODO: extract background info from line variable
+
 	for (int i = 0; i < m_brick_lines; ++i)
 	{
 		std::getline(m_level_file, line);
@@ -393,8 +383,8 @@ void Wallbreaker::createBall()
 {
 	Ball* ball = new Ball();
 	// Center ball on player pad
-	float x = m_player_pad.getPosition().x + (m_player_pad.getWidth() - ball->getWidth()) / 2;
-	float y = m_height - m_player_pad.getHeight() - ball->getHeight();
+	float x = m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2;
+	float y = m_height - m_paddle.getHeight() - ball->getHeight();
 	ball->setPosition(x, y);
 	ball->launchParticles();
 	m_entities.push_back(ball);

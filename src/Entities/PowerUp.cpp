@@ -1,5 +1,5 @@
 #include "PowerUp.hpp"
-#include "PlayerPad.hpp"
+#include "Paddle.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 
@@ -12,7 +12,7 @@ PowerUp::PowerUp(Type type):
 }
 
 
-void PowerUp::onCollide(const PlayerPad& pad)
+void PowerUp::onCollide(const Paddle& paddle)
 {
 	switch (m_type)
 	{

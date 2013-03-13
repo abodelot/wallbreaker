@@ -3,9 +3,6 @@
 #include "Core/SoundSystem.hpp"
 #include "Core/Easing.hpp"
 
-#define FADE_DELAY 2
-
-#include <iostream>
 
 Brick::Brick():
 	m_type(BRICK_NONE),
@@ -25,7 +22,6 @@ Brick::Brick():
 
 void Brick::setType(int id)
 {
-
 	if (id < BRICK_START || id > BRICK_UNBREAKABLE)
 		id = BRICK_NONE;
 
@@ -70,10 +66,10 @@ bool Brick::takeDamage(bool force_destruction)
 			break;
 		default:
 			m_broken = true;
-			Easing::move(*this, {getPosition().x, getPosition().y + math::rand(20, 40)}, 1);
-			Easing::fadeOut(*this, 1);
-			Easing::rotate(*this, math::rand(-60, 60), 1);
-			Easing::scale(*this, 1, 2, 1);
+			Easing::move(*this, {getPosition().x, getPosition().y + math::rand(20, 40)});
+			Easing::fadeOut(*this);
+			Easing::rotate(*this, math::rand(-60, 60));
+			Easing::scale(*this, 1, 0.5);
 			launchParticles();
 			break;
 	}

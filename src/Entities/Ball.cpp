@@ -1,6 +1,6 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
-#include "PlayerPad.hpp"
+#include "Paddle.hpp"
 #include "Core/Easing.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
@@ -74,11 +74,11 @@ void Ball::onBrickHit(Brick& brick)
 }
 
 
-void Ball::onCollide(const PlayerPad& pad)
+void Ball::onCollide(const Paddle& paddle)
 {
-	float x = getPosition().x + getWidth() / 2 - pad.getPosition().x;
+	float x = getPosition().x + getWidth() / 2 - paddle.getPosition().x;
 	float range = PAD_ANGLE * 2;
-	float angle_diff = (range * x / (float) pad.getWidth()) - PAD_ANGLE;
+	float angle_diff = (range * x / (float) paddle.getWidth()) - PAD_ANGLE;
 
 	m_angle = math::to_rad(90 - angle_diff);
 	SoundSystem::playSound("ball.ogg", 0.4f);

@@ -4,7 +4,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 
 class Ball;
-class PlayerPad;
+class Paddle;
 class Brick;
 
 /**
@@ -20,7 +20,7 @@ public:
 
 	virtual void onUpdate(float frametime) = 0;
 
-	virtual void onCollide(const PlayerPad&) {}
+	virtual void onCollide(const Paddle&) {}
 
 	bool collidesWith(const Entity& other) const;
 

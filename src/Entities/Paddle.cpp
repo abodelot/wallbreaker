@@ -1,19 +1,19 @@
 #include <SFML/Window.hpp>
 
-#include "PlayerPad.hpp"
+#include "Paddle.hpp"
 #include "Core/Game.hpp"
 #include "Core/Resources.hpp"
 
 
 
-PlayerPad::PlayerPad()
+Paddle::Paddle()
 {
 	setTexture(Resources::getTexture("pads.png"));
-	setPadSize(MEDIUM);
+	setSize(MEDIUM);
 }
 
 
-void PlayerPad::onUpdate(float frametime)
+void Paddle::onUpdate(float frametime)
 {
 	const sf::RenderWindow& window = Game::getInstance().getWindow();
 	int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
@@ -21,7 +21,7 @@ void PlayerPad::onUpdate(float frametime)
 }
 
 
-void PlayerPad::setPadSize(PadSize size)
+void Paddle::setSize(Size size)
 {
 	sf::IntRect subrect;
 	switch (size)
@@ -37,6 +37,6 @@ void PlayerPad::setPadSize(PadSize size)
 			break;
 	}
 	setTextureRect(subrect);
-	m_pad_size = size;
+	m_size = size;
 }
 
