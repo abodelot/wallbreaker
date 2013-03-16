@@ -3,7 +3,8 @@
 
 
 Editor::Editor():
-	m_menu(Game::getInstance().getWindow())
+	m_menu(Game::getInstance().getWindow()),
+	m_show_grid(true)
 {
 	// Initialize render texture
 	m_level_texture.create(m_width, m_height);
@@ -53,50 +54,61 @@ Editor::Editor():
 
 void Editor::onEvent(const sf::Event& event)
 {
-	if (event.type == sf::Event::MouseMoved)
+	switch (event.type)
 	{
-		// Convert mouse position and update cursor
-		sf::Vector2f pos = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-		m_cursor.setPosition(pos);
-
-		// Find brick index at the mouse position
-		sf::Vector2i new_pos;
-		new_pos.x = (pos.x - GAME_BORDER_SIZE) / Brick::WIDTH;
-		new_pos.y = (pos.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
-
-		if (new_pos.x >= 0 && new_pos.x < NB_BRICK_COLS
-		 && new_pos.y >= 0 && new_pos.y < NB_BRICK_LINES
-		 && new_pos != m_cursor_pos)
+		case sf::Event::MouseMoved:
 		{
-			std::cout << "x: " << new_pos.x << ", y: " << new_pos.y << std::endl;
-			m_cursor_pos = new_pos;
+			// Convert mouse position and update cursor
+			sf::Vector2f pos = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
+			m_cursor.setPosition(pos);
 
-			// Update prelight position
-			m_cursor_prelight[0].position = {new_pos.x * Brick::WIDTH,       new_pos.y * Brick::HEIGHT};
-			m_cursor_prelight[1].position = {(new_pos.x + 1) * Brick::WIDTH, new_pos.y * Brick::HEIGHT};
-			m_cursor_prelight[2].position = {(new_pos.x + 1) * Brick::WIDTH, (new_pos.y + 1) * Brick::HEIGHT};
-			m_cursor_prelight[3].position = {new_pos.x * Brick::WIDTH,       (new_pos.y + 1) * Brick::HEIGHT};
+			// Find brick index at the mouse position
+			sf::Vector2i new_pos;
+			new_pos.x = (pos.x - GAME_BORDER_SIZE) / Brick::WIDTH;
+			new_pos.y = (pos.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (new_pos.x >= 0 && new_pos.x < NB_BRICK_COLS
+			 && new_pos.y >= 0 && new_pos.y < NB_BRICK_LINES
+			 && new_pos != m_cursor_pos)
 			{
-				m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
-				m_cursor.playSound();
+				std::cout << "x: " << new_pos.x << ", y: " << new_pos.y << std::endl;
+				m_cursor_pos = new_pos;
+
+				// Update prelight position
+				m_cursor_prelight[0].position = {new_pos.x * Brick::WIDTH,       new_pos.y * Brick::HEIGHT};
+				m_cursor_prelight[1].position = {(new_pos.x + 1) * Brick::WIDTH, new_pos.y * Brick::HEIGHT};
+				m_cursor_prelight[2].position = {(new_pos.x + 1) * Brick::WIDTH, (new_pos.y + 1) * Brick::HEIGHT};
+				m_cursor_prelight[3].position = {new_pos.x * Brick::WIDTH,       (new_pos.y + 1) * Brick::HEIGHT};
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+					m_cursor.playSound();
+				}
+				updateTexture();
 			}
-			updateTexture();
+			break;
 		}
-	}
-	else if (event.type == sf::Event::MouseButtonPressed)
-	{
-		m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
-		m_cursor.playSound();
-		updateTexture();
-	}
-	else if (event.type == sf::Event::MouseWheelMoved)
-	{
-		if (event.mouseWheel.delta > 0)
-			m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE ? m_cursor.getType() + 1 : Brick::START);
-		else
-			m_cursor.setType(m_cursor.getType() > Brick::START ? m_cursor.getType() - 1 : Brick::UNBREAKABLE);
+		case sf::Event::MouseButtonPressed:
+			m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+			m_cursor.playSound();
+			updateTexture();
+			break;
+
+		case sf::Event::MouseWheelMoved:
+			if (event.mouseWheel.delta > 0)
+				m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE ? m_cursor.getType() + 1 : Brick::START);
+			else
+				m_cursor.setType(m_cursor.getType() > Brick::START ? m_cursor.getType() - 1 : Brick::UNBREAKABLE);
+			break;
+
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::G)
+			{
+				m_show_grid = !m_show_grid;
+				updateTexture();
+			}
+			break;
 	}
 
 	int id;
@@ -137,8 +149,12 @@ void Editor::updateTexture()
 	m_level_texture.draw(m_cursor_prelight, 4, sf::Quads);
 
 	// Draw grid
-	m_level_texture.draw(m_grid_lines, NB_BRICK_LINES * 2, sf::Lines);
-	m_level_texture.draw(m_grid_cols, NB_BRICK_COLS * 2, sf::Lines);
+	if (m_show_grid)
+	{
+		m_level_texture.draw(m_grid_lines, NB_BRICK_LINES * 2, sf::Lines);
+		m_level_texture.draw(m_grid_cols, NB_BRICK_COLS * 2, sf::Lines);
+	}
+
 
 	m_level_texture.display();
 }

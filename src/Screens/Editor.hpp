@@ -37,6 +37,7 @@ private:
 	// 2 vertices per line
 	sf::Vertex        m_grid_cols[NB_BRICK_COLS * 2];
 	sf::Vertex        m_grid_lines[NB_BRICK_LINES * 2];
+	bool              m_show_grid;
 
 	Menu  m_menu;
 };
