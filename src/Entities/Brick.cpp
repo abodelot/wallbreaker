@@ -51,7 +51,7 @@ bool Brick::isActive() const
 bool Brick::takeDamage(bool force_destruction)
 {
 	// The higher the ID, the higher the pitch
-	float pitch = 1.f + (float)(m_type - BRICK_START) / 8;
+	float pitch = 0.8f + (float)(m_type - BRICK_START) / 10;
 	SoundSystem::playSound("ball.ogg", pitch);
 
 	switch (m_type)

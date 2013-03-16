@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wallbreaker" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/wallbreaker" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/wallbreaker" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-pedantic" />
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add directory="src" />
+		</Compiler>
+		<Linker>
+			<Add library="sfml-audio" />
+			<Add library="sfml-graphics" />
+			<Add library="sfml-network" />
+			<Add library="sfml-system" />
+			<Add library="sfml-window" />
+		</Linker>
+		<Unit filename="bin/resources/levels/levels.txt" />
+		<Unit filename="src/Core/Config.hpp" />
+		<Unit filename="src/Core/Easing.cpp" />
+		<Unit filename="src/Core/Easing.hpp" />
+		<Unit filename="src/Core/Game.cpp" />
+		<Unit filename="src/Core/Game.hpp" />
+		<Unit filename="src/Core/HUD.cpp" />
+		<Unit filename="src/Core/HUD.hpp" />
+		<Unit filename="src/Core/Main.cpp" />
+		<Unit filename="src/Core/ParticleSystem.cpp" />
+		<Unit filename="src/Core/ParticleSystem.hpp" />
+		<Unit filename="src/Core/Resources.cpp" />
+		<Unit filename="src/Core/Resources.hpp" />
+		<Unit filename="src/Core/SoundSystem.cpp" />
+		<Unit filename="src/Core/SoundSystem.hpp" />
+		<Unit filename="src/Entities/Ball.cpp" />
+		<Unit filename="src/Entities/Ball.hpp" />
+		<Unit filename="src/Entities/Brick.cpp" />
+		<Unit filename="src/Entities/Brick.hpp" />
+		<Unit filename="src/Entities/Entity.cpp" />
+		<Unit filename="src/Entities/Entity.hpp" />
+		<Unit filename="src/Entities/LaserBeam.cpp" />
+		<Unit filename="src/Entities/LaserBeam.hpp" />
+		<Unit filename="src/Entities/Paddle.cpp" />
+		<Unit filename="src/Entities/Paddle.hpp" />
+		<Unit filename="src/Entities/PowerUp.cpp" />
+		<Unit filename="src/Entities/PowerUp.hpp" />
+		<Unit filename="src/Gui/BitmapFont.cpp" />
+		<Unit filename="src/Gui/BitmapFont.hpp" />
+		<Unit filename="src/Gui/BitmapText.cpp" />
+		<Unit filename="src/Gui/BitmapText.hpp" />
+		<Unit filename="src/Gui/Button.cpp" />
+		<Unit filename="src/Gui/Button.hpp" />
+		<Unit filename="src/Gui/Menu.cpp" />
+		<Unit filename="src/Gui/Menu.hpp" />
+		<Unit filename="src/Gui/Theme.cpp" />
+		<Unit filename="src/Gui/Theme.hpp" />
+		<Unit filename="src/Screens/Editor.cpp" />
+		<Unit filename="src/Screens/Editor.hpp" />
+		<Unit filename="src/Screens/LevelSelection.cpp" />
+		<Unit filename="src/Screens/LevelSelection.hpp" />
+		<Unit filename="src/Screens/MainMenu.cpp" />
+		<Unit filename="src/Screens/MainMenu.hpp" />
+		<Unit filename="src/Screens/Screen.hpp" />
+		<Unit filename="src/Screens/Wallbreaker.cpp" />
+		<Unit filename="src/Screens/Wallbreaker.hpp" />
+		<Unit filename="src/Utils/Math.cpp" />
+		<Unit filename="src/Utils/Math.hpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

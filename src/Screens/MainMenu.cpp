@@ -5,6 +5,7 @@
 
 #include "Wallbreaker.hpp"
 #include "Editor.hpp"
+#include "LevelSelection.hpp"
 
 #define APP_AUTHOR   "Alexandre Bodelot"
 #define APP_NAME     "Wallbreaker"
@@ -20,17 +21,14 @@ MainMenu::MainMenu():
 	m_title.setTexture(t);
 	m_title.setPosition(0, 16);
 
-
-	//m_about_text.setColor(sf::Color::White);
-	//m_about_text.setCharacterSize(10);
 	m_about_text.setString(ABOUT_TEXT);
 	m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
-//	m_view = sf::View(sf::FloatRect(0, 0, 640, 480));
 
 	m_menu.setPosition(80, 80);
 	m_menu.addButton("New game", 1);
-	m_menu.addButton("Editor", 2);
-	m_menu.addButton("Quit",  3);
+	m_menu.addButton("Editor",   2);
+	m_menu.addButton("Options",  3);
+	m_menu.addButton("Quit",     4);
 }
 
 
@@ -49,7 +47,9 @@ void MainMenu::onEvent(const sf::Event& event)
 				Game::getInstance().nextScreen(new Wallbreaker);
 			if (id == 2)
 				Game::getInstance().nextScreen(new Editor);
-			else if (id == 3)
+			if (id == 3)
+				Game::getInstance().nextScreen(new LevelSelection);
+			else if (id == 4)
 				Game::getInstance().quit();
 		}
 	}
@@ -72,14 +72,12 @@ void MainMenu::update(float frametime)
 	}
 }
 
+
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//target.setView(m_view);
 	target.clear({0x16, 0x1e, 0x26});
 	target.draw(m_title);
-
 	target.draw(m_about_text);
-
 	m_menu.draw();
 }
 

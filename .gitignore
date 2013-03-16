@@ -1,6 +1,10 @@
 # Executable
 bin/wallbreaker
 
+# Code::Blocks non-mandatory files
+wallbreaker.layout
+wallbreaker.depend
+
 # Compiled Object files
 *.slo
 *.lo

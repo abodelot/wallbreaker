@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "Screen.hpp"
-#include "Core/Game.hpp"
+#include "Core/Config.hpp"
 #include "Entities/Brick.hpp"
 #include "Entities/Paddle.hpp"
 #include "Gui/BitmapText.hpp"
@@ -50,13 +50,11 @@ private:
 	void createBall();
 
 
-	static const int m_brick_cols  = 11;
-	static const int m_brick_lines = 25;
-	static const int m_width       = m_brick_cols * Brick::WIDTH;
-	static const int m_height      = m_brick_lines * Brick::HEIGHT;
+	static const int m_width  = NB_BRICK_COLS  * Brick::WIDTH;
+	static const int m_height = NB_BRICK_LINES * Brick::HEIGHT;
 
 	std::ifstream   m_level_file;
-	Brick           m_bricks[m_brick_lines][m_brick_cols];
+	Brick           m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
 	int             m_nb_active_bricks;
 	ParticleSystem& m_particles;
 	BitmapText      m_info_text;

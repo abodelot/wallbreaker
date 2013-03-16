@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "Config.hpp"
 #include "Screens/Screen.hpp"
 #include "Resources.hpp"
 #include "Gui/Theme.hpp"

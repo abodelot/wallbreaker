@@ -24,10 +24,8 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::Sprite m_title;
-	BitmapText   m_about_text;
-	//sf::View m_view;
-
-	Menu m_menu;
+	BitmapText m_about_text;
+	Menu       m_menu;
 };
 
 #endif // MAIN_MENU_HPP

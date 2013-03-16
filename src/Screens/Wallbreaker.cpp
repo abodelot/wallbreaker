@@ -11,9 +11,6 @@
 #include "Gui/Theme.hpp"
 
 
-#define BORDER_SIZE 10 // frame around the playground (game_texture)
-
-
 Wallbreaker::Wallbreaker():
 	m_nb_active_bricks(0),
 	m_particles(ParticleSystem::instance()),
@@ -27,10 +24,10 @@ Wallbreaker::Wallbreaker():
 
 	// Sprites used for render textures
 	m_game_sprite.setTexture(m_game_texture.getTexture());
-	m_game_sprite.setPosition(BORDER_SIZE, BORDER_SIZE);
+	m_game_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
 
 	m_hud_sprite.setTexture(HUD::getInstance().getTexture());
-	m_hud_sprite.setPosition(0, m_height + BORDER_SIZE);
+	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
 }
 
 
@@ -151,9 +148,9 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Draw bricks
 	m_game_texture.clear({0x16, 0x1e, 0x26});
-	for (int i = 0; i < m_brick_lines; ++i)
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
-		for (int j = 0; j < m_brick_cols; ++j)
+		for (int j = 0; j < NB_BRICK_COLS; ++j)
 		{
 			const Brick& brick = m_bricks[i][j];
 			if (brick.getType() != BRICK_NONE)
@@ -287,7 +284,7 @@ bool Wallbreaker::loadNextLevel()
 {
 	if (!m_level_file.is_open())
 	{
-		std::string filename = Game::getInstance().getCurrentDir() + "resources/levels/levels.txt";
+		std::string filename = Game::getInstance().getCurrentDir() + LEVEL_FILE;
 		m_level_file.open(filename.c_str());
 		if (!m_level_file)
 		{
@@ -308,7 +305,7 @@ bool Wallbreaker::loadNextLevel()
 
 	// TODO: extract background info from line variable
 
-	for (int i = 0; i < m_brick_lines; ++i)
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
 		std::getline(m_level_file, line);
 		if (m_level_file.eof())
@@ -317,7 +314,7 @@ bool Wallbreaker::loadNextLevel()
 		}
 		int length = line.size();
 		printf("%02d. ", i);
-		for (int j = 0; j < m_brick_cols && j < length; ++j)
+		for (int j = 0; j < NB_BRICK_COLS && j < length; ++j)
 		{
 			Brick& brick = m_bricks[i][j];
 			// Set brick type

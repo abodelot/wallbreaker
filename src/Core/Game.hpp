@@ -5,11 +5,6 @@
 #include <stack>
 #include <SFML/Graphics.hpp>
 
-#define APP_TITLE  "Wallbreaker"
-#define APP_WIDTH  240
-#define APP_HEIGHT 320
-
-
 class Screen;
 
 /**

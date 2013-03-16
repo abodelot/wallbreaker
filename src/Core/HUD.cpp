@@ -1,5 +1,5 @@
 #include "HUD.hpp"
-#include "Core/Game.hpp"
+#include "Core/Config.hpp"
 #include "Core/Resources.hpp"
 #include "Gui/Theme.hpp"
 
