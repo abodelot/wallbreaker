@@ -153,7 +153,7 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		for (int j = 0; j < NB_BRICK_COLS; ++j)
 		{
 			const Brick& brick = m_bricks[i][j];
-			if (brick.getType() != BRICK_NONE)
+			if (brick.getType() != Brick::NONE)
 				m_game_texture.draw(brick, states);
 		}
 	}
@@ -320,7 +320,7 @@ bool Wallbreaker::loadNextLevel()
 			// Set brick type
 			int type = line[j];
 			brick.setType(type);
-			if (type != BRICK_NONE && type != BRICK_UNBREAKABLE)
+			if (type != Brick::NONE && type != Brick::UNBREAKABLE)
 				++m_nb_active_bricks;
 			// Reset brick position and rotation
 			brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);

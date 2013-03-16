@@ -40,7 +40,7 @@ Editor::Editor():
 
 	updateTexture();
 
-	m_cursor.setType(BRICK_START);
+	m_cursor.setType(Brick::START);
 
 	// Prelight cursor
 	for (int i = 0; i < 4; ++i)
@@ -80,6 +80,7 @@ void Editor::onEvent(const sf::Event& event)
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+				m_cursor.playSound();
 			}
 			updateTexture();
 		}
@@ -87,7 +88,15 @@ void Editor::onEvent(const sf::Event& event)
 	else if (event.type == sf::Event::MouseButtonPressed)
 	{
 		m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+		m_cursor.playSound();
 		updateTexture();
+	}
+	else if (event.type == sf::Event::MouseWheelMoved)
+	{
+		if (event.mouseWheel.delta > 0)
+			m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE ? m_cursor.getType() + 1 : Brick::START);
+		else
+			m_cursor.setType(m_cursor.getType() > Brick::START ? m_cursor.getType() - 1 : Brick::UNBREAKABLE);
 	}
 
 	int id;

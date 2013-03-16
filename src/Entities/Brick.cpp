@@ -5,7 +5,7 @@
 
 
 Brick::Brick():
-	m_type(BRICK_NONE),
+	m_type(NONE),
 	m_broken(false)
 {
 	setTexture(Resources::getTexture("bricks.png"));
@@ -20,16 +20,16 @@ Brick::Brick():
 }
 
 
-void Brick::setType(int id)
+void Brick::setType(int type)
 {
-	if (id < BRICK_START || id > BRICK_UNBREAKABLE)
-		id = BRICK_NONE;
+	if (type < START || type > UNBREAKABLE)
+		type = NONE;
 
-	m_type = id;
+	m_type = (Type) type;
 	m_broken = false;
-	if (id != BRICK_NONE)
+	if (type != NONE)
 	{
-		int tile_id = (id - BRICK_START);
+		int tile_id = (type - START);
 		// 4 bricks per row
 		int x = (tile_id % 4) * Brick::WIDTH;
 		int y = (tile_id / 4) * Brick::HEIGHT;
@@ -44,25 +44,23 @@ void Brick::setType(int id)
 
 bool Brick::isActive() const
 {
-	return m_type != BRICK_NONE && !m_broken;
+	return m_type != NONE && !m_broken;
 }
 
 
 bool Brick::takeDamage(bool force_destruction)
 {
-	// The higher the ID, the higher the pitch
-	float pitch = 0.8f + (float)(m_type - BRICK_START) / 10;
-	SoundSystem::playSound("ball.ogg", pitch);
+	playSound();
 
 	switch (m_type)
 	{
-		case BRICK_UNBREAKABLE:
+		case UNBREAKABLE:
 			break;
-		case BRICK_ROCK:
-			setType(BRICK_ROCK_2);
+		case ROCK:
+			setType(ROCK_2);
 			break;
-		case BRICK_ROCK_2:
-			setType(BRICK_ROCK_3);
+		case ROCK_2:
+			setType(ROCK_3);
 			break;
 		default:
 			m_broken = true;
@@ -77,6 +75,14 @@ bool Brick::takeDamage(bool force_destruction)
 }
 
 
+void Brick::playSound()
+{
+	// The higher the ID, the higher the pitch
+	float pitch = 0.8f + (float)(m_type - START) / 10;
+	SoundSystem::playSound("ball.ogg", pitch);
+}
+
+
 sf::Vector2f Brick::getSpawnPosition() const
 {
 	sf::Vector2f pos = getPosition();
@@ -88,7 +94,7 @@ sf::Vector2f Brick::getSpawnPosition() const
 
 sf::Color Brick::getBaseColor() const
 {
-	switch (m_type - BRICK_START)
+	switch (m_type - START)
 	{
 		case 0: return sf::Color(255, 0, 0);
 		case 1: return sf::Color(255, 0, 128);
