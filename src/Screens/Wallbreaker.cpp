@@ -299,14 +299,9 @@ bool Wallbreaker::loadNextLevel()
 		return false;
 
 	std::string line;
-	std::getline(m_level_file, line);
-	if (line.empty())
-		return false;
-
-	// TODO: extract background info from line variable
-
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
+
 		std::getline(m_level_file, line);
 		if (m_level_file.eof())
 		{

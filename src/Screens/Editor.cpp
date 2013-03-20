@@ -109,6 +109,9 @@ void Editor::onEvent(const sf::Event& event)
 				updateTexture();
 			}
 			break;
+
+		default:
+			break;
 	}
 
 	int id;
