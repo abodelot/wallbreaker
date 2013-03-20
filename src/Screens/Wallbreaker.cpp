@@ -76,7 +76,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						std::cout << "relaod\n";
 						break;
 					case sf::Keyboard::N:
-						std::cout << "next\n";
+						loadNextLevel();
 						break;
 					default:
 						break;
@@ -305,7 +305,7 @@ bool Wallbreaker::loadNextLevel()
 		std::getline(m_level_file, line);
 		if (m_level_file.eof())
 		{
-			break;
+			return false;
 		}
 		int length = line.size();
 		printf("%02d. ", i);
