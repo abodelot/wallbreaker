@@ -91,7 +91,12 @@ void Menu::setPosition(float x, float y)
 
 void Menu::addButton(const sf::String& string, int id)
 {
-	Button* button = new Button(string, id);
+	add(new Button(string, id));
+}
+
+
+void Menu::add(Widget* widget)
+{
 	sf::Vector2f pos;
 	if (!m_widgets.empty())
 	{
@@ -103,8 +108,8 @@ void Menu::addButton(const sf::String& string, int id)
 	{
 		pos = m_position;
 	}
-	button->setPosition(pos);
-	m_widgets.push_back(button);
+	widget->setPosition(pos);
+	m_widgets.push_back(widget);
 }
 
 

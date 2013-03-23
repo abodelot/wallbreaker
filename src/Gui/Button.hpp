@@ -15,7 +15,8 @@ public:
 	void setText(const sf::String& string);
 
 
-	// callbacks
+	// callbacks ---------------------------------------------------------------
+
 	void onMouseEnter();
 	void onMouseLeave();
 	void onMousePressed(float x, float y);

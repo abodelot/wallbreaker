@@ -22,6 +22,7 @@ public:
 	 * The menu will take care of widget deallocation
 	 */
 	void addButton(const sf::String& string, int id);
+	void add(Widget* widget);
 
 	void setPosition(float x, float y);
 

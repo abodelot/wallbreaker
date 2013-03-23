@@ -20,6 +20,8 @@ public:
 	static sf::Color BG_COLOR_PRESSED;
 	static sf::Color BORDER_COLOR;
 
+	static int WIDGET_WIDTH;
+
 private:
 	static BitmapFont m_font;
 };

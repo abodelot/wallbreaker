@@ -1,7 +1,7 @@
 #include "Button.hpp"
 #include "Theme.hpp"
 
-#define BUTTON_WIDTH 86
+#define V_PADDING 1
 
 using namespace gui;
 
@@ -20,11 +20,11 @@ Button::Button(const sf::String& string, int id):
 void Button::setText(const sf::String& string)
 {
 	m_text.setString(string);
-	m_box.setSize({BUTTON_WIDTH, m_text.getSize().y});
+	m_box.setSize({Theme::WIDGET_WIDTH, m_text.getSize().y + V_PADDING * 2});
 	setSize(m_box.getSize());
 
 	// Center text
-	m_text.move((m_box.getSize().x - m_text.getSize().x) / 2, 0);
+	m_text.setPosition((m_box.getSize().x - m_text.getSize().x) / 2, V_PADDING);
 }
 
 

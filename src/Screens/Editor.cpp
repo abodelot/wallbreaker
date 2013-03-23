@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Editor.hpp"
-
+#include "Gui/OptionsBox.hpp"
 
 Editor::Editor():
 	m_show_grid(true),
@@ -13,9 +13,7 @@ Editor::Editor():
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
 
-	// Create GUI menu
-	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE);
-	m_menu.addButton("Back", 1);
+
 
 	// Initialize bricks position
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
@@ -49,6 +47,16 @@ Editor::Editor():
 		m_cursor_prelight[i].color = sf::Color(255, 255, 255, 128);
 	}
 
+	// Create GUI menu
+	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE);
+	m_menu.addButton("Back", 1);
+
+	gui::OptionsBox<int>* options = new gui::OptionsBox<int>;
+	options->addItem("Level 1", 0);
+	options->addItem("Level 2", 1);
+	options->addItem("Level 42", 41);
+
+	m_menu.add(options);
 }
 
 

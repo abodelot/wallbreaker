@@ -11,6 +11,16 @@ BitmapText::BitmapText(const BitmapFont& font):
 }
 
 
+BitmapText::BitmapText(const BitmapFont& font, const sf::String& string):
+	m_font(&font),
+	m_vertices(sf::Quads),
+	m_color(255, 255, 255),
+	m_string(string)
+{
+	updateGeometry();
+}
+
+
 void BitmapText::setString(const sf::String& string)
 {
 	m_string = string;

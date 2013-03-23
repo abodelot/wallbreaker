@@ -12,7 +12,7 @@ namespace gui
 class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
-	Widget(int id);
+	Widget(int id = -1);
 
 	int getID() const;
 
