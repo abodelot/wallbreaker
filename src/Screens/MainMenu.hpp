@@ -25,7 +25,7 @@ private:
 
 	sf::Sprite m_title;
 	BitmapText m_about_text;
-	Menu       m_menu;
+	gui::Menu  m_menu;
 };
 
 #endif // MAIN_MENU_HPP

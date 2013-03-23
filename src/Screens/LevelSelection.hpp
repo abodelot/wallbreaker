@@ -12,7 +12,7 @@ private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	Menu m_menu;
+	gui::Menu m_menu;
 };
 
 #endif // LEVEL_SELECTION_HPP

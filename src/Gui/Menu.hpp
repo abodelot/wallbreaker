@@ -3,7 +3,11 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "Button.hpp"
+
+namespace gui
+{
+
+class Widget;
 
 class Menu
 {
@@ -20,12 +24,23 @@ public:
 	void draw() const;
 
 private:
-	typedef std::vector<Button*> WidgetVector;
+	/**
+	 * Get mouse cursor relative position
+	 * @param x: absolute x position from the event
+	 * @param y: absolute y position from the event
+	 * @param relative: if not NULL, compute mouse position relative to this widget
+	 * @return relative mouse position
+	 */
+	sf::Vector2f getMousePosition(int x, int y, const Widget* relative = NULL) const;
+
+	typedef std::vector<Widget*> WidgetVector;
 
 	sf::RenderTarget& m_window;
 	WidgetVector      m_widgets;
-	Button*           m_hover;
+	Widget*           m_hover;
 	sf::Vector2f      m_position;
 };
+
+}
 
 #endif // GUI_MENU_HPP

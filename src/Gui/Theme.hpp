@@ -15,6 +15,11 @@ public:
 
 	static const BitmapFont& getFont();
 
+	static sf::Color BG_COLOR;
+	static sf::Color BG_COLOR_HOVER;
+	static sf::Color BG_COLOR_PRESSED;
+	static sf::Color BORDER_COLOR;
+
 private:
 	static BitmapFont m_font;
 };

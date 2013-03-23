@@ -1,5 +1,9 @@
 #include "Menu.hpp"
+#include "Widget.hpp"
+#include "Button.hpp"
+#include "OptionsBox.hpp"
 
+using namespace gui;
 
 Menu::Menu(sf::RenderTarget& window):
 	m_window(window),
@@ -24,19 +28,18 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 	case sf::Event::MouseMoved:
 		for (WidgetVector::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
 		{
-			Button* button = *it;
+			Widget* widget = *it;
 			// Convert mouse position to widget coordinates system
-			sf::Vector2f mouse = m_window.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-			mouse -= button->getPosition();
-			if (button->containsPoint(mouse))
+			sf::Vector2f mouse = getMousePosition(event.mouseMove.x, event.mouseMove.y, widget);
+			if (widget->containsPoint(mouse))
 			{
-				if (m_hover != button)
+				if (m_hover != widget)
 				{
 					if (m_hover != NULL)
 						m_hover->onMouseLeave();
 
-					m_hover = button;
-					button->onMouseEnter();
+					m_hover = widget;
+					widget->onMouseEnter();
 				}
 
 				return false;
@@ -48,15 +51,25 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 			m_hover = NULL;
 		}
 		break;
+
 	case sf::Event::MouseButtonPressed:
+		if (m_hover != NULL)
+		{
+			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
+			if (m_hover->containsPoint(mouse))
+			{
+				m_hover->onMousePressed(mouse.x, mouse.y);
+			}
+		}
 		break;
+
 	case sf::Event::MouseButtonReleased:
 		if (m_hover != NULL)
 		{
-			sf::Vector2f mouse = m_window.mapPixelToCoords({event.mouseButton.x, event.mouseButton.y});
-			mouse -= m_hover->getPosition();
+			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
 			if (m_hover->containsPoint(mouse))
 			{
+				m_hover->onMouseReleased(mouse.x, mouse.y);
 				id = m_hover->getID();
 				return true;
 			}
@@ -82,7 +95,7 @@ void Menu::addButton(const sf::String& string, int id)
 	sf::Vector2f pos;
 	if (!m_widgets.empty())
 	{
-		Button* last = m_widgets.back();
+		Widget* last = m_widgets.back();
 		pos.x = last->getPosition().x;
 		pos.y = last->getPosition().y + last->getSize().y + 10;
 	}
@@ -99,7 +112,16 @@ void Menu::draw() const
 {
 	for (WidgetVector::const_iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
 	{
-		const Button& button = **it;
-		m_window.draw(button);
+		const Widget& widget = **it;
+		m_window.draw(widget);
 	}
+}
+
+
+sf::Vector2f Menu::getMousePosition(int x, int y, const Widget* relative) const
+{
+	sf::Vector2f mouse = m_window.mapPixelToCoords({x, y});
+	if (relative != NULL)
+		mouse -= relative->getPosition();
+	return mouse;
 }

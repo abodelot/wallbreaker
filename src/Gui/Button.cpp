@@ -3,57 +3,53 @@
 
 #define BUTTON_WIDTH 86
 
-// TODO: padding + borders
+using namespace gui;
 
 Button::Button(const sf::String& string, int id):
-	m_text(gui::Theme::getFont()),
-	m_id(id)
+	Widget(id),
+	m_text(gui::Theme::getFont())
 {
 	setText(string);
 	m_box.setOutlineThickness(1);
-	m_box.setOutlineColor(sf::Color::Cyan);
-	m_box.setFillColor(sf::Color::Blue);
-}
-
-
-const sf::Vector2f& Button::getSize() const
-{
-	return m_box.getSize();
+	m_box.setOutlineColor(Theme::BORDER_COLOR);
+	m_box.setFillColor(Theme::BG_COLOR);
 }
 
 
 void Button::setText(const sf::String& string)
 {
 	m_text.setString(string);
-	m_box.setSize(sf::Vector2f(BUTTON_WIDTH, m_text.getSize().y));
+	m_box.setSize({BUTTON_WIDTH, m_text.getSize().y});
+	setSize(m_box.getSize());
+
 	// Center text
 	m_text.move((m_box.getSize().x - m_text.getSize().x) / 2, 0);
 }
 
 
-bool Button::containsPoint(const sf::Vector2f& point) const
-{
-	return point.x > 0 && point.x < m_box.getSize().x &&
-	       point.y > 0 && point.y < m_box.getSize().y;
-}
-
-
-int Button::getID() const
-{
-	return m_id;
-}
-
-
 void Button::onMouseEnter()
 {
-	m_box.setFillColor(sf::Color(64, 128, 255));
+	m_box.setFillColor(Theme::BG_COLOR_HOVER);
 }
 
 
 void Button::onMouseLeave()
 {
-	m_box.setFillColor(sf::Color::Blue);
+	m_box.setFillColor(Theme::BG_COLOR);
 }
+
+
+void Button::onMousePressed(float, float)
+{
+	m_box.setFillColor(Theme::BG_COLOR_PRESSED);
+}
+
+
+void Button::onMouseReleased(float x, float y)
+{
+	m_box.setFillColor(Theme::BG_COLOR_HOVER);
+}
+
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

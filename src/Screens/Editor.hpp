@@ -39,7 +39,7 @@ private:
 	sf::Vertex        m_grid_lines[NB_BRICK_LINES * 2];
 	bool              m_show_grid;
 
-	Menu  m_menu;
+	gui::Menu  m_menu;
 };
 
 #endif // EDITOR_HPP

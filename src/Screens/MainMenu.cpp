@@ -47,8 +47,8 @@ void MainMenu::onEvent(const sf::Event& event)
 				Game::getInstance().nextScreen(new Wallbreaker);
 			if (id == 2)
 				Game::getInstance().nextScreen(new Editor);
-			if (id == 3)
-				Game::getInstance().nextScreen(new LevelSelection);
+			//if (id == 3)
+				//Game::getInstance().nextScreen(new LevelSelection);
 			else if (id == 4)
 				Game::getInstance().quit();
 		}
