@@ -77,8 +77,8 @@
 		<Unit filename="src/Gui/Button.hpp" />
 		<Unit filename="src/Gui/Menu.cpp" />
 		<Unit filename="src/Gui/Menu.hpp" />
-		<Unit filename="src/Gui/OptionsBox.cpp" />
 		<Unit filename="src/Gui/OptionsBox.hpp" />
+		<Unit filename="src/Gui/OptionsBox.inl" />
 		<Unit filename="src/Gui/Theme.cpp" />
 		<Unit filename="src/Gui/Theme.hpp" />
 		<Unit filename="src/Gui/Widget.cpp" />

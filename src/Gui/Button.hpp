@@ -26,6 +26,7 @@ private:
 
 	sf::RectangleShape m_box;
 	BitmapText         m_text;
+	bool               m_pressed;
 };
 
 }

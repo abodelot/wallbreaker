@@ -7,7 +7,8 @@ using namespace gui;
 
 Button::Button(const sf::String& string, int id):
 	Widget(id),
-	m_text(gui::Theme::getFont())
+	m_text(Theme::getFont()),
+	m_pressed(false)
 {
 	setText(string);
 	m_box.setOutlineThickness(1);
@@ -36,18 +37,30 @@ void Button::onMouseEnter()
 void Button::onMouseLeave()
 {
 	m_box.setFillColor(Theme::BG_COLOR);
+	if (m_pressed)
+	{
+		m_text.move(0, -1);
+		m_pressed = false;
+	}
 }
 
 
 void Button::onMousePressed(float, float)
 {
 	m_box.setFillColor(Theme::BG_COLOR_PRESSED);
+	m_text.move(0, 1);
+	m_pressed = true;
 }
 
 
 void Button::onMouseReleased(float x, float y)
 {
 	m_box.setFillColor(Theme::BG_COLOR_HOVER);
+	if (m_pressed)
+	{
+		m_text.move(0, -1);
+		m_pressed = false;
+	}
 }
 
 

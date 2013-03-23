@@ -17,6 +17,10 @@ public:
 
 	bool onEvent(const sf::Event& event, int& id);
 
+	/**
+	 * Add a new button in the menu container
+	 * The menu will take care of widget deallocation
+	 */
 	void addButton(const sf::String& string, int id);
 
 	void setPosition(float x, float y);

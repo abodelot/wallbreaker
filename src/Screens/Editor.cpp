@@ -3,8 +3,8 @@
 
 
 Editor::Editor():
-	m_menu(Game::getInstance().getWindow()),
-	m_show_grid(true)
+	m_show_grid(true),
+	m_menu(Game::getInstance().getWindow())
 {
 	// Initialize render texture
 	m_level_texture.create(m_width, m_height);
