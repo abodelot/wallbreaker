@@ -1,7 +1,5 @@
 #include "Theme.hpp"
 
-#define PADDING 1
-
 namespace gui
 {
 
@@ -24,7 +22,7 @@ OptionsBox<T>::OptionsBox():
 	m_arrow_right.pack(Theme::getBaseLine(), Theme::getBaseLine());
 	m_arrow_right.move(Theme::WIDGET_WIDTH - Theme::getBaseLine(), 0);
 
-	m_text.move(size, PADDING);
+	m_text.move(size, Theme::PADDING);
 
 	// Widget local bounds
 	setSize(m_box.getSize());
@@ -49,8 +47,8 @@ void OptionsBox<T>::selectItem(size_t item_index)
 	{
 		m_current_index = item_index;
 		m_text.setString(m_items[item_index].label);
-		// Center text
-		m_text.setPosition((m_box.getSize().x - m_text.getSize().x) / 2, PADDING);
+		// Keep text centered
+		m_text.setPosition((m_box.getSize().x - m_text.getSize().x) / 2, Theme::PADDING);
 	}
 }
 

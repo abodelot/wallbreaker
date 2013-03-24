@@ -7,14 +7,16 @@
 #include "Utils/Math.hpp"
 
 // When hitting the pad, the ball bounces from -PAD_ANGLE to +PAD_ANGLE
-#define PAD_ANGLE 45
-
+#define PAD_ANGLE  45
+#define MIN_SPEED  150
+#define MAX_SPEED  450
+#define SPEED_STEP 5
 
 int Ball::s_instance_count = 0;
 
 Ball::Ball():
 	m_angle(math::PI / 2),
-	m_velocity(140)
+	m_velocity(MIN_SPEED)
 {
 	setTexture(Resources::getTexture("ball.png"));
 	++s_instance_count;
@@ -60,8 +62,8 @@ void Ball::onCeilHit()
 
 void Ball::onBrickHit(Brick& brick)
 {
-	if (brick.takeDamage())
-		m_velocity += 5;
+	if (brick.takeDamage() && m_velocity < MAX_SPEED)
+		m_velocity += SPEED_STEP;
 
 	sf::IntRect intersection;
 	sf::IntRect brick_rect(brick.getPosition().x, brick.getPosition().y, Brick::WIDTH, Brick::HEIGHT);

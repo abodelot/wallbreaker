@@ -5,6 +5,9 @@
 #define APP_WIDTH         240
 #define APP_HEIGHT        320
 
+#define APP_AUTHOR        "Alexandre Bodelot"
+#define APP_VERSION       "0.2"
+
 #define LEVEL_FILE        "resources/levels/levels.txt"
 
 #define NB_BRICK_LINES    25 // number of lines

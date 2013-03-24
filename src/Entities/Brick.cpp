@@ -2,6 +2,7 @@
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Easing.hpp"
+#include "Utils/Math.hpp"
 
 
 Brick::Brick():

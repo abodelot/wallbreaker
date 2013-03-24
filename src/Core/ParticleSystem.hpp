@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include "Game.hpp"
-#include "Utils/Math.hpp"
+
 
 class ParticleSystem: public sf::Drawable
 {
@@ -71,25 +71,7 @@ private:
 
 	struct Particle
 	{
-		Particle(const ParticleSystem::Emitter& e, const sf::Vector2f& pos, const sf::Color& color):
-			emitter(e)
-		{
-			lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
-			float angle = e.getParticleAngle();
-			int velocity = e.getParticleSpeed();
-			speed.x = velocity * std::cos(angle);
-			speed.y = velocity * -std::sin(angle);
-
-			for (int i = 0; i < 4; ++i)
-			{
-				vertex[i].position = pos;
-				vertex[i].color = color;
-			}
-			vertex[1].position.x += 1;
-			vertex[2].position.x += 1;
-			vertex[2].position.y += 1;
-			vertex[3].position.y += 1;
-		}
+		Particle(const ParticleSystem::Emitter& e, const sf::Vector2f& pos, const sf::Color& color);
 
 		const Emitter&      emitter;
 		sf::Vertex   vertex[4];

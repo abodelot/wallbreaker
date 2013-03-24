@@ -1,17 +1,14 @@
 #include "MainMenu.hpp"
 #include "Core/Game.hpp"
 #include "Core/Resources.hpp"
+#include "Core/Config.hpp"
 #include "Gui/Theme.hpp"
-
+// Screens
 #include "Wallbreaker.hpp"
 #include "Editor.hpp"
 #include "LevelSelection.hpp"
 
-#define APP_AUTHOR   "Alexandre Bodelot"
-#define APP_NAME     "Wallbreaker"
-#define APP_VERSION  "0.2"
-
-#define ABOUT_TEXT (APP_NAME " v" APP_VERSION " - Author: " APP_AUTHOR " - Powered by SFML")
+#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - Author: " APP_AUTHOR " - Powered by SFML")
 
 MainMenu::MainMenu():
 	m_about_text(gui::Theme::getFont()),

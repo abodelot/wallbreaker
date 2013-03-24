@@ -170,7 +170,7 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	if (m_status != PLAYING)
 	{
 		sf::RectangleShape overlay({m_width, m_height});
-		overlay.setFillColor({0, 0, 0, 128});
+		overlay.setFillColor({0, 0, 0, 192});
 		m_game_texture.draw(overlay);
 		m_game_texture.draw(m_info_text, states);
 	}
