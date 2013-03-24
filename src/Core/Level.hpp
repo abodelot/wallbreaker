@@ -37,6 +37,12 @@ public:
 	void save();
 
 	/**
+	 * Create a new level (appended to levels file)
+	 * @return index of the level
+	 */
+	size_t append();
+
+	/**
 	 * Get index of the current level
 	 * @return level number (first is 1)
 	 */

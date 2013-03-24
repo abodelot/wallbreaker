@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Game.hpp"
 #include "Config.hpp"
 #include "Screens/Screen.hpp"
@@ -150,11 +151,11 @@ sf::RenderWindow& Game::getWindow()
 
 void Game::takeScreenshot() const
 {
-	char current_time[256];
+	char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
 	time_t t = time(NULL);
 	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
+	std::string filename = m_current_dir + "screenshots/" + current_time + ".png";
 
-	std::string filename = m_current_dir + "/" + current_time + ".png";
-	printf("screenshot saved to %s\n", filename.c_str());
-	m_app.capture().saveToFile(filename);
+	if (m_app.capture().saveToFile(filename))
+		std::cout << "screenshot saved to " << filename << std::endl;
 }

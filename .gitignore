@@ -1,6 +1,9 @@
 # Executable
 bin/wallbreaker
 
+# Screenshots
+bin/screenshots/*
+
 # Code::Blocks non-mandatory files
 wallbreaker.layout
 wallbreaker.depend

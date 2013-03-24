@@ -93,6 +93,20 @@ void Level::save()
 }
 
 
+size_t Level::append()
+{
+	// Create an empty level
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
+		for (int j = 0; j < NB_BRICK_COLS; ++j)
+			m_bricks[i][j].setType(Brick::NONE);
+
+	// Save it at the end of the file
+	m_current_level = ++m_level_count;
+	save();
+	return m_current_level;
+}
+
+
 int Level::getCurrentLevel() const
 {
 	return m_current_level;

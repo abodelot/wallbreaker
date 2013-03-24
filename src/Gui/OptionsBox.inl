@@ -31,13 +31,15 @@ OptionsBox<T>::OptionsBox():
 }
 
 template <class T>
-void OptionsBox<T>::addItem(const sf::String& label, const T& value)
+void OptionsBox<T>::addItem(const sf::String& label, const T& value, bool select)
 {
 	m_items.push_back(Item(label, value));
 
 	// First inserted item is default selection
 	if (m_items.size() == 1)
 		selectItem(0);
+	else if (select)
+		selectItem(m_items.size() - 1);
 }
 
 template <class T>

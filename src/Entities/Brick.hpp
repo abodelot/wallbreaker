@@ -23,7 +23,7 @@ public:
 
 	// The bricks type
 	void setType(int id);
-	inline int getType() const { return m_type; }
+	inline Type getType() const { return m_type; }
 
 	bool isActive() const;
 

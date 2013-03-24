@@ -36,6 +36,11 @@ private:
 	 */
 	void toggleGrid();
 
+	/**
+	 * Put or remove a brick at grid index
+	 */
+	void setBrick(const sf::Vector2i& index);
+
 	static const int  m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int  m_height = NB_BRICK_LINES * Brick::HEIGHT;
 

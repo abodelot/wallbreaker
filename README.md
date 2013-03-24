@@ -13,7 +13,9 @@ Move your mouse to catch the ball.
 How to use the editor?
 ----------------------
 
-- Mouse wheel up/down: change current brick
+- Mouse wheel up/down: change current brick type
+- Left click: put brick
+- Right click: remove brick
 - G: show/hide the grid
 
 

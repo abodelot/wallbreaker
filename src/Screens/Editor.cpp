@@ -83,15 +83,7 @@ void Editor::onEvent(const sf::Event& event)
 				m_cursor_prelight[2].position = {(new_pos.x + 1) * Brick::WIDTH, (new_pos.y + 1) * Brick::HEIGHT};
 				m_cursor_prelight[3].position = {new_pos.x * Brick::WIDTH,       (new_pos.y + 1) * Brick::HEIGHT};
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					Brick& b = m_level.getBrick(new_pos.y, new_pos.x);
-					if (b.getType() != m_cursor.getType())
-					{
-						b.setType(m_cursor.getType());
-						m_cursor.playSound();
-					}
-				}
+				setBrick(new_pos);
 				updateTexture();
 			}
 			m_cursor_pos = new_pos;
@@ -102,8 +94,7 @@ void Editor::onEvent(const sf::Event& event)
 			if (m_cursor_pos.x >= 0 && m_cursor_pos.x < NB_BRICK_COLS
 			 && m_cursor_pos.y >= 0 && m_cursor_pos.y < NB_BRICK_LINES)
 			{
-				m_level.getBrick(m_cursor_pos.y, m_cursor_pos.x).setType(m_cursor.getType());
-				m_cursor.playSound();
+				setBrick(m_cursor_pos);
 				updateTexture();
 			}
 			break;
@@ -145,6 +136,14 @@ void Editor::onEvent(const sf::Event& event)
 			m_level.reload();
 			updateTexture();
 			break;
+		case 4: // New level
+		{
+			size_t index = m_level.append();
+			// Insert new level in level list
+			m_opt_levels->addItem("Level " + std::to_string(index), index, true);
+			updateTexture();
+			break;
+		}
 		case 5: // Grid on/off
 			toggleGrid();
 			break;
@@ -202,4 +201,23 @@ void Editor::toggleGrid()
 		m_but_grid->setString("Grid on");
 
 	updateTexture();
+}
+
+
+void Editor::setBrick(const sf::Vector2i& index)
+{
+	// Put with left click, erase with right click
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		Brick& b = m_level.getBrick(index.y, index.x);
+		if (b.getType() != m_cursor.getType())
+		{
+			b.setType(m_cursor.getType());
+			m_cursor.playSound();
+		}
+	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		m_level.getBrick(index.y, index.x).setType(Brick::NONE);
+	}
 }

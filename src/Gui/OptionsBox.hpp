@@ -23,8 +23,9 @@ public:
 	 * Append a new item in the list
 	 * @param label: displayed label when selected
 	 * @param value: value associated
+	 * @param select: if true, new item becomes the default selection
 	 */
-	void addItem(const sf::String& label, const T& value);
+	void addItem(const sf::String& label, const T& value, bool select = false);
 
 	/**
 	 * Make an item the current one
