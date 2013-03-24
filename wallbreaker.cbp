@@ -50,6 +50,8 @@
 		<Unit filename="src/Core/Game.hpp" />
 		<Unit filename="src/Core/HUD.cpp" />
 		<Unit filename="src/Core/HUD.hpp" />
+		<Unit filename="src/Core/Level.cpp" />
+		<Unit filename="src/Core/Level.hpp" />
 		<Unit filename="src/Core/Main.cpp" />
 		<Unit filename="src/Core/ParticleSystem.cpp" />
 		<Unit filename="src/Core/ParticleSystem.hpp" />

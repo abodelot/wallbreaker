@@ -11,6 +11,7 @@ namespace gui
 
 /**
  * Widget for selecting one item from a list
+ * Triggers an event when selected item changes
  */
 template <class T>
 class OptionsBox: public Widget
@@ -18,9 +19,24 @@ class OptionsBox: public Widget
 public:
 	OptionsBox();
 
+	/**
+	 * Append a new item in the list
+	 * @param label: displayed label when selected
+	 * @param value: value associated
+	 */
 	void addItem(const sf::String& label, const T& value);
 
+	/**
+	 * Make an item the current one
+	 * @param item_index: position of the item in the list
+	 */
 	void selectItem(size_t item_index);
+
+	/**
+	 * Get the value of the selected item
+	 * @return associated value
+	 */
+	const T& getSelectedValue() const;
 
 	// callbacks ---------------------------------------------------------------
 
@@ -42,9 +58,8 @@ private:
 	};
 
 	typedef std::vector<Item> ItemVector;
-
 	ItemVector         m_items;
-	int                m_current_index;
+	size_t             m_current_index;
 
 	// Visual components
 	sf::RectangleShape m_box;

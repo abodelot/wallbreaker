@@ -10,6 +10,12 @@ Widget::Widget(int id):
 }
 
 
+void Widget::setID(int id)
+{
+	m_id = id;
+}
+
+
 int Widget::getID() const
 {
 	return m_id;

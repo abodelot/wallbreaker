@@ -10,13 +10,18 @@ class Level
 public:
 	Level();
 
-	void reset();
+	bool loadAt(size_t index);
 
-	bool loadLevel(size_t level_index);
+	bool reload();
 
-	bool loadPreviousLevel();
+	bool loadPrevious();
 
-	bool loadNextLevel();
+	bool loadNext();
+
+	/**
+	 * Save current level to file
+	 */
+	void save();
 
 	int getCurrentLevel() const;
 
@@ -25,12 +30,15 @@ public:
 	size_t getLevelCount() const;
 
 private:
-
+	/**
+	 * Load level at the current stream position
+	 */
 	bool load();
 
 	Brick         m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
 	std::ifstream m_level_file;
 	int           m_current_level;
+	int           m_level_count;
 };
 
 #endif // LEVEL_HPP

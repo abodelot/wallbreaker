@@ -25,8 +25,8 @@ public:
 	 * Add a new button in the menu container
 	 * The menu will take care of widget deallocation
 	 */
-	void addButton(const sf::String& string, int id);
-	void add(Widget* widget);
+	void addButton(const sf::String& string, int id = -1);
+	void add(Widget* widget, int id = -1);
 
 	void setPosition(float x, float y);
 

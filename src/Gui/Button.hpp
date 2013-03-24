@@ -7,11 +7,18 @@
 namespace gui
 {
 
+/**
+ * A simple press button
+ * Triggers an event when clicked
+ */
 class Button: public Widget
 {
 public:
 	Button(const sf::String& string, int id = -1);
 
+	/**
+	 * Set the displayed button label
+	 */
 	void setText(const sf::String& string);
 
 

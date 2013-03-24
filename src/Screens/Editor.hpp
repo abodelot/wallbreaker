@@ -7,6 +7,12 @@
 #include "Entities/Brick.hpp"
 #include "Gui/Menu.hpp"
 
+namespace gui
+{
+template <class T>
+class OptionsBox;
+}
+
 class Editor: public Screen
 {
 public:
@@ -40,7 +46,9 @@ private:
 	sf::Vertex        m_grid_lines[NB_BRICK_LINES * 2];
 	bool              m_show_grid;
 
-	gui::Menu  m_menu;
+	// GUI elements
+	gui::OptionsBox<size_t>* m_opt_levels;
+	gui::Menu                m_menu;
 };
 
 #endif // EDITOR_HPP

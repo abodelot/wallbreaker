@@ -1,45 +1,76 @@
 #include <iostream>
 #include "Level.hpp"
 
+/**
+ * Number of bytes per level in the levels file
+ * NB_BRICK_COLS + 1 because additional '\n' character for each line
+ */
+#define LEVEL_SIZE() ((NB_BRICK_COLS + 1) * NB_BRICK_LINES)
+
 
 Level::Level():
-	m_level_file(LEVEL_FILE),
-	m_current_level(0)
+	m_current_level(0),
+	m_level_count(0)
 {
-	if (m_level_file)
-	{
-		// Initialize bricks position
-		for (int i = 0; i < NB_BRICK_LINES; ++i)
-			for (int j = 0; j < NB_BRICK_COLS; ++j)
-				m_bricks[i][j].setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
+	// Initialize bricks position
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
+		for (int j = 0; j < NB_BRICK_COLS; ++j)
+			m_bricks[i][j].setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
 
-		load();
+
+	// Open the file containing the levels
+	std::string filename = Game::getInstance().getCurrentDir() + LEVEL_FILE;
+	m_level_file.open(filename.c_str());
+	if (!m_level_file)
+	{
+		std::cerr << "error while opening level file " << filename << std::endl;
 	}
 	else
 	{
-		std::cerr << "Couldn't open level file:" << LEVEL_FILE << std::endl;
+		// Number of levels = file size / size of one level
+		m_level_file.seekg(0, std::ifstream::end);
+		m_level_count = m_level_file.tellg() / LEVEL_SIZE();
+		std::cout << "level count:" << m_level_count << std::endl;
+
+		// Load first level
+		m_level_file.seekg(0);
+		load();
 	}
-
-
 }
 
 
-void Level::reset()
+bool Level::loadAt(size_t index)
 {
+	if (index > 0 && index <= m_level_count)
+	{
+		// -1 because stream cursor needs to be BEFORE the level
+		m_current_level = index - 1;
+		m_level_file.seekg(LEVEL_SIZE() * m_current_level);
+		return load();
+	}
+	return false;
 }
 
 
-bool Level::loadLevel(size_t level_index)
+bool Level::loadPrevious()
 {
+	return loadAt(m_current_level - 1);
 }
 
 
-bool Level::loadPreviousLevel()
+bool Level::reload()
 {
+	return loadAt(m_current_level);
 }
 
 
-bool Level::loadNextLevel()
+bool Level::loadNext()
+{
+	return load();
+}
+
+
+void Level::save()
 {
 }
 
@@ -58,21 +89,13 @@ Brick& Level::getBrick(int i, int j)
 
 size_t Level::getLevelCount() const
 {
+	return m_level_count;
 }
 
 
 bool Level::load()
 {
-	if (!m_level_file.is_open())
-	{
-		std::string filename = Game::getInstance().getCurrentDir() + LEVEL_FILE;
-		m_level_file.open(filename.c_str());
-		if (!m_level_file)
-		{
-			std::cerr << "error while opening level file " << filename << std::endl;
-			return false;
-		}
-	}
+
 
 	int nb_active_bricks = 0;
 

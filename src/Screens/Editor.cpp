@@ -44,11 +44,11 @@ Editor::Editor():
 	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE + 2);
 	m_menu.addButton("Save", 1);
 
-	gui::OptionsBox<int>* options = new gui::OptionsBox<int>;
-	options->addItem("Level 1", 0);
-	options->addItem("Level 2", 1);
-	options->addItem("Level 42", 41);
-	m_menu.add(options);
+	m_opt_levels = new gui::OptionsBox<size_t>;
+	for (size_t i = 1; i <= m_level.getLevelCount(); ++i)
+		m_opt_levels->addItem("Level " + std::to_string(i), i);
+
+	m_menu.add(m_opt_levels, 3);
 
 	m_menu.addButton("Back", 2);
 }
@@ -129,6 +129,16 @@ void Editor::onEvent(const sf::Event& event)
 		case 2:
 			Game::getInstance().previousScreen();
 			break;
+		case 3:
+		{
+			int level = m_opt_levels->getSelectedValue();
+			if (m_level.loadAt(level))
+			{
+				updateTexture();
+			}
+			break;
+		}
+
 	}
 }
 

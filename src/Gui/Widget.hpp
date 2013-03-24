@@ -5,17 +5,18 @@
 
 namespace gui
 {
+
 class Menu;
+
 /**
  * Base class for gui widgets
  */
 class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
-
-
 	Widget(int id = -1);
 
+	void setID(int id);
 	int getID() const;
 
 	float getX() const { return getPosition().x; }
@@ -26,6 +27,9 @@ public:
 	 */
 	const sf::Vector2f& getSize() const;
 
+	/**
+	 * Check if a point is inside the widget
+	 */
 	bool containsPoint(const sf::Vector2f& point) const;
 
 	// callbacks ---------------------------------------------------------------

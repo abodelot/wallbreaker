@@ -24,16 +24,16 @@ public:
 	/**
 	 * Widget height based on text height
 	 */
-	static int getBaseLine();
+	static float getBaseLine();
 
 	static sf::Color BG_COLOR;
 	static sf::Color BG_COLOR_HOVER;
 	static sf::Color BG_COLOR_PRESSED;
 	static sf::Color BORDER_COLOR;
 
-	static int WIDGET_WIDTH;
-	static int PADDING; // Spacing inside widget
-	static int MARGIN;  // Spacing between widgets
+	static float WIDGET_WIDTH;
+	static float PADDING; // Spacing inside widget
+	static float MARGIN;  // Spacing between widgets
 
 private:
 	static BitmapFont m_font;

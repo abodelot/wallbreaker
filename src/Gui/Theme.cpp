@@ -7,9 +7,9 @@ sf::Color Theme::BG_COLOR_HOVER   = sf::Color(64, 128, 255);
 sf::Color Theme::BG_COLOR_PRESSED = sf::Color(0, 0, 128);
 sf::Color Theme::BORDER_COLOR     = sf::Color::Cyan;
 
-int       Theme::WIDGET_WIDTH     = 86;
-int       Theme::PADDING          = 1;
-int       Theme::MARGIN           = 8;
+float     Theme::WIDGET_WIDTH     = 86;
+float     Theme::PADDING          = 1;
+float     Theme::MARGIN           = 8;
 
 BitmapFont Theme::m_font;
 
@@ -26,7 +26,7 @@ const BitmapFont& Theme::getFont()
 }
 
 
-int Theme::getBaseLine()
+float Theme::getBaseLine()
 {
 	return m_font.getGlyphHeight() + PADDING * 2;
 }

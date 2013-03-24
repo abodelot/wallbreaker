@@ -53,6 +53,12 @@ void OptionsBox<T>::selectItem(size_t item_index)
 }
 
 template <class T>
+const T& OptionsBox<T>::getSelectedValue() const
+{
+	return m_items[m_current_index].value;
+}
+
+template <class T>
 void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
