@@ -132,7 +132,7 @@ void Game::setResolution(int width, int height)
 
 	// Center window on desktop
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	m_app.setPosition(sf::Vector2i((desktop.width - m_app.getSize().x) / 2, (desktop.height - m_app.getSize().y) / 2));
+	m_app.setPosition({(desktop.width - width) / 2, (desktop.height - height) / 2});
 }
 
 

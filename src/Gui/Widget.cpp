@@ -1,8 +1,10 @@
 #include "Widget.hpp"
+#include "Menu.hpp"
 
 using namespace gui;
 
 Widget::Widget(int id):
+	m_parent(NULL),
 	m_id(id)
 {
 }
@@ -31,6 +33,19 @@ bool Widget::containsPoint(const sf::Vector2f& point) const
 	return point.x > 0 && point.x < m_size.x &&
 	       point.y > 0 && point.y < m_size.y;
 }
+
+
+void Widget::triggerCallback()
+{
+	if (m_parent != NULL)
+		m_parent->triggerCallback(this);
+}
+
+void Widget::setParent(Menu* menu)
+{
+	m_parent = menu;
+}
+
 
 // callbacks -------------------------------------------------------------------
 

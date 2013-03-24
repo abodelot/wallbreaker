@@ -7,7 +7,8 @@ using namespace gui;
 
 Menu::Menu(sf::RenderTarget& window):
 	m_window(window),
-	m_hover(NULL)
+	m_hover(NULL),
+	m_triggered(NULL)
 {
 }
 
@@ -21,7 +22,7 @@ Menu::~Menu()
 }
 
 
-bool Menu::onEvent(const sf::Event& event, int& id)
+int Menu::onEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
@@ -47,8 +48,7 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 					// Hover on the same previously hovered widget
 					widget->onMouseMoved(mouse.x, mouse.y);
 				}
-
-				return false;
+				return -1;
 			}
 		}
 		if (m_hover != NULL)
@@ -76,15 +76,20 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 			if (m_hover->containsPoint(mouse))
 			{
 				m_hover->onMouseReleased(mouse.x, mouse.y);
-				id = m_hover->getID();
-				return true;
 			}
 		}
 		break;
 	default:
 		break;
 	}
-	return false;
+
+	if (m_triggered != NULL)
+	{
+		int id = m_triggered->getID();
+		m_triggered = NULL;
+		return id;
+	}
+	return -1;
 }
 
 
@@ -114,8 +119,15 @@ void Menu::add(Widget* widget)
 	{
 		pos = m_position;
 	}
+	widget->setParent(this);
 	widget->setPosition(pos);
 	m_widgets.push_back(widget);
+}
+
+
+void Menu::triggerCallback(const Widget* widget)
+{
+	m_triggered = widget;
 }
 
 

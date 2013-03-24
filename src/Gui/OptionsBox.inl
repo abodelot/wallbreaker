@@ -109,12 +109,14 @@ void OptionsBox<T>::onMouseReleased(float x, float y)
 		// Select previous item
 		selectItem(m_current_index == 0 ? m_items.size() - 1 : m_current_index - 1);
 		m_arrow_left.release();
+		triggerCallback();
 	}
 	else if (m_arrow_right.containsPoint(x, y))
 	{
 		// Select next item
 		selectItem(m_current_index == (m_items.size() - 1) ? 0 : m_current_index + 1);
 		m_arrow_right.release();
+		triggerCallback();
 	}
 }
 

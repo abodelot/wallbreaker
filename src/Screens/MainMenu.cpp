@@ -34,24 +34,20 @@ MainMenu::MainMenu():
 
 void MainMenu::onEvent(const sf::Event& event)
 {
-	if (event.type == sf::Event::KeyPressed)
+	switch (m_menu.onEvent(event))
 	{
-		Game::getInstance().nextScreen(new Wallbreaker);
-	}
-	else
-	{
-		int id;
-		if (m_menu.onEvent(event, id))
-		{
-			if (id == 1)
-				Game::getInstance().nextScreen(new Wallbreaker);
-			if (id == 2)
-				Game::getInstance().nextScreen(new Editor);
-			//if (id == 3)
-				//Game::getInstance().nextScreen(new LevelSelection);
-			else if (id == 4)
-				Game::getInstance().quit();
-		}
+		case 1:
+			Game::getInstance().nextScreen(new Wallbreaker);
+			break;
+		case 2:
+			Game::getInstance().nextScreen(new Editor);
+			break;
+		case 3:
+			//Game::getInstance().nextScreen(new OptionsMenu);
+			break;
+		case 4:
+			Game::getInstance().quit();
+			break;
 	}
 }
 

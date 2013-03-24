@@ -15,7 +15,11 @@ public:
 	Menu(sf::RenderTarget& window);
 	~Menu();
 
-	bool onEvent(const sf::Event& event, int& id);
+	/**
+	 * Handle event and send it to widgets
+	 * @return triggered widget ID, or -1 if none
+	 */
+	int onEvent(const sf::Event& event);
 
 	/**
 	 * Add a new button in the menu container
@@ -27,6 +31,8 @@ public:
 	void setPosition(float x, float y);
 
 	void draw() const;
+
+	void triggerCallback(const Widget* widget);
 
 private:
 	/**
@@ -41,9 +47,10 @@ private:
 	typedef std::vector<Widget*> WidgetVector;
 
 	sf::RenderTarget& m_window;
+	sf::Vector2f      m_position;
 	WidgetVector      m_widgets;
 	Widget*           m_hover;
-	sf::Vector2f      m_position;
+	const Widget*     m_triggered;
 };
 
 }

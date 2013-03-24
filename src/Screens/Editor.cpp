@@ -13,13 +13,6 @@ Editor::Editor():
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
 
-
-
-	// Initialize bricks position
-	for (int i = 0; i < NB_BRICK_LINES; ++i)
-		for (int j = 0; j < NB_BRICK_COLS; ++j)
-			m_bricks[i][j].setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
-
 	// Initialize visual grid
 	for (int i = 1; i < NB_BRICK_LINES; ++i)
 	{
@@ -88,19 +81,24 @@ void Editor::onEvent(const sf::Event& event)
 
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
-					m_cursor.playSound();
+					Brick& b = m_level.getBrick(new_pos.y, new_pos.x);
+					if (b.getType() != m_cursor.getType())
+					{
+						b.setType(m_cursor.getType());
+						m_cursor.playSound();
+					}
 				}
 				updateTexture();
 			}
 			m_cursor_pos = new_pos;
+
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
 			if (m_cursor_pos.x >= 0 && m_cursor_pos.x < NB_BRICK_COLS
 			 && m_cursor_pos.y >= 0 && m_cursor_pos.y < NB_BRICK_LINES)
 			{
-				m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+				m_level.getBrick(m_cursor_pos.y, m_cursor_pos.x).setType(m_cursor.getType());
 				m_cursor.playSound();
 				updateTexture();
 			}
@@ -125,20 +123,19 @@ void Editor::onEvent(const sf::Event& event)
 			break;
 	}
 
-	int id;
-	if (m_menu.onEvent(event, id))
+
+	switch (m_menu.onEvent(event))
 	{
-		if (id == 2)
+		case 2:
 			Game::getInstance().previousScreen();
+			break;
 	}
 }
 
 
 void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-
 	target.draw(m_level_sprite);
-
 	target.draw(m_cursor);
 
 	// draw GUI menu
@@ -155,7 +152,7 @@ void Editor::updateTexture()
 	{
 		for (int j = 0; j < NB_BRICK_COLS; ++j)
 		{
-			const Brick& brick = m_bricks[i][j];
+			Brick& brick = m_level.getBrick(i, j);
 			if (brick.isActive())
 				m_level_texture.draw(brick);
 		}

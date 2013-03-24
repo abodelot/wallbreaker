@@ -60,6 +60,7 @@ void Button::onMouseReleased(float x, float y)
 	{
 		m_text.move(0, -1);
 		m_pressed = false;
+		triggerCallback();
 	}
 }
 

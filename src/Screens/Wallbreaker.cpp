@@ -280,6 +280,7 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j)
 	return false;
 }
 
+
 bool Wallbreaker::loadNextLevel()
 {
 	if (!m_level_file.is_open())
@@ -301,7 +302,6 @@ bool Wallbreaker::loadNextLevel()
 	std::string line;
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
-
 		std::getline(m_level_file, line);
 		if (m_level_file.eof())
 		{

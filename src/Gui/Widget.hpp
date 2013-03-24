@@ -5,13 +5,15 @@
 
 namespace gui
 {
-
+class Menu;
 /**
  * Base class for gui widgets
  */
 class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
+
+
 	Widget(int id = -1);
 
 	int getID() const;
@@ -37,7 +39,13 @@ public:
 protected:
 	void setSize(const sf::Vector2f& size);
 
+	void triggerCallback();
+
 private:
+	friend class Menu;
+	void setParent(Menu* menu);
+
+	Menu*        m_parent;
 	sf::Vector2f m_size;
 	int          m_id;
 };

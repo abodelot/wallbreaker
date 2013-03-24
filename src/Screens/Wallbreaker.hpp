@@ -49,7 +49,6 @@ private:
 	// Create a new ball instance
 	void createBall();
 
-
 	static const int m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int m_height = NB_BRICK_LINES * Brick::HEIGHT;
 

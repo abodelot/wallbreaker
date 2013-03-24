@@ -3,6 +3,7 @@
 
 #include "Screen.hpp"
 #include "Core/Config.hpp"
+#include "Core/Level.hpp"
 #include "Entities/Brick.hpp"
 #include "Gui/Menu.hpp"
 
@@ -25,8 +26,8 @@ private:
 
 	static const int  m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int  m_height = NB_BRICK_LINES * Brick::HEIGHT;
-	Brick             m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
 
+	Level             m_level;
 	Brick             m_cursor;
 	sf::Vertex        m_cursor_prelight[4];
 	sf::Vector2i      m_cursor_pos;
