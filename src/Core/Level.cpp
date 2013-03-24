@@ -46,7 +46,7 @@ Level::~Level()
 }
 
 
-bool Level::loadAt(size_t index)
+int Level::loadAt(size_t index)
 {
 	if (index > 0 && index <= m_level_count)
 	{
@@ -59,19 +59,19 @@ bool Level::loadAt(size_t index)
 }
 
 
-bool Level::loadPrevious()
+int Level::loadPrevious()
 {
 	return loadAt(m_current_level - 1);
 }
 
 
-bool Level::reload()
+int Level::reload()
 {
 	return loadAt(m_current_level);
 }
 
 
-bool Level::loadNext()
+int Level::loadNext()
 {
 	return load();
 }
@@ -125,14 +125,18 @@ size_t Level::getLevelCount() const
 }
 
 
-bool Level::load()
+size_t Level::getBrickCount() const
 {
+	return m_brick_count;
+}
 
 
-	int nb_active_bricks = 0;
+int Level::load()
+{
+	m_brick_count = 0;
 
 	if (m_level_file.eof())
-		return false;
+		return 0;
 
 	std::string line;
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
@@ -140,7 +144,7 @@ bool Level::load()
 		std::getline(m_level_file, line);
 		if (m_level_file.eof())
 		{
-			return false;
+			return 0;
 		}
 		int length = line.size();
 		printf("%02d. ", i);
@@ -151,7 +155,7 @@ bool Level::load()
 			int type = line[j];
 			brick.setType(type);
 			if (type != Brick::NONE && type != Brick::UNBREAKABLE)
-				++nb_active_bricks;
+				++m_brick_count;
 			// Reset brick position and rotation
 			brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
 			brick.setRotation(0);
@@ -161,6 +165,21 @@ bool Level::load()
 		puts("");
 	}
 
-	std::cout << "level " << ++m_current_level << " loaded (" << nb_active_bricks << " bricks)"<< std::endl;
-	return true;
+	std::cout << "level " << ++m_current_level << " loaded (" << m_brick_count << " bricks)"<< std::endl;
+	return m_brick_count;
+}
+
+
+void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.clear({0x16, 0x1e, 0x26});
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
+	{
+		for (int j = 0; j < NB_BRICK_COLS; ++j)
+		{
+			const Brick& brick = m_bricks[i][j];
+			if (brick.getType() != Brick::NONE)
+				target.draw(brick, states);
+		}
+	}
 }

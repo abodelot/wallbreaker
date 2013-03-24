@@ -1,14 +1,12 @@
 #ifndef WALLBREAKER_HPP
 #define WALLBREAKER_HPP
 
-#include <fstream>
-
 #include "Screen.hpp"
 #include "Core/Config.hpp"
-#include "Entities/Brick.hpp"
+#include "Core/ParticleSystem.hpp"
+#include "Core/Level.hpp"
 #include "Entities/Paddle.hpp"
 #include "Gui/BitmapText.hpp"
-#include "Core/ParticleSystem.hpp"
 
 class Wallbreaker: public Screen
 {
@@ -31,17 +29,15 @@ private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	bool loadNextLevel();
+
+	void updateTexture();
+
 	void updateEntities(float frametime);
 
 	bool checkBrick(Entity& entity, int i, int j);
 
-	/**
-	 * Load the next level in the level file
-	 */
-	bool loadNextLevel();
-
 	void setStatus(Status status);
-
 
 	// Delete all entities
 	void clearEntities();
@@ -52,21 +48,19 @@ private:
 	static const int m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int m_height = NB_BRICK_LINES * Brick::HEIGHT;
 
-	std::ifstream   m_level_file;
-	Brick           m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
-	int             m_nb_active_bricks;
-	ParticleSystem& m_particles;
-	BitmapText      m_info_text;
-	sf::Sprite      m_hud_sprite;
-	sf::Sprite      m_game_sprite;
-	mutable sf::RenderTexture m_game_texture;
+	Level             m_level;
+	int               m_remaining_bricks;
+	ParticleSystem&   m_particles;
+	BitmapText        m_info_text;
+	sf::Sprite        m_hud_sprite;
+	sf::Sprite        m_level_sprite;
+	sf::RenderTexture m_level_texture;
 
 	typedef std::list<Entity*> EntityList;
 	EntityList m_entities;
 	Paddle     m_paddle;
 	Status     m_status;
 	int        m_player_lives;
-	int        m_current_level;
 };
 
 #endif // WALLBREAKER_HPP

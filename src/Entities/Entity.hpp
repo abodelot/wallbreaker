@@ -16,7 +16,7 @@ public:
 	Entity();
 	virtual ~Entity() {}
 
-	// callbacks --------------
+	// callbacks ---------------------------------------------------------------
 
 	virtual void onUpdate(float frametime) = 0;
 
@@ -30,8 +30,6 @@ public:
 
 	virtual void onWallHit() {}
 
-	sf::IntRect getCollisionRect() const;
-
 	// position helpers --------------------------------------------------------
 
 	inline float getX() const { return getPosition().x; }
@@ -44,6 +42,7 @@ public:
 	float getWidth() const;
 	float getHeight() const;
 
+	sf::IntRect getCollisionRect() const;
 
 	inline void kill() { m_alive = false; }
 	inline bool isAlive() const { return m_alive; }

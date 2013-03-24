@@ -5,7 +5,7 @@
 #include "Config.hpp"
 #include "Entities/Brick.hpp"
 
-class Level
+class Level: public sf::Drawable
 {
 public:
 	Level();
@@ -13,23 +13,24 @@ public:
 
 	/**
 	 * Load the level located at index
+	 * @return number of bricks in current level
 	 */
-	bool loadAt(size_t index);
+	int loadAt(size_t index);
 
 	/**
 	 * Reload the current level
 	 */
-	bool reload();
+	int reload();
 
 	/**
 	 * Load the previous level in levels file
 	 */
-	bool loadPrevious();
+	int loadPrevious();
 
 	/**
 	 * Load the next level in levels file
 	 */
-	bool loadNext();
+	int loadNext();
 
 	/**
 	 * Save current level to file
@@ -55,16 +56,21 @@ public:
 	 */
 	size_t getLevelCount() const;
 
+	size_t getBrickCount() const;
+
 private:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	/**
 	 * Load level at the current stream position
 	 */
-	bool load();
+	int load();
 
 	Brick        m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
 	std::fstream m_level_file;
 	int          m_current_level;
 	size_t       m_level_count;
+	size_t       m_brick_count;
 };
 
 #endif // LEVEL_HPP

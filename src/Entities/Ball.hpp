@@ -25,7 +25,6 @@ public:
 
 	void onCeilHit();
 
-
 	sf::Vector2f getSpawnPosition() const;
 
 private:

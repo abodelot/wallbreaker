@@ -166,18 +166,8 @@ void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Editor::updateTexture()
 {
-	m_level_texture.clear({0x16, 0x1e, 0x26});
-
 	// Draw bricks
-	for (int i = 0; i < NB_BRICK_LINES; ++i)
-	{
-		for (int j = 0; j < NB_BRICK_COLS; ++j)
-		{
-			Brick& brick = m_level.getBrick(i, j);
-			if (brick.isActive())
-				m_level_texture.draw(brick);
-		}
-	}
+	m_level_texture.draw(m_level);
 	m_level_texture.draw(m_cursor_prelight, 4, sf::Quads);
 
 	// Draw grid
@@ -186,7 +176,6 @@ void Editor::updateTexture()
 		m_level_texture.draw(m_grid_lines, NB_BRICK_LINES * 2, sf::Lines);
 		m_level_texture.draw(m_grid_cols, NB_BRICK_COLS * 2, sf::Lines);
 	}
-
 
 	m_level_texture.display();
 }
