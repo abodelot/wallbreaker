@@ -67,21 +67,18 @@ void Editor::onEvent(const sf::Event& event)
 		case sf::Event::MouseMoved:
 		{
 			// Convert mouse position and update cursor
-			sf::Vector2f pos = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-			m_cursor.setPosition(pos);
+			sf::Vector2f mouse = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
+			m_cursor.setPosition(mouse);
 
 			// Find brick index at the mouse position
 			sf::Vector2i new_pos;
-			new_pos.x = (pos.x - GAME_BORDER_SIZE) / Brick::WIDTH;
-			new_pos.y = (pos.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
+			new_pos.x = int(mouse.x - GAME_BORDER_SIZE) / Brick::WIDTH;
+			new_pos.y = int(mouse.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
 
 			if (new_pos.x >= 0 && new_pos.x < NB_BRICK_COLS
 			 && new_pos.y >= 0 && new_pos.y < NB_BRICK_LINES
 			 && new_pos != m_cursor_pos)
 			{
-				std::cout << "x: " << new_pos.x << ", y: " << new_pos.y << std::endl;
-				m_cursor_pos = new_pos;
-
 				// Update prelight position
 				m_cursor_prelight[0].position = {new_pos.x * Brick::WIDTH,       new_pos.y * Brick::HEIGHT};
 				m_cursor_prelight[1].position = {(new_pos.x + 1) * Brick::WIDTH, new_pos.y * Brick::HEIGHT};
@@ -95,12 +92,17 @@ void Editor::onEvent(const sf::Event& event)
 				}
 				updateTexture();
 			}
+			m_cursor_pos = new_pos;
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
-			m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
-			m_cursor.playSound();
-			updateTexture();
+			if (m_cursor_pos.x >= 0 && m_cursor_pos.x < NB_BRICK_COLS
+			 && m_cursor_pos.y >= 0 && m_cursor_pos.y < NB_BRICK_LINES)
+			{
+				m_bricks[m_cursor_pos.y][m_cursor_pos.x].setType(m_cursor.getType());
+				m_cursor.playSound();
+				updateTexture();
+			}
 			break;
 
 		case sf::Event::MouseWheelMoved:
