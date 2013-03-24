@@ -20,7 +20,7 @@ Level::Level():
 
 	// Open the file containing the levels
 	std::string filename = Game::getInstance().getCurrentDir() + LEVEL_FILE;
-	m_level_file.open(filename.c_str());
+	m_level_file.open(filename.c_str(), std::ios::in | std::ios::out | std::ios::binary);
 	if (!m_level_file)
 	{
 		std::cerr << "error while opening level file " << filename << std::endl;
@@ -36,6 +36,13 @@ Level::Level():
 		m_level_file.seekg(0);
 		load();
 	}
+}
+
+
+Level::~Level()
+{
+	if (m_level_file.is_open())
+		m_level_file.close();
 }
 
 
@@ -72,6 +79,17 @@ bool Level::loadNext()
 
 void Level::save()
 {
+	// Set stream cursor before current level
+	m_level_file.seekp(LEVEL_SIZE() * (m_current_level - 1));
+	for (int i = 0; i < NB_BRICK_LINES; ++i)
+	{
+		for (int j = 0; j < NB_BRICK_COLS; ++j)
+		{
+			Brick& brick = m_bricks[i][j];
+			m_level_file.put(brick.getType());
+		}
+		m_level_file.put('\n');
+	}
 }
 
 

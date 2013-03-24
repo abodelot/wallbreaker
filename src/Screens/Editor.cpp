@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Editor.hpp"
 #include "Gui/OptionsBox.hpp"
+#include "Gui/Button.hpp"
 
 Editor::Editor():
 	m_show_grid(true),
@@ -41,16 +42,19 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE + 2);
-	m_menu.addButton("Save", 1);
+	m_menu.setPosition(20, m_height + GAME_BORDER_SIZE + 2);
+
 
 	m_opt_levels = new gui::OptionsBox<size_t>;
 	for (size_t i = 1; i <= m_level.getLevelCount(); ++i)
 		m_opt_levels->addItem("Level " + std::to_string(i), i);
 
-	m_menu.add(m_opt_levels, 3);
-
-	m_menu.addButton("Back", 2);
+	m_menu.add(m_opt_levels,      1);
+	m_menu.addButton("Save",      2);
+	m_menu.addButton("Reload",    3);
+	m_menu.addButton("New level", 4)->setPosition(130, m_menu.getPosition().y);
+	m_but_grid = m_menu.addButton("Grid off", 5);
+	m_menu.addButton("Back",      6);
 }
 
 
@@ -114,8 +118,7 @@ void Editor::onEvent(const sf::Event& event)
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::G)
 			{
-				m_show_grid = !m_show_grid;
-				updateTexture();
+				toggleGrid();
 			}
 			break;
 
@@ -123,13 +126,10 @@ void Editor::onEvent(const sf::Event& event)
 			break;
 	}
 
-
+	// Handle GUI events
 	switch (m_menu.onEvent(event))
 	{
-		case 2:
-			Game::getInstance().previousScreen();
-			break;
-		case 3:
+		case 1: // Level selector
 		{
 			int level = m_opt_levels->getSelectedValue();
 			if (m_level.loadAt(level))
@@ -138,7 +138,19 @@ void Editor::onEvent(const sf::Event& event)
 			}
 			break;
 		}
-
+		case 2: // Save
+			m_level.save();
+			break;
+		case 3: // Reload
+			m_level.reload();
+			updateTexture();
+			break;
+		case 5: // Grid on/off
+			toggleGrid();
+			break;
+		case 6: // Back
+			Game::getInstance().previousScreen();
+			break;
 	}
 }
 
@@ -148,7 +160,7 @@ void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_level_sprite);
 	target.draw(m_cursor);
 
-	// draw GUI menu
+	// Draw GUI menu
 	m_menu.draw();
 }
 
@@ -178,4 +190,16 @@ void Editor::updateTexture()
 
 
 	m_level_texture.display();
+}
+
+
+void Editor::toggleGrid()
+{
+	m_show_grid = !m_show_grid;
+	if (m_show_grid)
+		m_but_grid->setString("Grid off");
+	else
+		m_but_grid->setString("Grid on");
+
+	updateTexture();
 }

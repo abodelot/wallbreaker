@@ -8,6 +8,7 @@ namespace gui
 {
 
 class Widget;
+class Button;
 
 class Menu
 {
@@ -24,11 +25,13 @@ public:
 	/**
 	 * Add a new button in the menu container
 	 * The menu will take care of widget deallocation
+	 * @return added widget
 	 */
-	void addButton(const sf::String& string, int id = -1);
-	void add(Widget* widget, int id = -1);
+	Button* addButton(const sf::String& string, int id = -1);
+	Widget* add(Widget* widget, int id = -1);
 
 	void setPosition(float x, float y);
+	const sf::Vector2f& getPosition() const;
 
 	void draw() const;
 

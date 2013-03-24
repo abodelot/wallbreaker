@@ -19,8 +19,8 @@ public:
 	/**
 	 * Set the displayed button label
 	 */
-	void setText(const sf::String& string);
-
+	void setString(const sf::String& string);
+	const sf::String& getString() const;
 
 	// callbacks ---------------------------------------------------------------
 

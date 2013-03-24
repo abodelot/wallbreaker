@@ -11,6 +11,7 @@ namespace gui
 {
 template <class T>
 class OptionsBox;
+class Button;
 }
 
 class Editor: public Screen
@@ -30,6 +31,11 @@ private:
 	 */
 	void updateTexture();
 
+	/**
+	 * Turn the visual grid on/off
+	 */
+	void toggleGrid();
+
 	static const int  m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int  m_height = NB_BRICK_LINES * Brick::HEIGHT;
 
@@ -47,8 +53,9 @@ private:
 	bool              m_show_grid;
 
 	// GUI elements
-	gui::OptionsBox<size_t>* m_opt_levels;
 	gui::Menu                m_menu;
+	gui::OptionsBox<size_t>* m_opt_levels;
+	gui::Button*             m_but_grid;
 };
 
 #endif // EDITOR_HPP

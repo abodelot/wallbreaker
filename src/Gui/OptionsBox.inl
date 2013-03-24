@@ -36,7 +36,7 @@ void OptionsBox<T>::addItem(const sf::String& label, const T& value)
 	m_items.push_back(Item(label, value));
 
 	// First inserted item is default selection
-	if (m_current_index == -1)
+	if (m_items.size() == 1)
 		selectItem(0);
 }
 
