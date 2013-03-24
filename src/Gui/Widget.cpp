@@ -36,5 +36,6 @@ bool Widget::containsPoint(const sf::Vector2f& point) const
 
 void Widget::onMouseEnter() {}
 void Widget::onMouseLeave() {}
+void Widget::onMouseMoved(float, float) {}
 void Widget::onMousePressed(float, float) {}
 void Widget::onMouseReleased(float, float) {}

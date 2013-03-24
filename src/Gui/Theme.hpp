@@ -11,9 +11,20 @@ namespace gui
 class Theme
 {
 public:
+	/**
+	 * Load the font
+	 */
 	static void load(const std::string& path);
 
+	/**
+	 * Get font
+	 */
 	static const BitmapFont& getFont();
+
+	/**
+	 * Widget height based on text height
+	 */
+	static int getBaseLine();
 
 	static sf::Color BG_COLOR;
 	static sf::Color BG_COLOR_HOVER;
@@ -21,6 +32,8 @@ public:
 	static sf::Color BORDER_COLOR;
 
 	static int WIDGET_WIDTH;
+	static int PADDING; // Spacing inside widget
+	static int MARGIN;  // Spacing between widgets
 
 private:
 	static BitmapFont m_font;

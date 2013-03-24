@@ -30,6 +30,7 @@ public:
 
 	virtual void onMouseEnter();
 	virtual void onMouseLeave();
+	virtual void onMouseMoved(float x, float y);
 	virtual void onMousePressed(float x, float y);
 	virtual void onMouseReleased(float x, float y);
 

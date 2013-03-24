@@ -4,6 +4,7 @@
 #include "Widget.hpp"
 #include "BitmapText.hpp"
 #include "Utils/Arrow.hpp"
+#include "Utils/Box.hpp"
 
 namespace gui
 {
@@ -25,6 +26,7 @@ public:
 
 	void onMouseEnter();
 	void onMouseLeave();
+	void onMouseMoved(float x, float y);
 	void onMousePressed(float x, float y);
 	void onMouseReleased(float x, float y);
 
@@ -47,9 +49,8 @@ private:
 	// Visual components
 	sf::RectangleShape m_box;
 	BitmapText         m_text;
-	Arrow              m_arrow_left;
-	Arrow              m_arrow_right;
-
+	Box<Arrow>         m_arrow_left;
+	Box<Arrow>         m_arrow_right;
 };
 
 }

@@ -35,11 +35,17 @@ bool Menu::onEvent(const sf::Event& event, int& id)
 			{
 				if (m_hover != widget)
 				{
+					// A new widget is hovered
 					if (m_hover != NULL)
 						m_hover->onMouseLeave();
 
 					m_hover = widget;
 					widget->onMouseEnter();
+				}
+				else
+				{
+					// Hover on the same previously hovered widget
+					widget->onMouseMoved(mouse.x, mouse.y);
 				}
 
 				return false;
@@ -102,7 +108,7 @@ void Menu::add(Widget* widget)
 	{
 		Widget* last = m_widgets.back();
 		pos.x = last->getPosition().x;
-		pos.y = last->getPosition().y + last->getSize().y + 10;
+		pos.y = last->getPosition().y + last->getSize().y + Theme::MARGIN;
 	}
 	else
 	{

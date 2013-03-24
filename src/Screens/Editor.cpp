@@ -48,15 +48,16 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE);
-	m_menu.addButton("Back", 1);
+	m_menu.setPosition(80, m_height + GAME_BORDER_SIZE + 2);
+	m_menu.addButton("Save", 1);
 
 	gui::OptionsBox<int>* options = new gui::OptionsBox<int>;
 	options->addItem("Level 1", 0);
 	options->addItem("Level 2", 1);
 	options->addItem("Level 42", 41);
-
 	m_menu.add(options);
+
+	m_menu.addButton("Back", 2);
 }
 
 
@@ -127,7 +128,7 @@ void Editor::onEvent(const sf::Event& event)
 	int id;
 	if (m_menu.onEvent(event, id))
 	{
-		if (id == 1)
+		if (id == 2)
 			Game::getInstance().previousScreen();
 	}
 }

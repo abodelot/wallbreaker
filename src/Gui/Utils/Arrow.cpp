@@ -7,6 +7,12 @@ Arrow::Arrow()
 }
 
 
+Arrow::Arrow(float size, Direction direction)
+{
+	build(size, direction);
+}
+
+
 void Arrow::build(float size, Direction direction)
 {
 	switch (direction)
@@ -50,6 +56,14 @@ void Arrow::move(float dx, float dy)
 		m_triangle[i].position.x += dx;
 		m_triangle[i].position.y += dy;
 	}
+}
+
+
+sf::Vector2f Arrow::getSize() const
+{
+	float size = std::max(std::abs(m_triangle[0].position.x - m_triangle[1].position.x),
+	                      std::abs(m_triangle[1].position.y - m_triangle[1].position.y));
+	return sf::Vector2f(size, size);
 }
 
 

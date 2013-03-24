@@ -10,18 +10,19 @@ OptionsBox<T>::OptionsBox():
 	m_current_index(-1),
 	m_text(Theme::getFont())
 {
-	float size = Theme::getFont().getGlyphHeight();
-
 	// Build visual components
-	m_box.setSize({Theme::WIDGET_WIDTH, size + PADDING * 2});
+	m_box.setSize({Theme::WIDGET_WIDTH, Theme::getBaseLine()});
 	m_box.setOutlineThickness(1);
 	m_box.setOutlineColor(Theme::BORDER_COLOR);
 	m_box.setFillColor(Theme::BG_COLOR);
 
-	m_arrow_left.build(size - PADDING, Arrow::Left);
-	m_arrow_left.move(PADDING, PADDING);
-	m_arrow_right.build(size - PADDING, Arrow::Right);
-	m_arrow_right.move(Theme::WIDGET_WIDTH - PADDING - size, PADDING);
+	float size = Theme::getFont().getGlyphHeight() - 4;
+	m_arrow_left.m_item.build(size, Arrow::Left);
+	m_arrow_left.pack(Theme::getBaseLine(), Theme::getBaseLine());
+
+	m_arrow_right.m_item.build(size, Arrow::Right);
+	m_arrow_right.pack(Theme::getBaseLine(), Theme::getBaseLine());
+	m_arrow_right.move(Theme::WIDGET_WIDTH - Theme::getBaseLine(), 0);
 
 	m_text.move(size, PADDING);
 
@@ -71,25 +72,50 @@ void OptionsBox<T>::onMouseEnter()
 template <class T>
 void OptionsBox<T>::onMouseLeave()
 {
+	m_arrow_left.release();
+	m_arrow_right.release();
 }
+
+template <class T>
+void OptionsBox<T>::onMouseMoved(float x, float y)
+{
+	if (m_arrow_left.containsPoint(x, y))
+		m_arrow_left.prelight();
+	else
+		m_arrow_left.release();
+
+	if (m_arrow_right.containsPoint(x, y))
+		m_arrow_right.prelight();
+	else
+		m_arrow_right.release();
+}
+
 
 template <class T>
 void OptionsBox<T>::onMousePressed(float x, float y)
 {
+	if (m_arrow_left.containsPoint(x, y))
+		m_arrow_left.press();
 
+	else if (m_arrow_right.containsPoint(x, y))
+		m_arrow_right.press();
 }
 
 template <class T>
 void OptionsBox<T>::onMouseReleased(float x, float y)
 {
-	float size = Theme::getFont().getGlyphHeight();
-	// Select previous item
-	if (x < size)
+	if (m_arrow_left.containsPoint(x, y))
+	{
+		// Select previous item
 		selectItem(m_current_index == 0 ? m_items.size() - 1 : m_current_index - 1);
-
-	// Select next item
-	else if (x > (Theme::WIDGET_WIDTH - size))
+		m_arrow_left.release();
+	}
+	else if (m_arrow_right.containsPoint(x, y))
+	{
+		// Select next item
 		selectItem(m_current_index == (m_items.size() - 1) ? 0 : m_current_index + 1);
+		m_arrow_right.release();
+	}
 }
 
 template <class T>

@@ -83,6 +83,8 @@
 		<Unit filename="src/Gui/Theme.hpp" />
 		<Unit filename="src/Gui/Utils/Arrow.cpp" />
 		<Unit filename="src/Gui/Utils/Arrow.hpp" />
+		<Unit filename="src/Gui/Utils/Box.hpp" />
+		<Unit filename="src/Gui/Utils/Box.inl" />
 		<Unit filename="src/Gui/Widget.cpp" />
 		<Unit filename="src/Gui/Widget.hpp" />
 		<Unit filename="src/Screens/Editor.cpp" />
