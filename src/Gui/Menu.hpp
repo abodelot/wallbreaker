@@ -29,6 +29,7 @@ public:
 	 */
 	Button* addButton(const sf::String& string, int id = -1);
 	Widget* add(Widget* widget, int id = -1);
+	Widget* add(const sf::String& label, Widget* widget, int id = -1);
 
 	void setPosition(float x, float y);
 	const sf::Vector2f& getPosition() const;

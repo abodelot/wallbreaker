@@ -1,7 +1,8 @@
 #include "Menu.hpp"
 #include "Widget.hpp"
 #include "Button.hpp"
-#include "OptionsBox.hpp"
+#include "Label.hpp"
+#include "Theme.hpp"
 
 using namespace gui;
 
@@ -111,6 +112,20 @@ Button* Menu::addButton(const sf::String& string, int id)
 	Button* button = new Button(string);
 	add(button, id);
 	return button;
+}
+
+
+Widget* Menu::add(const sf::String& str_label, Widget* widget, int id)
+{
+	add(widget, id);
+
+	sf::Vector2f pos = widget->getPosition();
+
+	Label* label = new Label(str_label);
+	add(label);
+	label->setPosition(pos);
+	widget->move(label->getSize().x + Theme::MARGIN, 0);
+	return widget;
 }
 
 

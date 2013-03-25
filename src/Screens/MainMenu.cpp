@@ -6,7 +6,7 @@
 // Screens
 #include "Wallbreaker.hpp"
 #include "Editor.hpp"
-#include "LevelSelection.hpp"
+#include "OptionsMenu.hpp"
 
 #define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - Author: " APP_AUTHOR " - Powered by SFML")
 
@@ -40,7 +40,7 @@ void MainMenu::onEvent(const sf::Event& event)
 			Game::getInstance().nextScreen(new Editor);
 			break;
 		case 3:
-			//Game::getInstance().nextScreen(new OptionsMenu);
+			Game::getInstance().nextScreen(new OptionsMenu);
 			break;
 		case 4:
 			Game::getInstance().quit();
