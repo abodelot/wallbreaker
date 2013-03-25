@@ -7,6 +7,7 @@
 #include "Core/Level.hpp"
 #include "Entities/Paddle.hpp"
 #include "Gui/BitmapText.hpp"
+#include "Gui/Menu.hpp"
 
 class Wallbreaker: public Screen
 {
@@ -18,9 +19,6 @@ public:
 
 	// override
 	void onEvent(const sf::Event& event);
-
-	// override
-	void onFocus();
 
 	// override
 	void update(float frametime);
@@ -61,6 +59,9 @@ private:
 	Paddle     m_paddle;
 	Status     m_status;
 	int        m_player_lives;
+
+	// GUI elements for pause
+	gui::Menu m_menu;
 };
 
 #endif // WALLBREAKER_HPP

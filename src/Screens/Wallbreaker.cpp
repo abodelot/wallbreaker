@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include "Wallbreaker.hpp"
+#include "OptionsMenu.hpp"
+
 #include "Entities/Ball.hpp"
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
@@ -16,7 +16,8 @@ Wallbreaker::Wallbreaker():
 	m_particles(ParticleSystem::instance()),
 	m_info_text(gui::Theme::getFont()),
 	m_status(READY),
-	m_player_lives(5)
+	m_player_lives(5),
+	m_menu(Game::getInstance().getWindow())
 {
 	// Initialize render texture
 	m_level_texture.create(m_width, m_height);
@@ -27,73 +28,13 @@ Wallbreaker::Wallbreaker():
 
 	m_hud_sprite.setTexture(HUD::getInstance().getTexture());
 	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
-}
 
+	// Pause menu
+	m_menu.setPosition(80, 100);
+	m_menu.addButton("Resume", 1);
+	m_menu.addButton("Options", 2);
+	m_menu.addButton("Main menu", 3);
 
-Wallbreaker::~Wallbreaker()
-{
-	clearEntities();
-}
-
-
-void Wallbreaker::onEvent(const sf::Event& event)
-{
-	switch (event.type)
-	{
-		case sf::Event::KeyPressed:
-			switch (event.key.code)
-			{
-				case sf::Keyboard::F2:
-					Game::getInstance().takeScreenshot();
-					break;
-				case sf::Keyboard::R:
-					m_remaining_bricks = m_level.reload();
-					HUD::getInstance().setBrickCount(m_remaining_bricks);
-					break;
-				case sf::Keyboard::N:
-					loadNextLevel();
-					break;
-				case sf::Keyboard::Escape:
-					setStatus(m_status == PAUSED ? PLAYING : PAUSED);
-					break;
-				default:
-					break;
-			}
-			break;
-
-		case sf::Event::MouseButtonPressed:
-			switch (m_status)
-			{
-				case READY:
-					setStatus(PLAYING);
-					break;
-				case PLAYING:
-					if (event.mouseButton.button == sf::Mouse::Left)
-					{
-						LaserBeam* beam = new LaserBeam();
-						beam->setPosition(m_paddle.getPosition().x + (m_paddle.getWidth() - beam->getWidth()) / 2,
-								   m_height - m_paddle.getHeight() - beam->getHeight());
-						m_entities.push_back(beam);
-					}
-					else if (event.mouseButton.button == sf::Mouse::Right)
-					{
-						createBall();
-					}
-					break;
-				case GAME_OVER:
-					Game::getInstance().previousScreen();
-					break;
-			}
-			break;
-
-		default:
-			break;
-	}
-}
-
-
-void Wallbreaker::onFocus()
-{
 	// Player paddle positioned at the bottom-center
 	m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
 
@@ -106,49 +47,125 @@ void Wallbreaker::onFocus()
 	HUD::getInstance().setLevel(m_level.getCurrentLevel());
 	HUD::getInstance().setScore(0);
 	HUD::getInstance().setHighscore(0);
-
-	Game::getInstance().getWindow().setMouseCursorVisible(false);
 	setStatus(READY);
+}
+
+
+Wallbreaker::~Wallbreaker()
+{
+	clearEntities();
+}
+
+
+void Wallbreaker::onEvent(const sf::Event& event)
+{
+	switch (m_status)
+	{
+		case PLAYING:
+			switch (event.type)
+			{
+				case sf::Event::KeyPressed:
+					switch (event.key.code)
+					{
+						case sf::Keyboard::F2:
+							Game::getInstance().takeScreenshot();
+							break;
+						case sf::Keyboard::R:
+							m_remaining_bricks = m_level.reload();
+							HUD::getInstance().setBrickCount(m_remaining_bricks);
+							break;
+						case sf::Keyboard::N:
+							loadNextLevel();
+							break;
+						case sf::Keyboard::Escape:
+							setStatus(PAUSED);
+							break;
+						default:
+							break;
+					}
+					break;
+				case sf::Event::MouseButtonPressed:
+					if (event.mouseButton.button == sf::Mouse::Right)
+					{
+						createBall();
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case PAUSED:
+			switch (m_menu.onEvent(event))
+			{
+				case 1: // Resume
+					setStatus(PLAYING);
+					break;
+				case 2: // Go to options menu
+					Game::getInstance().nextScreen(new OptionsMenu);
+					break;
+				case 3: // Back to main menu
+					Game::getInstance().previousScreen();
+					break;
+				default:
+					// Resume
+					if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+						setStatus(PLAYING);
+					break;
+			}
+			break;
+
+		case READY:
+			if (event.type == sf::Event::MouseButtonPressed)
+				setStatus(PLAYING);
+			break;
+
+		case GAME_OVER:
+			if (event.type == sf::Event::MouseButtonPressed)
+				Game::getInstance().previousScreen();
+			break;
+	}
 }
 
 
 void Wallbreaker::update(float frametime)
 {
-	Easing::update(frametime);
-
-	// Update player paddle and make sure it remains inside bounds
-	m_paddle.onUpdate(frametime);
-	if (m_paddle.getX() < 0)
-		m_paddle.setX(0);
-	else if (m_paddle.getX() + m_paddle.getWidth() > m_width)
-		m_paddle.setX(m_width - m_paddle.getWidth());
-
-	switch (m_status)
+	if (m_status == PLAYING || m_status == READY)
 	{
-		case READY:
+		Easing::update(frametime);
+
+		// Update player paddle and make sure it remains inside bounds
+		m_paddle.onUpdate(frametime);
+		if (m_paddle.getX() < 0)
+			m_paddle.setX(0);
+		else if (m_paddle.getX() + m_paddle.getWidth() > m_width)
+			m_paddle.setX(m_width - m_paddle.getWidth());
+
+		if (m_status == PLAYING)
+		{
+			updateEntities(frametime);
+		}
+		else
 		{
 			Entity* ball = m_entities.front();
 			// Keep the ball centered on the player pad
 			ball->setPosition(m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
 				              m_height - m_paddle.getHeight() - ball->getHeight());
-			break;
 		}
-		case PLAYING:
-			updateEntities(frametime);
-			break;
-		default:
-			break;
+		m_particles.update(frametime);
 	}
-
-	m_particles.update(frametime);
 	updateTexture();
 }
 
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_hud_sprite);
-	target.draw(m_level_sprite);
+	target.draw(m_hud_sprite, states);
+	target.draw(m_level_sprite, states);
+	if (m_status == PAUSED)
+	{
+		m_menu.draw();
+	}
 }
 
 
@@ -313,8 +330,9 @@ void Wallbreaker::setStatus(Status status)
 	{
 		m_info_text.setString("Paused");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, (m_height - m_info_text.getSize().y) / 2);
+		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, 60);
 	}
+	Game::getInstance().getWindow().setMouseCursorVisible(status == PAUSED);
 }
 
 
