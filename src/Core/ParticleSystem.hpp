@@ -56,7 +56,7 @@ public:
 
 	static ParticleSystem& instance();
 
-	// creates particles
+	// create particles
 	void create(const Emitter& emitter);
 
 
@@ -64,6 +64,11 @@ public:
 	void update(float frametime);
 
 	void removeByEmitter(const Emitter* emitter);
+
+	/**
+	 * Remove all particles
+	 */
+	void clear();
 
 private:
 	// override

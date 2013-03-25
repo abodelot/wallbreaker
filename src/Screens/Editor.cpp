@@ -18,17 +18,17 @@ Editor::Editor():
 	for (int i = 1; i < NB_BRICK_LINES; ++i)
 	{
 		m_grid_lines[i * 2].color        = sf::Color::Black;
-		m_grid_lines[i * 2].position     = sf::Vector2f(0, Brick::HEIGHT * i);
+		m_grid_lines[i * 2].position     = sf::Vector2f(0, Brick::HEIGHT * i - 1);
 		m_grid_lines[i * 2 + 1].color    = sf::Color::Black;
-		m_grid_lines[i * 2 + 1].position = sf::Vector2f(m_width, Brick::HEIGHT * i);
+		m_grid_lines[i * 2 + 1].position = sf::Vector2f(m_width, Brick::HEIGHT * i - 1);
 	}
 
 	for (int i = 1; i < NB_BRICK_COLS; ++i)
 	{
 		m_grid_cols[i * 2].color        = sf::Color::Black;
-		m_grid_cols[i * 2].position     = sf::Vector2f(Brick::WIDTH * i, 0);
+		m_grid_cols[i * 2].position     = sf::Vector2f(Brick::WIDTH * i - 1, 0);
 		m_grid_cols[i * 2 + 1].color    = sf::Color::Black;
-		m_grid_cols[i * 2 + 1].position = sf::Vector2f(Brick::WIDTH * i, m_height);
+		m_grid_cols[i * 2 + 1].position = sf::Vector2f(Brick::WIDTH * i - 1, m_height);
 	}
 
 	updateTexture();

@@ -123,10 +123,9 @@ void BitmapText::updateGeometry()
 		// Handle special characters
 		switch (current)
 		{
-			//case L' ' :  x += hspace;		continue;
-			//case L'	' : x += hspace * 4;	continue;
+			case L'\t' : x += m_font->getGlyphWidth() * 4;	continue;
 			case L'\n' : y += m_font->getGlyphHeight(); x = 0; continue;
-			//case L'\v' : y += vspace * 4;	continue;
+			case L'\v' : y += m_font->getGlyphWidth() * 4;	continue;
 		}
 
 

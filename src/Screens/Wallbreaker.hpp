@@ -9,6 +9,9 @@
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
+/**
+ * Game screen
+ */
 class Wallbreaker: public Screen
 {
 public:

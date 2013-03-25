@@ -46,6 +46,7 @@ int ParticleSystem::Emitter::getParticleCount() const
 	return m_particle_count;
 }
 
+
 void ParticleSystem::Emitter::setParticleCount(int count)
 {
 	m_particle_count = count;
@@ -69,6 +70,7 @@ ParticleSystem& ParticleSystem::instance()
 	static ParticleSystem self;
 	return self;
 }
+
 
 void ParticleSystem::create(const Emitter& emitter)
 {
@@ -124,6 +126,12 @@ void ParticleSystem::update(float frametime)
 }
 
 
+void ParticleSystem::clear()
+{
+	m_particles.clear();
+}
+
+
 void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.blendMode = sf::BlendAdd;
@@ -131,7 +139,6 @@ void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) con
 	for (ParticleList::const_iterator it = m_particles.begin(); it != m_particles.end(); ++it)
 	{
 		target.draw(it->vertex, 4, sf::Quads, states);
-
 	}
 }
 
@@ -147,23 +154,24 @@ void ParticleSystem::removeByEmitter(const Emitter* emitter)
 	}
 }
 
+
 ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e, const sf::Vector2f& pos, const sf::Color& color):
 	emitter(e)
 {
-		lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
-		float angle = e.getParticleAngle();
-		int velocity = e.getParticleSpeed();
-		speed.x = velocity * std::cos(angle);
-		speed.y = velocity * -std::sin(angle);
+	lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
+	float angle = e.getParticleAngle();
+	int velocity = e.getParticleSpeed();
+	speed.x = velocity * std::cos(angle);
+	speed.y = velocity * -std::sin(angle);
 
-		for (int i = 0; i < 4; ++i)
-		{
-			vertex[i].position = pos;
-			vertex[i].color = color;
-		}
-		vertex[1].position.x += 1;
-		vertex[2].position.x += 1;
-		vertex[2].position.y += 1;
-		vertex[3].position.y += 1;
+	for (int i = 0; i < 4; ++i)
+	{
+		vertex[i].position = pos;
+		vertex[i].color = color;
 	}
+	vertex[1].position.x += 1;
+	vertex[2].position.x += 1;
+	vertex[2].position.y += 1;
+	vertex[3].position.y += 1;
+}
 

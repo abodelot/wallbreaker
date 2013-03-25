@@ -36,6 +36,7 @@ Ball::~Ball()
 {
 	Emitter::clearParticles();
 	--s_instance_count;
+	puts("ball cleared");
 }
 
 

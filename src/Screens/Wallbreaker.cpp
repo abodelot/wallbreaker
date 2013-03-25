@@ -54,6 +54,7 @@ Wallbreaker::Wallbreaker():
 Wallbreaker::~Wallbreaker()
 {
 	clearEntities();
+	m_particles.clear();
 }
 
 

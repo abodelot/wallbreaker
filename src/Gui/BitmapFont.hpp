@@ -21,7 +21,7 @@ public:
 	 * @param width: nb characters by line
 	 * @param height: nb characters by column
 	 */
-	bool loadFromFile(const std::string& image_path, int width=10, int height=10);
+	bool loadFromFile(const std::string& image_path, int width=16, int height=6);
 
 	// Get the font's texture
 	const sf::Texture& getTexture() const;
@@ -34,6 +34,7 @@ public:
 	sf::IntRect getGlyphRect(char character) const;
 
 	int getGlyphHeight() const;
+	int getGlyphWidth() const;
 
 private:
 	sf::Texture m_texture;

@@ -55,3 +55,9 @@ int BitmapFont::getGlyphHeight() const
 {
 	return m_glyph_height;
 }
+
+
+int BitmapFont::getGlyphWidth() const
+{
+	return m_glyph_width;
+}
