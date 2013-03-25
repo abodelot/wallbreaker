@@ -3,15 +3,17 @@
 #include "Core/Game.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Gui/Button.hpp"
-
+#include "Gui/Label.hpp"
 
 OptionsMenu::OptionsMenu():
 	m_menu(Game::getInstance().getWindow())
 {
-	m_menu.setPosition(20, 100);
+	m_menu.setPosition(20, 80);
+
+	m_menu.add(new gui::Label("Options"))->setScale(2, 2);
 
 	// Create button for turning sound on/off
-	m_but_sound = new gui::Button("Turn off");
+	m_but_sound = new gui::Button(SoundSystem::isSoundEnabled() ? "Turn off" : "Turn on");
 	m_menu.add("Sound:", m_but_sound, 1);
 
 	// Create options box for selecting a resolution

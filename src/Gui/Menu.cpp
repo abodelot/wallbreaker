@@ -136,7 +136,7 @@ Widget* Menu::add(Widget* widget, int id)
 	{
 		Widget* last = m_widgets.back();
 		pos.x = last->getPosition().x;
-		pos.y = last->getPosition().y + last->getSize().y + Theme::MARGIN;
+		pos.y = last->getPosition().y + last->getSize().y * last->getScale().y + Theme::MARGIN;
 	}
 	else
 	{

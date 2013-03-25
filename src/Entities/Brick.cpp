@@ -17,7 +17,6 @@ Brick::Brick():
 	Emitter::m_angle = 0.f;
 	Emitter::m_angle_variation = 2 * math::PI;
 	Emitter::m_time_to_live = 5.f;
-	Emitter::setColor(sf::Color::Green);
 }
 
 
@@ -97,20 +96,16 @@ sf::Color Brick::getBaseColor() const
 {
 	switch (m_type - START)
 	{
-		case 0: return sf::Color(255, 0, 0);
-		case 1: return sf::Color(255, 0, 128);
-		case 2: return sf::Color(255, 0, 255);
-		case 3: return sf::Color(128, 0, 255);
+		case 0: return sf::Color(0x2e, 0xcd, 0x71);
+		case 1: return sf::Color(0x1b, 0xbc, 0x9b);
+		case 2: return sf::Color(0x35, 0x98, 0xdb);
+		case 3: return sf::Color(0x9b, 0x58, 0xb5);
 
-		case 4: return sf::Color(0, 0, 255);
-		case 5: return sf::Color(0, 128, 255);
-		case 6: return sf::Color(0, 255, 255);
-		case 7: return sf::Color(0, 255, 128);
+		case 4: return sf::Color(0xe2, 0x5d, 0xb5);
+		case 5: return sf::Color(0xe8, 0x4c, 0x3d);
+		case 6: return sf::Color(0xe7, 0x7e, 0x23);
+		case 7: return sf::Color(0xf1, 0xc4, 0x0f);
 
-		case 8:  return sf::Color(0, 255, 0);
-		case 9:  return sf::Color(128, 255, 0);
-		case 10: return sf::Color(255, 255, 0);
-		case 11: return sf::Color(255, 128, 0);
+		default: return sf::Color(0xbe, 0xc3, 0xc7);
 	}
-	return sf::Color::White;
 }

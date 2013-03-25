@@ -11,7 +11,7 @@
 class Wallbreaker: public Screen
 {
 public:
-	enum Status { READY, PLAYING, GAME_OVER };
+	enum Status { READY, PLAYING, PAUSED, GAME_OVER };
 
 	Wallbreaker();
 	~Wallbreaker();

@@ -18,10 +18,8 @@ Game::Game():
 	m_current_screen(NULL),
 	m_next_screen(NULL)
 {
-	//setResolution(APP_WIDTH, APP_HEIGHT);
 	setResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
-	//setResolution(APP_WIDTH * 3, APP_HEIGHT * 3);
-	m_app.setFramerateLimit(120);
+	m_app.setFramerateLimit(60);
 }
 
 

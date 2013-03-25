@@ -38,53 +38,55 @@ Wallbreaker::~Wallbreaker()
 
 void Wallbreaker::onEvent(const sf::Event& event)
 {
-	switch (m_status)
+	switch (event.type)
 	{
-		case READY:
-			if (event.type == sf::Event::MouseButtonPressed)
+		case sf::Event::KeyPressed:
+			switch (event.key.code)
 			{
-				setStatus(PLAYING);
+				case sf::Keyboard::F2:
+					Game::getInstance().takeScreenshot();
+					break;
+				case sf::Keyboard::R:
+					m_remaining_bricks = m_level.reload();
+					HUD::getInstance().setBrickCount(m_remaining_bricks);
+					break;
+				case sf::Keyboard::N:
+					loadNextLevel();
+					break;
+				case sf::Keyboard::Escape:
+					setStatus(m_status == PAUSED ? PLAYING : PAUSED);
+					break;
+				default:
+					break;
 			}
 			break;
-		case PLAYING:
-			if (event.type == sf::Event::MouseButtonPressed)
+
+		case sf::Event::MouseButtonPressed:
+			switch (m_status)
 			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					LaserBeam* beam = new LaserBeam();
-					beam->setPosition(m_paddle.getPosition().x + (m_paddle.getWidth() - beam->getWidth()) / 2,
-					           m_height - m_paddle.getHeight() - beam->getHeight());
-					m_entities.push_back(beam);
-				}
-				else if (event.mouseButton.button == sf::Mouse::Right)
-				{
-					createBall();
-				}
-			}
-			else if (event.type == sf::Event::KeyPressed)
-			{
-				switch (event.key.code)
-				{
-					case sf::Keyboard::F2:
-						Game::getInstance().takeScreenshot();
-						break;
-					case sf::Keyboard::R:
-						m_remaining_bricks = m_level.reload();
-						HUD::getInstance().setBrickCount(m_remaining_bricks);
-						break;
-					case sf::Keyboard::N:
-						loadNextLevel();
-						break;
-					default:
-						break;
-				}
+				case READY:
+					setStatus(PLAYING);
+					break;
+				case PLAYING:
+					if (event.mouseButton.button == sf::Mouse::Left)
+					{
+						LaserBeam* beam = new LaserBeam();
+						beam->setPosition(m_paddle.getPosition().x + (m_paddle.getWidth() - beam->getWidth()) / 2,
+								   m_height - m_paddle.getHeight() - beam->getHeight());
+						m_entities.push_back(beam);
+					}
+					else if (event.mouseButton.button == sf::Mouse::Right)
+					{
+						createBall();
+					}
+					break;
+				case GAME_OVER:
+					Game::getInstance().previousScreen();
+					break;
 			}
 			break;
-		case GAME_OVER:
-			if (event.type == sf::Event::MouseButtonPressed)
-			{
-				Game::getInstance().previousScreen();
-			}
+
+		default:
 			break;
 	}
 }
@@ -304,6 +306,12 @@ void Wallbreaker::setStatus(Status status)
 			m_player_lives > 0 ?
 			"Congratulations!\nGame complete!" :
 			"GAME OVER.\nTry harder\nnext time!");
+		m_info_text.setScale(2, 2);
+		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, (m_height - m_info_text.getSize().y) / 2);
+	}
+	else if (status == PAUSED)
+	{
+		m_info_text.setString("Paused");
 		m_info_text.setScale(2, 2);
 		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, (m_height - m_info_text.getSize().y) / 2);
 	}

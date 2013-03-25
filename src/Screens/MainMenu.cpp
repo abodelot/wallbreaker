@@ -8,7 +8,7 @@
 #include "Editor.hpp"
 #include "OptionsMenu.hpp"
 
-#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - Author: " APP_AUTHOR " - Powered by SFML")
+#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - Author: " APP_AUTHOR)
 
 MainMenu::MainMenu():
 	m_about_text(gui::Theme::getFont()),
@@ -21,7 +21,7 @@ MainMenu::MainMenu():
 	m_about_text.setString(ABOUT_TEXT);
 	m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
 
-	m_menu.setPosition(80, 80);
+	m_menu.setPosition(80, 100);
 	m_menu.addButton("New game", 1);
 	m_menu.addButton("Editor",   2);
 	m_menu.addButton("Options",  3);
