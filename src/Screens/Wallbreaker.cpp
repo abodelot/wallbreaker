@@ -204,7 +204,7 @@ void Wallbreaker::updateEntities(float frametime)
 		Entity& entity = **it;
 		if (entity.isAlive())
 		{
-			sf::Vector2f previous_entity_pos = entity.getPosition();
+			sf::Vector2f old_pos = entity.getPosition();
 			entity.onUpdate(frametime);
 
 			// Ensure entity doesn't go beyond the walls
@@ -228,7 +228,7 @@ void Wallbreaker::updateEntities(float frametime)
 			{
 				entity.kill();
 			}
-			// Check if entity collides with player pad
+			// Check if entity collides with paddle
 			else if (entity.collidesWith(m_paddle))
 			{
 				entity.onCollide(m_paddle);
@@ -240,15 +240,14 @@ void Wallbreaker::updateEntities(float frametime)
 				// Get corners
 				int left =   (int) entity.getX() / Brick::WIDTH;
 				int top =    (int) entity.getY() / Brick::HEIGHT;
-				int right =  (int) (entity.getX() + entity.getWidth() - 1)  / Brick::WIDTH;
-				int bottom = (int) (entity.getY() + entity.getHeight() - 1) / Brick::HEIGHT;
+				int right =  (int) (entity.getX() + entity.getWidth())  / Brick::WIDTH;
+				int bottom = (int) (entity.getY() + entity.getHeight()) / Brick::HEIGHT;
 
-				if (checkBrick(entity, top, left)
-				 || checkBrick(entity, top, right)
-				 || checkBrick(entity, bottom, left)
-				 || checkBrick(entity, bottom, right))
+				if (checkBrick(entity, top, left, old_pos)
+				 || checkBrick(entity, top, right, old_pos)
+				 || checkBrick(entity, bottom, left, old_pos)
+				 || checkBrick(entity, bottom, right, old_pos))
 				{
-					entity.setPosition(previous_entity_pos);
 					if (m_remaining_bricks == 0)
 					{
 						if (loadNextLevel())
@@ -278,12 +277,14 @@ void Wallbreaker::updateEntities(float frametime)
 }
 
 
-bool Wallbreaker::checkBrick(Entity& entity, int i, int j)
+bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos)
 {
 	Brick& brick = m_level.getBrick(i, j);
 	if (brick.isActive())
 	{
+		entity.setPosition(old_pos);
 		entity.onBrickHit(brick);
+
 		if (!brick.isActive())
 		{
 			--m_remaining_bricks;

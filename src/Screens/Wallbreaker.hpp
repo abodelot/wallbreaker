@@ -36,7 +36,7 @@ private:
 
 	void updateEntities(float frametime);
 
-	bool checkBrick(Entity& entity, int i, int j);
+	bool checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos);
 
 	void setStatus(Status status);
 

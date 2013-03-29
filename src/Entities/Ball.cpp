@@ -36,7 +36,6 @@ Ball::~Ball()
 {
 	Emitter::clearParticles();
 	--s_instance_count;
-	puts("ball cleared");
 }
 
 
@@ -66,14 +65,30 @@ void Ball::onBrickHit(Brick& brick)
 	if (brick.takeDamage() && m_velocity < MAX_SPEED)
 		m_velocity += SPEED_STEP;
 
-	sf::IntRect intersection;
-	sf::IntRect brick_rect(brick.getPosition().x, brick.getPosition().y, Brick::WIDTH, Brick::HEIGHT);
-	brick_rect.intersects(getCollisionRect(), intersection);
+	sf::Vector2f ball_center = getPosition();
+	ball_center.x += getWidth() / 2;
+	ball_center.y += getHeight() / 2;
 
-	if (intersection.height > intersection.width)
-		m_angle = math::PI - m_angle;
+	sf::Vector2f brick_center = brick.getPosition();
+	brick_center.x += Brick::WIDTH / 2;
+	brick_center.y += Brick::HEIGHT / 2;
+
+	// Angle between the ball and the brick before the collision occured
+	float angle_ball = math::to_degrees(math::angle(ball_center, brick_center));
+
+	// Get brick ratio angle
+	float brick_ratio = math::to_degrees(std::tan((float) Brick::HEIGHT / Brick::WIDTH));
+
+	// Check if collision was with a vertical side
+	if ((angle_ball > brick_ratio       && angle_ball < (180 - brick_ratio)) ||
+	    (angle_ball > 180 + brick_ratio && angle_ball < (360 - brick_ratio)))
+	{
+		m_angle = -m_angle; // Vertical side, flip Y-axis
+	}
 	else
-		m_angle = -m_angle;
+	{
+		m_angle = math::PI - m_angle; // Horizontal side, flip X-axis
+	}
 }
 
 
@@ -83,7 +98,7 @@ void Ball::onCollide(const Paddle& paddle)
 	float range = PAD_ANGLE * 2;
 	float angle_diff = (range * x / (float) paddle.getWidth()) - PAD_ANGLE;
 
-	m_angle = math::to_rad(90 - angle_diff);
+	m_angle = math::to_radians(90 - angle_diff);
 	SoundSystem::playSound("ball.ogg", 0.4f);
 }
 
