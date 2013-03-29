@@ -24,7 +24,7 @@ public:
 
 	bool collidesWith(const Entity& other) const;
 
-	virtual void onBrickHit(Brick& brick) {};
+	virtual void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos) {};
 
 	virtual void onCeilHit() {}
 

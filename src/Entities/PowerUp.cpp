@@ -2,23 +2,26 @@
 #include "Paddle.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
+#include "Utils/Math.hpp"
+
+
+PowerUp* PowerUp::createRandom()
+{
+	return new PowerUp((Type) math::rand(0, EXTRA_LIFE));
+}
 
 
 PowerUp::PowerUp(Type type):
 	m_type(type)
 {
-	setTextureRect(sf::IntRect((type) * SIZE, 0, SIZE, SIZE));
+	setTextureRect(sf::IntRect((type) * WIDTH, 0, WIDTH, HEIGHT));
 	setTexture(Resources::getTexture("power-ups.png"));
 }
 
 
 void PowerUp::onCollide(const Paddle& paddle)
 {
-	switch (m_type)
-	{
-		case EXTRA_BALL:
-			break;
-	}
+
 	kill();
 	SoundSystem::playSound("power-up.ogg");
 }
@@ -26,5 +29,5 @@ void PowerUp::onCollide(const Paddle& paddle)
 
 void PowerUp::onUpdate(float frametime)
 {
-	move(0, 50 * frametime);
+	move(0, 40 * frametime);
 }

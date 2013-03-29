@@ -17,7 +17,7 @@ public:
 
 	void onUpdate(float frametime);
 
-	void onBrickHit(Brick& brick);
+	void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos);
 
 	void onCollide(const Paddle& paddle);
 

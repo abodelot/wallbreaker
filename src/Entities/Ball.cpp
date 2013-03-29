@@ -60,12 +60,12 @@ void Ball::onCeilHit()
 }
 
 
-void Ball::onBrickHit(Brick& brick)
+void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 {
 	if (brick.takeDamage() && m_velocity < MAX_SPEED)
 		m_velocity += SPEED_STEP;
 
-	sf::Vector2f ball_center = getPosition();
+	sf::Vector2f ball_center = previous_pos;
 	ball_center.x += getWidth() / 2;
 	ball_center.y += getHeight() / 2;
 
@@ -89,6 +89,8 @@ void Ball::onBrickHit(Brick& brick)
 	{
 		m_angle = math::PI - m_angle; // Horizontal side, flip X-axis
 	}
+
+	setPosition(previous_pos);
 }
 
 

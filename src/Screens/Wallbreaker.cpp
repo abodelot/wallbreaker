@@ -9,6 +9,7 @@
 #include "Core/SoundSystem.hpp"
 #include "Core/HUD.hpp"
 #include "Gui/Theme.hpp"
+#include "Utils/Math.hpp"
 
 
 Wallbreaker::Wallbreaker():
@@ -224,7 +225,7 @@ void Wallbreaker::updateEntities(float frametime)
 				entity.setX(m_width - entity.getWidth());
 			}
 			// Kill entities if they go beyond the bottom line
-			else if (entity.getY() + entity.getHeight() > m_height)
+			else if (entity.getY() > m_height)
 			{
 				entity.kill();
 			}
@@ -279,18 +280,27 @@ void Wallbreaker::updateEntities(float frametime)
 
 bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos)
 {
-	Brick& brick = m_level.getBrick(i, j);
-	if (brick.isActive())
+	if (i >= 0 && i < NB_BRICK_LINES && j >= 0 && j < NB_BRICK_COLS)
 	{
-		entity.setPosition(old_pos);
-		entity.onBrickHit(brick);
-
-		if (!brick.isActive())
+		Brick& brick = m_level.getBrick(i, j);
+		if (brick.isActive())
 		{
-			--m_remaining_bricks;
-			HUD::getInstance().setBrickCount(m_remaining_bricks);
+			entity.onBrickHit(brick, old_pos);
+
+			if (!brick.isActive())
+			{
+				if (math::rand(0, 9) == 0)
+				{
+					PowerUp* powerup = PowerUp::createRandom();
+					powerup->setPosition(brick.getPosition());
+					m_entities.push_back(powerup);
+				}
+
+				--m_remaining_bricks;
+				HUD::getInstance().setBrickCount(m_remaining_bricks);
+			}
+			return true;
 		}
-		return true;
 	}
 	return false;
 }
