@@ -9,18 +9,21 @@ namespace gui
 class Menu;
 
 /**
- * Base class for gui widgets
+ * Abstract base class for gui widgets
  */
 class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
 	Widget(int id = -1);
 
+	/**
+	 * Give an ID to the widget
+	 */
 	void setID(int id);
 	int getID() const;
 
-	float getX() const { return getPosition().x; }
-	float getY() const { return getPosition().y; }
+	inline float getX() const { return getPosition().x; }
+	inline float getY() const { return getPosition().y; }
 
 	/**
 	 * Get widget dimensions
@@ -41,8 +44,14 @@ public:
 	virtual void onMouseReleased(float x, float y);
 
 protected:
+	/**
+	 * Set size occupied by the widget
+	 */
 	void setSize(const sf::Vector2f& size);
 
+	/**
+	 * Notify parent that the widget has been triggered by user input
+	 */
 	void triggerCallback();
 
 private:

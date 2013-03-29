@@ -21,6 +21,9 @@ private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	/**
+	 * Add a resolution in the option box widget
+	 */
 	void addResolution(const sf::Vector2u& res);
 
 	// Gui elements

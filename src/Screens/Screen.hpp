@@ -16,7 +16,6 @@ public:
 	virtual void onFocus() {}
 
 	virtual void update(float frametime) {}
-
 };
 
 #endif // SCREEN_HPP

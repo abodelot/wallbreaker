@@ -14,16 +14,16 @@
 class Resources
 {
 public:
-	// Set path where resources are located
-	static void setDataPath(const std::string& path);
+	/// Set path where resources are located
+	static void setSearchPath(const std::string& path);
 
-	// Get a texture (load if not loaded yet)
+	/// Get a texture (load if not loaded yet)
 	static sf::Texture& getTexture(const std::string& name);
 
-	// Get a font (load if not loaded yet)
+	/// Get a font (load if not loaded yet)
 	static sf::Font& getFont(const std::string& name);
 
-	// Get a sound buffer (load if not loaded yet)
+	/// Get a sound buffer (load if not loaded yet)
 	static sf::SoundBuffer& getSoundBuffer(const std::string& name);
 
 private:

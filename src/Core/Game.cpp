@@ -42,7 +42,7 @@ void Game::init(const std::string& path)
 		m_current_dir = "./";
 
 	// Init resources search directory
-	Resources::setDataPath(m_current_dir);
+	Resources::setSearchPath(m_current_dir + "/resources/");
 
 	// Init GUI theme
 	gui::Theme::load(m_current_dir + "/resources/images/font.png");

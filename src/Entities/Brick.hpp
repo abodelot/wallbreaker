@@ -21,14 +21,13 @@ public:
 
 	Brick();
 
-	// The bricks type
+	/**
+	 * Set the brick type
+	 */
 	void setType(int id);
 	inline Type getType() const { return m_type; }
 
 	bool isActive() const;
-
-	// override
-	sf::Vector2f getSpawnPosition() const;
 
 	bool takeDamage(bool force_destruction=false);
 
@@ -37,8 +36,15 @@ public:
 	 */
 	void playSound();
 
+	// override
+	sf::Vector2f getSpawnPosition() const;
+
 private:
+	/**
+	 * Get color associated to the birck type
+	 */
 	sf::Color getBaseColor() const;
+
 	Type m_type;
 	bool m_broken;
 };

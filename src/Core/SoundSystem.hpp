@@ -28,23 +28,33 @@ public:
 	 */
 	static void playSound(const std::string& sound_name, float pitch = 1.f);
 
-	// Music volume
+	/**
+	 * Control music volume
+	 */
 	static void setMusicVolume(int volume);
 	static inline int getMusicVolume() { return m_music_volume; }
 
-	// Sound effects volume
+	/**
+	 * Control sound effects volume
+	 */
 	static void setSoundVolume(int volume);
 	static inline int getSoundVolume() { return m_sound_volume; }
 
-	// Enable/disable music
+	/**
+	 * Turn music on/off
+	 */
 	static void enableMusic(bool enabled);
 	static bool isMusicEnabled();
 
-	// Enable/disable sound effects
+	/**
+	 * Turn sound effects on/off
+	 */
 	static void enableSound(bool enabled);
 	static bool isSoundEnabled();
 
-	// Stop music and sound effects
+	/**
+	 * Stop music and sound effects
+	 */
 	static void stopAll();
 
 private:

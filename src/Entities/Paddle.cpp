@@ -5,7 +5,6 @@
 #include "Core/Resources.hpp"
 
 
-
 Paddle::Paddle()
 {
 	setTexture(Resources::getTexture("pads.png"));
