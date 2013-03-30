@@ -7,16 +7,17 @@
 #include "Utils/Math.hpp"
 
 // When hitting the pad, the ball bounces from -PAD_ANGLE to +PAD_ANGLE
-#define PAD_ANGLE  45
-#define MIN_SPEED  150
-#define MAX_SPEED  450
-#define SPEED_STEP 5
+#define PAD_ANGLE              45 // degrees
+#define BALL_START_SPEED      150 // pixels/second
+#define BALL_MAX_SPEED        450 // pixels/second
+#define BALL_SPEED_STEP         5 // pixels/second
+#define POWER_BALL_DURATION     3 // seconds
 
 int Ball::s_instance_count = 0;
 
 Ball::Ball():
 	m_angle(math::to_radians(math::rand(PAD_ANGLE, 90 + PAD_ANGLE))),
-	m_velocity(MIN_SPEED),
+	m_velocity(BALL_START_SPEED),
 	m_powered(false),
 	m_glued_to(NULL)
 {
@@ -56,10 +57,11 @@ void Ball::unstick()
 
 void Ball::activePower()
 {
-	setTextureRect({8, 0, 8, 8});
 	m_powered = true;
+	setTextureRect({8, 0, 8, 8});
 	Emitter::m_color = sf::Color::Cyan;
 	Emitter::m_to_color = sf::Color(0, 0, 255, 0);
+	m_power_clock.restart();
 }
 
 
@@ -72,7 +74,17 @@ void Ball::onUpdate(float frametime)
 	}
 	else
 	{
+		// Stick to the paddle
 		setX(m_glued_to->getX() - m_glued_at);
+	}
+
+	if (m_powered && m_power_clock.getElapsedTime().asSeconds() > 3)
+	{
+		// Turn off the Power-ball
+		m_powered = false;
+		setTextureRect({0, 0, 8, 8});
+		Emitter::m_color = sf::Color::Red;
+		Emitter::m_to_color = sf::Color(255, 255, 0, 0);
 	}
 }
 
@@ -99,9 +111,15 @@ void Ball::onCeilHit()
 
 void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 {
-	if (brick.takeDamage() && m_velocity < MAX_SPEED)
-		m_velocity += SPEED_STEP;
+	// Increase ball speed if brick was destroyed
+	if (brick.takeDamage(m_powered) && m_velocity < BALL_MAX_SPEED)
+		m_velocity += BALL_SPEED_STEP;
 
+	// Nothing can stop the Power-ball (except the UNBREAKABLE brick...)
+	if (m_powered && brick.getType() != Brick::UNBREAKABLE)
+		return;
+
+	// Get the side of the brick hit by the ball
 	sf::Vector2f ball_center = previous_pos;
 	ball_center.x += getWidth() / 2;
 	ball_center.y += getHeight() / 2;
@@ -120,11 +138,13 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 	if ((angle_ball > brick_ratio       && angle_ball < (180 - brick_ratio)) ||
 	    (angle_ball > 180 + brick_ratio && angle_ball < (360 - brick_ratio)))
 	{
-		m_angle = -m_angle; // Vertical side, flip Y-axis
+		// Vertical side, flip Y-axis
+		m_angle = -m_angle;
 	}
 	else
 	{
-		m_angle = math::PI - m_angle; // Horizontal side, flip X-axis
+		// Horizontal side, flip X-axis
+		m_angle = math::PI - m_angle;
 	}
 
 	setPosition(previous_pos);

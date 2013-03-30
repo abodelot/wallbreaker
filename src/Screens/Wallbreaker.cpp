@@ -88,10 +88,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 					}
 					break;
 				case sf::Event::MouseButtonPressed:
-					if (event.mouseButton.button == sf::Mouse::Right)
-					{
-						applyOnEachBall(&Ball::unstick); //createBall();
-					}
+					applyOnEachBall(&Ball::unstick);
 					break;
 				default:
 					break;

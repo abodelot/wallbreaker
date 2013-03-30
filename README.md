@@ -10,6 +10,7 @@ How to play?
 ------------
 
 Move your mouse to catch the ball.
+Click to release balls glued to sticky paddle.
 
 
 How to use the editor?
@@ -32,4 +33,4 @@ How to compile from source?
 Credits
 -------
 
-Sounds by Cabeeno Rossley: http://www.freesound.org/people/Cabeeno%20Rossley/packs/7895/
+Sounds by Cabeeno Rossley: http://www.freesound.org/people/Cabeeno%20Rossley/
