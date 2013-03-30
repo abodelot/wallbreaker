@@ -20,7 +20,8 @@ Ball::Ball():
 	m_powered(false),
 	m_glued_to(NULL)
 {
-	setTexture(Resources::getTexture("ball.png"));
+	setTexture(Resources::getTexture("balls.png"));
+	setTextureRect({0, 0, 8, 8});
 	++s_instance_count;
 
 	setParticleCount(100);
@@ -50,6 +51,15 @@ Ball* Ball::toBall()
 void Ball::unstick()
 {
 	m_glued_to = NULL;
+}
+
+
+void Ball::activePower()
+{
+	setTextureRect({8, 0, 8, 8});
+	m_powered = true;
+	Emitter::m_color = sf::Color::Cyan;
+	Emitter::m_to_color = sf::Color(0, 0, 255, 0);
 }
 
 

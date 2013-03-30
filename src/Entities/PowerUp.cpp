@@ -28,6 +28,8 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 			getParent()->createBall();
 			getParent()->createBall();
 			break;
+		case POWER_BALL:
+			getParent()->applyOnEachBall(&Ball::activePower);
 			break;
 		case SMALL_PADDLE:
 			paddle.shrink();
@@ -49,5 +51,5 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 
 void PowerUp::onUpdate(float frametime)
 {
-	move(0, 40 * frametime);
+	move(0, 50 * frametime);
 }

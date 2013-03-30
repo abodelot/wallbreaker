@@ -25,6 +25,9 @@ public:
 	 */
 	void unstick();
 
+	void activePower();
+
+
 	// callbacks ---------------------------------------------------------------
 
 	void onUpdate(float frametime);
