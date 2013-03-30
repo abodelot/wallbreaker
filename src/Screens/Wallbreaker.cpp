@@ -77,6 +77,12 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::Escape:
 							setStatus(PAUSED);
 							break;
+						case sf::Keyboard::Space:
+							if (m_paddle.isSticky())
+								applyOnEachBall(&Ball::unstick);
+							else if (m_paddle.hasLaser())
+								addEntity(m_paddle.shoot());
+							break;
 #ifdef WALLBREAKER_DEBUG
 						case sf::Keyboard::R: // Reload level
 							m_remaining_bricks = m_level.reload();
@@ -109,16 +115,18 @@ void Wallbreaker::onEvent(const sf::Event& event)
 							break;
 					}
 					break;
+
 				case sf::Event::MouseButtonPressed:
 					if (m_paddle.isSticky())
-					{
 						applyOnEachBall(&Ball::unstick);
-					}
 					else if (m_paddle.hasLaser())
-					{
 						addEntity(m_paddle.shoot());
-					}
 					break;
+
+				case sf::Event::LostFocus:
+					setStatus(PAUSED);
+					break;
+
 				default:
 					break;
 			}
