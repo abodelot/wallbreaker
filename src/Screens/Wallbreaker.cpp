@@ -298,7 +298,7 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 
 			if (!brick.isActive())
 			{
-				if (math::rand(0, 5) == 0)
+				if (math::rand(0, 9) == 0)
 				{
 					PowerUp* powerup = PowerUp::createRandom();
 					powerup->setPosition(brick.getPosition());

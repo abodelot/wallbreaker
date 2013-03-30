@@ -15,7 +15,7 @@
 int Ball::s_instance_count = 0;
 
 Ball::Ball():
-	m_angle(math::PI / 2),
+	m_angle(math::to_radians(math::rand(PAD_ANGLE, 90 + PAD_ANGLE))),
 	m_velocity(MIN_SPEED)
 {
 	setTexture(Resources::getTexture("ball.png"));

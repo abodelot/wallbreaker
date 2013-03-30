@@ -24,6 +24,11 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 {
 	switch (m_type)
 	{
+		case TRIPLE_BALL:
+			getParent()->createBall();
+			getParent()->createBall();
+			break;
+			break;
 		case SMALL_PADDLE:
 			paddle.shrink();
 			break;
