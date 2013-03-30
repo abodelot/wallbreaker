@@ -14,12 +14,23 @@ PROJECT_NAME=$(basename $(pwd) | tr '[A-Z]' '[a-z'])
 read -p "Enter version number: " VERSION
 
 # Name of the directory which will contain the release
-TARGET_NAME="$PROJECT_NAME"_"$VERSION"-linux
+ARCH=$(uname -m)
+KERNEL=$(uname -s | tr '[A-Z]' '[a-z]')
+TARGET_NAME="$PROJECT_NAME"_"$VERSION"-"$KERNEL"_"$ARCH"
 echo Packaging $TARGET_NAME.tar.gz ...
 
+# Find SFML libraries
+for i in /usr/lib /usr/local/lib; do
+	SFML_LIBS=$i/libsfml*
+	files=$(ls $SFML_LIBS* 2> /dev/null | wc -l)
+	if [ $files != "0" ]; then
+		break
+	fi
+done
+
 # Copy SFML libraries
-mkdir bin/lib32
-cp /usr/local/lib/libsfml* bin/lib32
+mkdir bin/lib
+cp $SFML_LIBS bin/lib
 
 # Copy launcher script
 cp tools/wallbreaker-launcher.sh bin
@@ -29,10 +40,11 @@ cp README.md bin
 
 # Create the tarball from bin directory and give it a proper name
 tar -czf $TARGET_NAME.tar.gz bin/ --transform s/bin/$TARGET_NAME/ 
-echo $TARGET_NAME.tar.gz generated
 
 # Clean up the mess created in the bin/ directory
-rm bin/README.md
+rm -r bin/lib
 rm bin/wallbreaker-launcher.sh
-rm -r bin/lib32
+rm bin/README.md
+
+echo Done!
 

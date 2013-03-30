@@ -45,8 +45,7 @@ public:
 private:
 	float   m_angle;
 	float   m_velocity;
-	bool    m_powered;
-	sf::Clock m_power_clock;
+	int     m_powered;
 	// If ball is glued to a sticky paddle
 	Paddle* m_glued_to;
 	float   m_glued_at;

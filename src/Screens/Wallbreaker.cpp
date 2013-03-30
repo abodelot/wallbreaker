@@ -73,6 +73,10 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::F2:
 							Game::getInstance().takeScreenshot();
 							break;
+						case sf::Keyboard::Escape:
+							setStatus(PAUSED);
+							break;
+						// DEBUG
 						case sf::Keyboard::R:
 							m_remaining_bricks = m_level.reload();
 							HUD::getInstance().setBrickCount(m_remaining_bricks);
@@ -92,8 +96,8 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::T:
 							m_paddle.activeSticky();
 							break;
-						case sf::Keyboard::Escape:
-							setStatus(PAUSED);
+						case sf::Keyboard::P:
+							applyOnEachBall(&Ball::activePower);
 							break;
 						default:
 							break;
