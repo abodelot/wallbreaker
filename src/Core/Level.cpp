@@ -30,8 +30,9 @@ Level::Level():
 		// Number of levels = file size / size of one level
 		m_level_file.seekg(0, std::ifstream::end);
 		m_level_count = m_level_file.tellg() / LEVEL_SIZE();
-		std::cout << "level count:" << m_level_count << std::endl;
-
+#ifdef WALLBREAKER_DEBUG
+		printf("%s contains %u levels\n", LEVEL_FILE, m_level_count);
+#endif
 		// Load first level
 		m_level_file.seekg(0);
 		load();
@@ -147,7 +148,9 @@ int Level::load()
 			return 0;
 		}
 		int length = line.size();
-		printf("%02d. ", i);
+#ifdef WALLBREAKER_DEBUG
+		printf("%2d  ", i + 1);
+#endif
 		for (int j = 0; j < NB_BRICK_COLS && j < length; ++j)
 		{
 			Brick& brick = m_bricks[i][j];
@@ -160,12 +163,19 @@ int Level::load()
 			brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
 			brick.setRotation(0);
 			brick.setScale(1, 1);
-			printf("%c", line[j]);
+#ifdef WALLBREAKER_DEBUG
+			putchar(line[j]);
+#endif
 		}
-		puts("");
+#ifdef WALLBREAKER_DEBUG
+		putchar('\n');
+#endif
 	}
+	++m_current_level;
+#ifdef WALLBREAKER_DEBUG
+	printf("level %d loaded (contains %u bricks)\n", m_current_level, m_brick_count);
+#endif
 
-	std::cout << "level " << ++m_current_level << " loaded (" << m_brick_count << " bricks)"<< std::endl;
 	return m_brick_count;
 }
 

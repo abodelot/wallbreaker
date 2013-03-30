@@ -2,9 +2,11 @@
 
 #include "Paddle.hpp"
 #include "LaserBeam.hpp"
+#include "Ball.hpp"
 #include "Core/Game.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
+#include "Screens/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
 
@@ -67,7 +69,11 @@ bool Paddle::isSticky() const
 void Paddle::activeLaser()
 {
 	setType(LASER);
-	m_sticky = false;
+	if (m_sticky)
+	{
+		m_sticky = false;
+		getParent()->applyOnEachBall(&Ball::unstick);
+	}
 }
 
 

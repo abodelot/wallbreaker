@@ -39,6 +39,7 @@ Wallbreaker::Wallbreaker():
 
 	// Player paddle positioned at the bottom-center
 	m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
+	m_paddle.setParent(this);
 
 	m_player_lives = 5;
 	m_remaining_bricks = m_level.getBrickCount();
@@ -76,29 +77,34 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::Escape:
 							setStatus(PAUSED);
 							break;
-						// DEBUG
-						case sf::Keyboard::R:
+#ifdef WALLBREAKER_DEBUG
+						case sf::Keyboard::R: // Reload level
 							m_remaining_bricks = m_level.reload();
 							HUD::getInstance().setBrickCount(m_remaining_bricks);
 							break;
-						case sf::Keyboard::N:
+						case sf::Keyboard::N: // Go to next level
 							loadNextLevel();
 							break;
-						case sf::Keyboard::G:
+						case sf::Keyboard::G: // Simulate LARGE_PADDLE
 							m_paddle.grow();
 							break;
-						case sf::Keyboard::S:
+						case sf::Keyboard::S: // Simulate SMALL_PADDLE
 							m_paddle.shrink();
 							break;
-						case sf::Keyboard::L:
-							m_paddle.activeLaser();
-							break;
-						case sf::Keyboard::T:
+						case sf::Keyboard::Y: // Simulate STICKY_PADDLE
 							m_paddle.activeSticky();
 							break;
-						case sf::Keyboard::P:
+						case sf::Keyboard::L: // Simulate LASER_PADDLE
+							m_paddle.activeLaser();
+							break;
+						case sf::Keyboard::T: // Simulate TRIPLE_BALL
+							createBall();
+							createBall();
+							break;
+						case sf::Keyboard::P: // Simulate POWER_BALL
 							applyOnEachBall(&Ball::activePower);
 							break;
+#endif
 						default:
 							break;
 					}
