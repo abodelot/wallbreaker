@@ -3,14 +3,11 @@
 
 #include "Entity.hpp"
 
+class LaserBeam;
+
 class Paddle: public Entity
 {
 public:
-	enum Size
-	{
-		SMALL, MEDIUM, LARGE
-	};
-
 	Paddle();
 
 	// override
@@ -31,13 +28,29 @@ public:
 	 */
 	void reset();
 
-	void setSticky(bool sticky);
+	/**
+	 * Turn on glue
+	 */
+	void activeSticky();
 	bool isSticky() const;
 
-private:
-	void setSize(Size size);
+	/**
+	 * Turn on laser
+	 */
+	void activeLaser();
+	bool hasLaser() const;
 
-	Size m_size;
+	LaserBeam* shoot() const;
+
+private:
+	enum Type
+	{
+		SMALL, MEDIUM, LARGE, LASER
+	};
+
+	void setType(Type size);
+
+	Type m_type;
 	bool m_sticky;
 };
 

@@ -9,8 +9,9 @@ Contact: Alexandre Bodelot <alexandre.bodelot@gmail.com>
 How to play?
 ------------
 
-Move your mouse to catch the ball.
-Click to release balls glued to sticky paddle.
+- Move your mouse to catch the ball.
+- Click to release balls glued to sticky paddle.
+- Click to shoot lasers with laser paddle.
 
 
 How to use the editor?

@@ -10,15 +10,15 @@ class PowerUp: public Entity
 public:
 	enum Type
 	{
-		TRIPLE_BALL,
-		POWER_BALL,
 		SMALL_PADDLE,
 		LARGE_PADDLE,
 		STICKY_PADDLE,
-		EXTRA_LIFE
+		LASER_PADDLE,
+		TRIPLE_BALL,
+		POWER_BALL,
+		EXTRA_LIFE,
+		RANDOM
 	};
-	static const int WIDTH = 20;
-	static const int HEIGHT = 10;
 
 	/**
 	 * Alocate a new power up with a random type

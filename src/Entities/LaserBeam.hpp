@@ -10,10 +10,9 @@ public:
 
 	void onUpdate(float frametime);
 
-	void onCeilHit();
+	void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos);
 
-private:
-	float m_length;
+	void onCeilHit();
 };
 
 #endif // LASER_BEAM_HPP

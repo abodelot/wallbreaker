@@ -1,15 +1,18 @@
 #include <SFML/Window.hpp>
 
 #include "Paddle.hpp"
+#include "LaserBeam.hpp"
 #include "Core/Game.hpp"
+#include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
+#include "Utils/Math.hpp"
 
 
 Paddle::Paddle():
 	m_sticky(false)
 {
 	setTexture(Resources::getTexture("paddles.png"));
-	setSize(MEDIUM);
+	setType(MEDIUM);
 }
 
 
@@ -24,28 +27,34 @@ void Paddle::onUpdate(float frametime)
 
 void Paddle::grow()
 {
-	if (m_size < LARGE)
-		setSize((Size) (m_size + 1));
+	if (m_type == SMALL)
+		setType(MEDIUM);
+	else
+		setType(LARGE);
 }
 
 
 void Paddle::shrink()
 {
-	if (m_size > 0)
-		setSize((Size) (m_size - 1));
+	if (m_type == LARGE)
+		setType(MEDIUM);
+	else
+		setType(SMALL);
 }
 
 
 void Paddle::reset()
 {
-	setSize(MEDIUM);
-	setSticky(false);
+	setType(MEDIUM);
+	m_sticky = false;
 }
 
 
-void Paddle::setSticky(bool sticky)
+void Paddle::activeSticky()
 {
-	m_sticky = sticky;
+	m_sticky = true;
+	if (m_type == LASER)
+		setType(MEDIUM);
 }
 
 
@@ -55,10 +64,32 @@ bool Paddle::isSticky() const
 }
 
 
-void Paddle::setSize(Size size)
+void Paddle::activeLaser()
+{
+	setType(LASER);
+	m_sticky = false;
+}
+
+
+bool Paddle::hasLaser() const
+{
+	return m_type == LASER;
+}
+
+
+LaserBeam* Paddle::shoot() const
+{
+	LaserBeam* laserbeam = new LaserBeam();
+	laserbeam->setPosition(getX() + (getWidth() - laserbeam->getWidth()) / 2, getY());
+	SoundSystem::playSound("laser.ogg", math::rand(1.f, 2.f));
+	return laserbeam;
+}
+
+
+void Paddle::setType(Type type)
 {
 	sf::IntRect subrect;
-	switch (size)
+	switch (type)
 	{
 		case SMALL:
 			subrect = sf::IntRect(0, 0, 24, 16);
@@ -69,8 +100,11 @@ void Paddle::setSize(Size size)
 		case LARGE:
 			subrect = sf::IntRect(0, 32, 48, 16);
 			break;
+		case LASER:
+			subrect = sf::IntRect(0, 48, 32, 16);
+			break;
 	}
 	setTextureRect(subrect);
-	m_size = size;
+	m_type = type;
 }
 

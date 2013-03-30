@@ -80,6 +80,18 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::N:
 							loadNextLevel();
 							break;
+						case sf::Keyboard::G:
+							m_paddle.grow();
+							break;
+						case sf::Keyboard::S:
+							m_paddle.shrink();
+							break;
+						case sf::Keyboard::L:
+							m_paddle.activeLaser();
+							break;
+						case sf::Keyboard::T:
+							m_paddle.activeSticky();
+							break;
 						case sf::Keyboard::Escape:
 							setStatus(PAUSED);
 							break;
@@ -88,7 +100,14 @@ void Wallbreaker::onEvent(const sf::Event& event)
 					}
 					break;
 				case sf::Event::MouseButtonPressed:
-					applyOnEachBall(&Ball::unstick);
+					if (m_paddle.isSticky())
+					{
+						applyOnEachBall(&Ball::unstick);
+					}
+					else if (m_paddle.hasLaser())
+					{
+						addEntity(m_paddle.shoot());
+					}
 					break;
 				default:
 					break;

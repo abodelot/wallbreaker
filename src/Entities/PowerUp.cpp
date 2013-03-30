@@ -1,5 +1,6 @@
 #include "PowerUp.hpp"
 #include "Paddle.hpp"
+#include "Brick.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Screens/Wallbreaker.hpp"
@@ -8,14 +9,17 @@
 
 PowerUp* PowerUp::createRandom()
 {
-	return new PowerUp((Type) math::rand(0, EXTRA_LIFE));
+	return new PowerUp((Type) math::rand(0, RANDOM));
 }
 
 
 PowerUp::PowerUp(Type type):
 	m_type(type)
 {
-	setTextureRect(sf::IntRect((type) * WIDTH, 0, WIDTH, HEIGHT));
+	int x = (type % 4) * Brick::WIDTH;
+	int y = (type / 4) * Brick::HEIGHT;
+
+	setTextureRect({x, y, Brick::WIDTH, Brick::HEIGHT});
 	setTexture(Resources::getTexture("power-ups.png"));
 }
 
@@ -24,13 +28,6 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 {
 	switch (m_type)
 	{
-		case TRIPLE_BALL:
-			getParent()->createBall();
-			getParent()->createBall();
-			break;
-		case POWER_BALL:
-			getParent()->applyOnEachBall(&Ball::activePower);
-			break;
 		case SMALL_PADDLE:
 			paddle.shrink();
 			break;
@@ -38,11 +35,26 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 			paddle.grow();
 			break;
 		case STICKY_PADDLE:
-			paddle.setSticky(true);
+			paddle.activeSticky();
+			break;
+		case LASER_PADDLE:
+			paddle.activeLaser();
+			break;
+		case TRIPLE_BALL:
+			getParent()->createBall();
+			getParent()->createBall();
+			break;
+		case POWER_BALL:
+			getParent()->applyOnEachBall(&Ball::activePower);
 			break;
 		case EXTRA_LIFE:
 			getParent()->addPlayerLife();
 			break;
+		case RANDOM:
+			m_type = ((Type) math::rand(0, EXTRA_LIFE));
+			onPaddleHit(paddle);
+			break;
+
 	}
 	kill();
 	SoundSystem::playSound("power-up.ogg");
