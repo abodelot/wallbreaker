@@ -16,10 +16,23 @@ public:
 	// override
 	void onUpdate(float frametime);
 
-	void setSize(Size size);
+	/**
+	 * Increase paddle size
+	 */
+	void grow();
+
+	/**
+	 * Decrease paddle size
+	 */
+	void shrink();
+
+	void setSticky(bool sticky);
 
 private:
+	void setSize(Size size);
+
 	Size m_size;
+	bool m_stikcy;
 };
 
 #endif // PADDLE_HPP

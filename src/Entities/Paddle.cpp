@@ -5,9 +5,10 @@
 #include "Core/Resources.hpp"
 
 
-Paddle::Paddle()
+Paddle::Paddle():
+	m_stikcy(false)
 {
-	setTexture(Resources::getTexture("pads.png"));
+	setTexture(Resources::getTexture("paddles.png"));
 	setSize(MEDIUM);
 }
 
@@ -17,6 +18,26 @@ void Paddle::onUpdate(float frametime)
 	const sf::RenderWindow& window = Game::getInstance().getWindow();
 	int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
 	setPosition(x - getWidth() / 2, getPosition().y);
+}
+
+
+void Paddle::grow()
+{
+	if (m_size < LARGE)
+		setSize((Size) (m_size + 1));
+}
+
+
+void Paddle::shrink()
+{
+	if (m_size > 0)
+		setSize((Size) (m_size - 1));
+}
+
+
+void Paddle::setSticky(bool sticky)
+{
+	m_stikcy = sticky;
 }
 
 
@@ -32,7 +53,7 @@ void Paddle::setSize(Size size)
 			subrect = sf::IntRect(0, 16, 32, 16);
 			break;
 		case LARGE:
-			subrect = sf::IntRect(0, 32, 40, 16);
+			subrect = sf::IntRect(0, 32, 48, 16);
 			break;
 	}
 	setTextureRect(subrect);

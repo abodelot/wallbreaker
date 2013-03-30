@@ -11,13 +11,15 @@
 #include "Gui/Theme.hpp"
 #include "Utils/Math.hpp"
 
+#define MAX_PLAYER_LIVES 5
+
 
 Wallbreaker::Wallbreaker():
 	m_remaining_bricks(0),
 	m_particles(ParticleSystem::instance()),
 	m_info_text(gui::Theme::getFont()),
 	m_status(READY),
-	m_player_lives(5),
+	m_player_lives(MAX_PLAYER_LIVES),
 	m_menu(Game::getInstance().getWindow())
 {
 	// Initialize render texture
@@ -197,6 +199,13 @@ void Wallbreaker::updateTexture()
 }
 
 
+void Wallbreaker::addPlayerLife()
+{
+	if (m_player_lives < MAX_PLAYER_LIVES)
+		HUD::getInstance().setLiveCount(++m_player_lives);
+}
+
+
 void Wallbreaker::updateEntities(float frametime)
 {
 	// For each entity
@@ -232,7 +241,7 @@ void Wallbreaker::updateEntities(float frametime)
 			// Check if entity collides with paddle
 			else if (entity.collidesWith(m_paddle))
 			{
-				entity.onCollide(m_paddle);
+				entity.onPaddleHit(m_paddle);
 				entity.setY(m_height - m_paddle.getHeight() - entity.getHeight());
 			}
 			// Check if entity is colliding with a brick
@@ -289,13 +298,12 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 
 			if (!brick.isActive())
 			{
-				if (math::rand(0, 9) == 0)
+				if (math::rand(0, 5) == 0)
 				{
 					PowerUp* powerup = PowerUp::createRandom();
 					powerup->setPosition(brick.getPosition());
-					m_entities.push_back(powerup);
+					addEntity(powerup);
 				}
-
 				--m_remaining_bricks;
 				HUD::getInstance().setBrickCount(m_remaining_bricks);
 			}
@@ -348,6 +356,25 @@ void Wallbreaker::setStatus(Status status)
 }
 
 
+void Wallbreaker::createBall()
+{
+	Ball* ball = new Ball();
+	// Center ball on player pad
+	float x = m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2;
+	float y = m_height - m_paddle.getHeight() - ball->getHeight();
+	ball->setPosition(x, y);
+	ball->launchParticles();
+	addEntity(ball);
+}
+
+
+void Wallbreaker::addEntity(Entity* entity)
+{
+	entity->setParent(this);
+	m_entities.push_back(entity);
+}
+
+
 void Wallbreaker::clearEntities()
 {
 	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
@@ -358,13 +385,3 @@ void Wallbreaker::clearEntities()
 }
 
 
-void Wallbreaker::createBall()
-{
-	Ball* ball = new Ball();
-	// Center ball on player pad
-	float x = m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2;
-	float y = m_height - m_paddle.getHeight() - ball->getHeight();
-	ball->setPosition(x, y);
-	ball->launchParticles();
-	m_entities.push_back(ball);
-}

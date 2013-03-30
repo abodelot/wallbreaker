@@ -2,6 +2,7 @@
 #include "Paddle.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
+#include "Screens/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
 
@@ -19,9 +20,23 @@ PowerUp::PowerUp(Type type):
 }
 
 
-void PowerUp::onCollide(const Paddle& paddle)
+void PowerUp::onPaddleHit(Paddle& paddle)
 {
-
+	switch (m_type)
+	{
+		case SMALL_PADDLE:
+			paddle.shrink();
+			break;
+		case LARGE_PADDLE:
+			paddle.grow();
+			break;
+		case STICKY_PADDLE:
+			paddle.setSticky(true);
+			break;
+		case EXTRA_LIFE:
+			getParent()->addPlayerLife();
+			break;
+	}
 	kill();
 	SoundSystem::playSound("power-up.ogg");
 }

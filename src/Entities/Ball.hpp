@@ -19,7 +19,7 @@ public:
 
 	void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos);
 
-	void onCollide(const Paddle& paddle);
+	void onPaddleHit(Paddle& paddle);
 
 	void onWallHit();
 

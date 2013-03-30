@@ -26,6 +26,11 @@ public:
 	// override
 	void update(float frametime);
 
+	// Create a new ball instance
+	void createBall();
+
+	void addPlayerLife();
+
 private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -40,11 +45,10 @@ private:
 
 	void setStatus(Status status);
 
+	void addEntity(Entity* entity);
+
 	// Delete all entities
 	void clearEntities();
-
-	// Create a new ball instance
-	void createBall();
 
 	static const int m_width  = NB_BRICK_COLS  * Brick::WIDTH;
 	static const int m_height = NB_BRICK_LINES * Brick::HEIGHT;

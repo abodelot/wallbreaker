@@ -94,7 +94,7 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 }
 
 
-void Ball::onCollide(const Paddle& paddle)
+void Ball::onPaddleHit(Paddle& paddle)
 {
 	float x = getPosition().x + getWidth() / 2 - paddle.getPosition().x;
 	float range = PAD_ANGLE * 2;

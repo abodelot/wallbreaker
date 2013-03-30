@@ -27,7 +27,7 @@ public:
 
 	PowerUp(Type type);
 
-	void onCollide(const Paddle& paddle);
+	void onPaddleHit(Paddle& paddle);
 
 	void onUpdate(float frametime);
 

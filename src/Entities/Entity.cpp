@@ -1,9 +1,28 @@
 #include "Entity.hpp"
+#include "Screens/Wallbreaker.hpp"
 
 
 Entity::Entity():
+	m_parent(NULL),
 	m_alive(true)
 {
+}
+
+
+Entity::~Entity()
+{
+}
+
+
+void Entity::setParent(Wallbreaker* parent)
+{
+	m_parent = parent;
+}
+
+
+Wallbreaker* Entity::getParent()
+{
+	return m_parent;
 }
 
 
