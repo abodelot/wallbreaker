@@ -277,7 +277,10 @@ void Wallbreaker::updateEntities(float frametime)
 				entity.kill();
 			}
 			// Check if entity collides with paddle
-			else if (entity.collidesWith(m_paddle))
+			else if ((entity.getY() + entity.getHeight() > m_paddle.getY())
+			      && (entity.getY() < m_paddle.getY())
+			      && (entity.getX() + entity.getWidth() > m_paddle.getX())
+			      && (entity.getX() < m_paddle.getX() + m_paddle.getWidth()))
 			{
 				entity.setY(m_height - m_paddle.getHeight() - entity.getHeight());
 				entity.onPaddleHit(m_paddle);

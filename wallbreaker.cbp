@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DWALLBREAKER_DEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">

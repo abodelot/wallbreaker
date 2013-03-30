@@ -6,8 +6,8 @@
 #include "Core/SoundSystem.hpp"
 #include "Utils/Math.hpp"
 
-// When hitting the pad, the ball bounces from -PAD_ANGLE to +PAD_ANGLE
-#define PAD_ANGLE              45 // degrees
+// When hitting the pad, the ball bounces from PADDLE_ANGLE to 90 + PADDLE_ANGLE
+#define PADDLE_ANGLE           30 // degrees
 #define BALL_START_SPEED      150 // pixels/second
 #define BALL_MAX_SPEED        450 // pixels/second
 #define BALL_SPEED_STEP         5 // pixels/second
@@ -16,7 +16,7 @@
 int Ball::s_instance_count = 0;
 
 Ball::Ball():
-	m_angle(math::to_radians(math::rand(PAD_ANGLE, 90 + PAD_ANGLE))),
+	m_angle(math::to_radians(math::rand(PADDLE_ANGLE, 90 + PADDLE_ANGLE))),
 	m_velocity(BALL_START_SPEED),
 	m_powered(0),
 	m_glued_to(NULL)
@@ -153,11 +153,11 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 
 void Ball::onPaddleHit(Paddle& paddle)
 {
-	float x = getPosition().x + getWidth() / 2 - paddle.getPosition().x;
-	float range = PAD_ANGLE * 2;
-	float angle_diff = (range * x / (float) paddle.getWidth()) - PAD_ANGLE;
+	float x = getX() + getWidth() / 2 - paddle.getX();
+	float range = 180 - PADDLE_ANGLE * 2;
+	float degrees = (range * x / paddle.getWidth()) + PADDLE_ANGLE;
 
-	m_angle = math::to_radians(90 - angle_diff);
+	m_angle = math::PI - math::to_radians(degrees); // Angles are inverted, flip Y
 	SoundSystem::playSound("ball.ogg", 0.4f);
 
 	if (paddle.isSticky())
