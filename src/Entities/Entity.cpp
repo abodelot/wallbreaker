@@ -35,6 +35,12 @@ bool Entity::collidesWith(const Entity& other) const
 }
 
 
+Ball* Entity::toBall()
+{
+	return NULL;
+}
+
+
 sf::IntRect Entity::getCollisionRect() const
 {
 	sf::IntRect rect = getTextureRect();

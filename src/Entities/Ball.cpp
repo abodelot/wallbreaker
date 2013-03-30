@@ -16,7 +16,9 @@ int Ball::s_instance_count = 0;
 
 Ball::Ball():
 	m_angle(math::to_radians(math::rand(PAD_ANGLE, 90 + PAD_ANGLE))),
-	m_velocity(MIN_SPEED)
+	m_velocity(MIN_SPEED),
+	m_powered(false),
+	m_glued_to(NULL)
 {
 	setTexture(Resources::getTexture("ball.png"));
 	++s_instance_count;
@@ -39,24 +41,49 @@ Ball::~Ball()
 }
 
 
+Ball* Ball::toBall()
+{
+	return this;
+}
+
+
+void Ball::unstick()
+{
+	m_glued_to = NULL;
+}
+
+
 void Ball::onUpdate(float frametime)
 {
-	float delta = m_velocity * frametime;
-	move(delta * std::cos(m_angle), -delta * std::sin(m_angle));
+	if (m_glued_to == NULL)
+	{
+		float delta = m_velocity * frametime;
+		move(delta * std::cos(m_angle), -delta * std::sin(m_angle));
+	}
+	else
+	{
+		setX(m_glued_to->getX() - m_glued_at);
+	}
 }
 
 
 void Ball::onWallHit()
 {
-	m_angle = math::PI - m_angle;
-	SoundSystem::playSound("ball.ogg", 0.8f);
+	if (m_glued_to == NULL)
+	{
+		m_angle = math::PI - m_angle;
+		SoundSystem::playSound("ball.ogg", 0.8f);
+	}
 }
 
 
 void Ball::onCeilHit()
 {
-	m_angle = -m_angle;
-	SoundSystem::playSound("ball.ogg", 0.6f);
+	if (m_glued_to == NULL)
+	{
+		m_angle = -m_angle;
+		SoundSystem::playSound("ball.ogg", 0.6f);
+	}
 }
 
 
@@ -102,6 +129,12 @@ void Ball::onPaddleHit(Paddle& paddle)
 
 	m_angle = math::to_radians(90 - angle_diff);
 	SoundSystem::playSound("ball.ogg", 0.4f);
+
+	if (paddle.isSticky())
+	{
+		m_glued_to = &paddle;
+		m_glued_at = paddle.getX() - getX();
+	}
 }
 
 

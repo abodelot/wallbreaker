@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
+class Ball;
 class Paddle;
 class Brick;
 class Wallbreaker;
@@ -24,6 +25,10 @@ public:
 	inline void kill() { m_alive = false; }
 
 	bool collidesWith(const Entity& other) const;
+
+	// casts -------------------------------------------------------------------
+
+	virtual Ball* toBall();
 
 	// callbacks ---------------------------------------------------------------
 

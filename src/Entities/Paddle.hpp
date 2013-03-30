@@ -26,13 +26,19 @@ public:
 	 */
 	void shrink();
 
+	/**
+	 * Reset paddle to its default behaviour
+	 */
+	void reset();
+
 	void setSticky(bool sticky);
+	bool isSticky() const;
 
 private:
 	void setSize(Size size);
 
 	Size m_size;
-	bool m_stikcy;
+	bool m_sticky;
 };
 
 #endif // PADDLE_HPP

@@ -1,7 +1,6 @@
 #include "Wallbreaker.hpp"
 #include "OptionsMenu.hpp"
 
-#include "Entities/Ball.hpp"
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
 #include "Core/Easing.hpp"
@@ -91,7 +90,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 				case sf::Event::MouseButtonPressed:
 					if (event.mouseButton.button == sf::Mouse::Right)
 					{
-						createBall();
+						applyOnEachBall(&Ball::unstick); //createBall();
 					}
 					break;
 				default:
@@ -206,6 +205,19 @@ void Wallbreaker::addPlayerLife()
 }
 
 
+void Wallbreaker::applyOnEachBall(Ball::ActionPointer action)
+{
+	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
+	{
+		Ball* ball = (**it).toBall();
+		if (ball != NULL)
+		{
+			(ball->*action)();
+		}
+	}
+}
+
+
 void Wallbreaker::updateEntities(float frametime)
 {
 	// For each entity
@@ -241,8 +253,8 @@ void Wallbreaker::updateEntities(float frametime)
 			// Check if entity collides with paddle
 			else if (entity.collidesWith(m_paddle))
 			{
-				entity.onPaddleHit(m_paddle);
 				entity.setY(m_height - m_paddle.getHeight() - entity.getHeight());
+				entity.onPaddleHit(m_paddle);
 			}
 			// Check if entity is colliding with a brick
 			else
@@ -330,6 +342,9 @@ void Wallbreaker::setStatus(Status status)
 	m_status = status;
 	if (status == READY)
 	{
+		// Remove power-ups applied to the paddle
+		m_paddle.reset();
+
 		// Clear all and spawn a new ball
 		clearEntities();
 		createBall();

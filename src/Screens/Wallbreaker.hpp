@@ -6,6 +6,7 @@
 #include "Core/ParticleSystem.hpp"
 #include "Core/Level.hpp"
 #include "Entities/Paddle.hpp"
+#include "Entities/Ball.hpp"
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
@@ -30,6 +31,8 @@ public:
 	void createBall();
 
 	void addPlayerLife();
+
+	void applyOnEachBall(Ball::ActionPointer action);
 
 private:
 	// override

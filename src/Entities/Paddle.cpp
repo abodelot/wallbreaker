@@ -6,7 +6,7 @@
 
 
 Paddle::Paddle():
-	m_stikcy(false)
+	m_sticky(false)
 {
 	setTexture(Resources::getTexture("paddles.png"));
 	setSize(MEDIUM);
@@ -15,6 +15,7 @@ Paddle::Paddle():
 
 void Paddle::onUpdate(float frametime)
 {
+	// Paddle follows the mouse cursor
 	const sf::RenderWindow& window = Game::getInstance().getWindow();
 	int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
 	setPosition(x - getWidth() / 2, getPosition().y);
@@ -35,9 +36,22 @@ void Paddle::shrink()
 }
 
 
+void Paddle::reset()
+{
+	setSize(MEDIUM);
+	setSticky(false);
+}
+
+
 void Paddle::setSticky(bool sticky)
 {
-	m_stikcy = sticky;
+	m_sticky = sticky;
+}
+
+
+bool Paddle::isSticky() const
+{
+	return m_sticky;
 }
 
 

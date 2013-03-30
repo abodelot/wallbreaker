@@ -8,10 +8,22 @@
 class Ball: public Entity, public ParticleSystem::Emitter
 {
 public:
+	typedef void(Ball::*ActionPointer)(void);
+
 	Ball();
 	~Ball();
 
+	/**
+	 * Get number of allocated balls
+	 */
 	static int getCount() { return s_instance_count; };
+
+	Ball* toBall();
+
+	/**
+	 * Unstick ball if glued to a paddle
+	 */
+	void unstick();
 
 	// callbacks ---------------------------------------------------------------
 
@@ -28,8 +40,13 @@ public:
 	sf::Vector2f getSpawnPosition() const;
 
 private:
-	float m_angle;
-	float m_velocity;
+	float   m_angle;
+	float   m_velocity;
+	bool    m_powered;
+	// If ball is glued to a sticky paddle
+	Paddle* m_glued_to;
+	float   m_glued_at;
+
 	static int s_instance_count;
 };
 
