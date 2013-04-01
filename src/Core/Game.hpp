@@ -43,6 +43,7 @@ public:
 	/// Save a picture of the screen
 	void takeScreenshot() const;
 
+	sf::View& getView() { return m_view; }
 private:
 	Game();
 	Game(const Game&);

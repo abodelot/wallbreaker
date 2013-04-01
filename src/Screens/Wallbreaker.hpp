@@ -5,6 +5,7 @@
 #include "Core/Config.hpp"
 #include "Core/ParticleSystem.hpp"
 #include "Core/Level.hpp"
+#include "Core/HUD.hpp"
 #include "Entities/Paddle.hpp"
 #include "Entities/Ball.hpp"
 #include "Gui/BitmapText.hpp"
@@ -61,8 +62,11 @@ private:
 	ParticleSystem&   m_particles;
 	BitmapText        m_info_text;
 	sf::Sprite        m_hud_sprite;
+	HUD               m_hud;
 	sf::Sprite        m_level_sprite;
 	sf::RenderTexture m_level_texture;
+
+	int               m_score;
 
 	typedef std::list<Entity*> EntityList;
 	EntityList m_entities;

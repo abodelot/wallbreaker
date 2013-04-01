@@ -8,7 +8,7 @@
 #include "Editor.hpp"
 #include "OptionsMenu.hpp"
 
-#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - https://github.com/abodelot/wallbreaker")
+#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - " APP_URL)
 
 MainMenu::MainMenu():
 	m_about_text(gui::Theme::getFont()),

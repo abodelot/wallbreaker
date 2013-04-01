@@ -5,8 +5,8 @@
 #include "Entities/PowerUp.hpp"
 #include "Core/Easing.hpp"
 #include "Core/Resources.hpp"
+#include "Core/Settings.hpp"
 #include "Core/SoundSystem.hpp"
-#include "Core/HUD.hpp"
 #include "Gui/Theme.hpp"
 #include "Utils/Math.hpp"
 
@@ -17,6 +17,7 @@ Wallbreaker::Wallbreaker():
 	m_remaining_bricks(0),
 	m_particles(ParticleSystem::instance()),
 	m_info_text(gui::Theme::getFont()),
+	m_score(0),
 	m_status(READY),
 	m_player_lives(MAX_PLAYER_LIVES),
 	m_menu(Game::getInstance().getWindow())
@@ -28,7 +29,7 @@ Wallbreaker::Wallbreaker():
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
 
-	m_hud_sprite.setTexture(HUD::getInstance().getTexture());
+	m_hud_sprite.setTexture(m_hud.getTexture());
 	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
 
 	// Pause menu
@@ -45,11 +46,11 @@ Wallbreaker::Wallbreaker():
 	m_remaining_bricks = m_level.getBrickCount();
 
 	// Initialize HUD
-	HUD::getInstance().setLiveCount(m_player_lives);
-	HUD::getInstance().setBrickCount(m_remaining_bricks);
-	HUD::getInstance().setLevel(m_level.getCurrentLevel());
-	HUD::getInstance().setScore(0);
-	HUD::getInstance().setHighscore(0);
+	m_hud.setLiveCount(m_player_lives);
+	m_hud.setBrickCount(m_remaining_bricks);
+	m_hud.setLevel(m_level.getCurrentLevel());
+	m_hud.setScore(m_score);
+	m_hud.setHighscore(Settings::highscore);
 	setStatus(READY);
 }
 
@@ -86,7 +87,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 #ifdef WALLBREAKER_DEBUG
 						case sf::Keyboard::R: // Reload level
 							m_remaining_bricks = m_level.reload();
-							HUD::getInstance().setBrickCount(m_remaining_bricks);
+							m_hud.setBrickCount(m_remaining_bricks);
 							break;
 						case sf::Keyboard::N: // Go to next level
 							loadNextLevel();
@@ -235,7 +236,7 @@ void Wallbreaker::updateTexture()
 void Wallbreaker::addPlayerLife()
 {
 	if (m_player_lives < MAX_PLAYER_LIVES)
-		HUD::getInstance().setLiveCount(++m_player_lives);
+		m_hud.setLiveCount(++m_player_lives);
 }
 
 
@@ -326,7 +327,7 @@ void Wallbreaker::updateEntities(float frametime)
 			it = m_entities.erase(it);
 			if (Ball::getCount() == 0)
 			{
-				HUD::getInstance().setLiveCount(--m_player_lives);
+				m_hud.setLiveCount(--m_player_lives);
 				SoundSystem::playSound("life-lost.ogg");
 				setStatus(m_player_lives == 0 ? GAME_OVER : READY);
 				break;
@@ -347,14 +348,25 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 
 			if (!brick.isActive())
 			{
+				// Randomly create a new power-up
 				if (math::rand(0, 9) == 0)
 				{
 					PowerUp* powerup = PowerUp::createRandom();
 					powerup->setPosition(brick.getPosition());
 					addEntity(powerup);
 				}
+				// Update remaining bricks counter
 				--m_remaining_bricks;
-				HUD::getInstance().setBrickCount(m_remaining_bricks);
+				m_hud.setBrickCount(m_remaining_bricks);
+				// Upgrade score
+				++m_score;
+				m_hud.setScore(m_score);
+				if (m_score > Settings::highscore)
+				{
+					Settings::highscore = m_score;
+					m_hud.setHighscore(Settings::highscore);
+				}
+
 			}
 			return true;
 		}
@@ -366,8 +378,8 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 bool Wallbreaker::loadNextLevel()
 {
 	m_remaining_bricks = m_level.loadNext();
-	HUD::getInstance().setLevel(m_level.getCurrentLevel());
-	HUD::getInstance().setBrickCount(m_remaining_bricks);
+	m_hud.setLevel(m_level.getCurrentLevel());
+	m_hud.setBrickCount(m_remaining_bricks);
 	SoundSystem::playSound("level-complete.ogg");
 	Easing::stopAll();
 	return m_remaining_bricks > 0; // No brick found = no more level

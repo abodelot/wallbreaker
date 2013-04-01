@@ -10,7 +10,7 @@
 class HUD
 {
 public:
-	static HUD& getInstance();
+	HUD();
 
 	void setLevel(int level);
 
@@ -28,7 +28,6 @@ public:
 	const sf::Texture& getTexture() const;
 
 private:
-	HUD();
 	HUD(const HUD& hud);
 
 	void updateTexture();

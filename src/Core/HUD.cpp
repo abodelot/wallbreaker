@@ -6,13 +6,6 @@
 #define ROW_WIDTH 90
 
 
-HUD& HUD::getInstance()
-{
-	static HUD self;
-	return self;
-}
-
-
 HUD::HUD():
 	m_life_count(0),
 	m_life_label(gui::Theme::getFont())

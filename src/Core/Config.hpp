@@ -1,12 +1,15 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
+// Application hard-coded global properties
+
 #define APP_TITLE         "Wallbreaker"
 #define APP_WIDTH         240
 #define APP_HEIGHT        320
 
 #define APP_AUTHOR        "Alexandre Bodelot"
 #define APP_VERSION       "0.2"
+#define APP_URL           "https://github.com/abodelot/wallbreaker"
 
 #define LEVEL_FILE        "resources/levels/levels.txt"
 

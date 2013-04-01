@@ -58,6 +58,8 @@
 		<Unit filename="src/Core/ParticleSystem.hpp" />
 		<Unit filename="src/Core/Resources.cpp" />
 		<Unit filename="src/Core/Resources.hpp" />
+		<Unit filename="src/Core/Settings.cpp" />
+		<Unit filename="src/Core/Settings.hpp" />
 		<Unit filename="src/Core/SoundSystem.cpp" />
 		<Unit filename="src/Core/SoundSystem.hpp" />
 		<Unit filename="src/Entities/Ball.cpp" />
