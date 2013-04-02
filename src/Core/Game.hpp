@@ -32,7 +32,7 @@ public:
 	void previousScreen();
 
 	/// Set application window dimension
-	void setResolution(int width, int height);
+	void setResolution(size_t width, size_t height);
 
 	/// Get execution current directory
 	const std::string& getCurrentDir() const;
@@ -43,7 +43,6 @@ public:
 	/// Save a picture of the screen
 	void takeScreenshot() const;
 
-	sf::View& getView() { return m_view; }
 private:
 	Game();
 	Game(const Game&);

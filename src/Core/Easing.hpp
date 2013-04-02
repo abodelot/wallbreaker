@@ -4,6 +4,9 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
+/**
+ * Animation manager based on sprite transformations
+ */
 class Easing
 {
 public:

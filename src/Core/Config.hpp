@@ -12,6 +12,7 @@
 #define APP_URL           "https://github.com/abodelot/wallbreaker"
 
 #define LEVEL_FILE        "resources/levels/levels.txt"
+#define SETTINGS_FILE     "settings.ini"
 
 #define NB_BRICK_LINES    25 // number of lines
 #define NB_BRICK_COLS     11 // number of columns

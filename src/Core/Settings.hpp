@@ -3,17 +3,13 @@
 
 #include <cstdlib>
 
+/**
+ * Static class for storing application global settings
+ */
 class Settings
 {
 public:
-	static int    highscore;
-	static bool   sound;
-	static size_t screen_width;
-	static size_t screen_height;
-
-	static bool saveToFile(const char* filename);
-
-	static bool loadFromFile(const char* filename);
+	static int highscore;
 };
 
 #endif // SETTINGS_HPP

@@ -3,7 +3,10 @@
 #include "Config.hpp"
 #include "Screens/Screen.hpp"
 #include "Resources.hpp"
+#include "Settings.hpp"
+#include "SoundSystem.hpp"
 #include "Gui/Theme.hpp"
+#include "Utils/IniParser.hpp"
 
 
 Game& Game::getInstance()
@@ -18,8 +21,6 @@ Game::Game():
 	m_current_screen(NULL),
 	m_next_screen(NULL)
 {
-	setResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
-	m_app.setFramerateLimit(60);
 }
 
 
@@ -46,6 +47,26 @@ void Game::init(const std::string& path)
 
 	// Init GUI theme
 	gui::Theme::load(m_current_dir + "/resources/images/font.png");
+
+	// Load configuration from settings file
+	IniParser config;
+	if (config.load(m_current_dir + SETTINGS_FILE))
+	{
+		std::cout << "* loading settings from " << SETTINGS_FILE << std::endl;
+
+		config.seek_section("Wallbreaker");
+		size_t app_width = config.get("app_width", APP_WIDTH * 2);
+		size_t app_height = config.get("app_height", APP_HEIGHT * 2);
+		setResolution(app_width, app_height);
+
+		Settings::highscore = config.get("highscore", 0);
+
+		SoundSystem::enableSound(config.get("sound", true));
+	}
+	else
+	{
+		setResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
+	}
 }
 
 
@@ -78,7 +99,7 @@ void Game::run()
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				m_running = false;
+				quit();
 			}
 			else
 			{
@@ -102,6 +123,15 @@ void Game::run()
 void Game::quit()
 {
 	m_running = false;
+
+	// Save configuration to settings file
+	IniParser config;
+	config.seek_section("Wallbreaker");
+	config.set("highscore",  Settings::highscore);
+	config.set("app_width",  m_app.getSize().x);
+	config.set("app_height", m_app.getSize().y);
+	config.set("sound",      SoundSystem::isSoundEnabled());
+	config.save(m_current_dir + SETTINGS_FILE);
 }
 
 
@@ -120,7 +150,7 @@ void Game::previousScreen()
 }
 
 
-void Game::setResolution(int width, int height)
+void Game::setResolution(size_t width, size_t height)
 {
 	if (m_app.isOpen())
 		m_app.close();
@@ -128,6 +158,8 @@ void Game::setResolution(int width, int height)
 	m_app.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
 	m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
 	m_app.setView(m_view);
+	m_app.setFramerateLimit(60);
+	m_app.setKeyRepeatEnabled(false);
 
 	// Center window on desktop
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -155,5 +187,7 @@ void Game::takeScreenshot() const
 	std::string filename = m_current_dir + "screenshots/" + current_time + ".png";
 
 	if (m_app.capture().saveToFile(filename))
-		std::cout << "screenshot saved to " << filename << std::endl;
+		std::cout << "* screenshot saved to " << filename << std::endl;
+	else
+		std::cerr << "* couldn't save screenshot " << filename << std::endl;
 }

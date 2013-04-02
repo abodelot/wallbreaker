@@ -10,8 +10,8 @@ How to play?
 ------------
 
 - Move your mouse to catch the ball.
-- Click to release balls glued to sticky paddle.
-- Click to shoot lasers with laser paddle.
+- Click or press [Space] to release balls glued to sticky paddle.
+- Click or press [Space] to shoot lasers with laser paddle.
 
 
 How to use the editor?
@@ -35,3 +35,4 @@ Credits
 -------
 
 Sounds by Cabeeno Rossley: http://www.freesound.org/people/Cabeeno%20Rossley/
+

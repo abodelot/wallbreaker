@@ -4,6 +4,9 @@ bin/wallbreaker
 # Screenshots
 bin/screenshots/*
 
+# Settings file
+bin/settings.ini
+
 # Code::Blocks non-mandatory files
 wallbreaker.layout
 wallbreaker.depend
