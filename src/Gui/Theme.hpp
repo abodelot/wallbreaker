@@ -31,6 +31,7 @@ public:
 	static sf::Color BG_COLOR_PRESSED;
 	static sf::Color BORDER_COLOR;
 
+	static float BORDER_SIZE;
 	static float WIDGET_WIDTH;
 	static float PADDING; // Spacing inside widget
 	static float MARGIN;  // Spacing between widgets

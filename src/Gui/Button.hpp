@@ -3,6 +3,7 @@
 
 #include "Widget.hpp"
 #include "BitmapText.hpp"
+#include "Utils/Box.hpp"
 
 namespace gui
 {
@@ -32,9 +33,7 @@ public:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	sf::RectangleShape m_box;
-	BitmapText         m_text;
-	bool               m_pressed;
+	Box<BitmapText> m_box;
 };
 
 }

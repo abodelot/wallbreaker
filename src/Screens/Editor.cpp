@@ -42,14 +42,14 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(20, m_height + GAME_BORDER_SIZE + 2);
+	m_menu.setPosition(20, m_height + GAME_BORDER_SIZE);
 
-
+	// Populate level list
 	m_opt_levels = new gui::OptionsBox<size_t>;
 	for (size_t i = 1; i <= m_level.getLevelCount(); ++i)
 		m_opt_levels->addItem("Level " + std::to_string(i), i);
-
 	m_menu.add(m_opt_levels,      1);
+
 	m_menu.addButton("Save",      2);
 	m_menu.addButton("Reload",    3);
 	m_menu.addButton("New level", 4)->setPosition(130, m_menu.getPosition().y);

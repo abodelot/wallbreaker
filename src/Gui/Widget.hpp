@@ -43,6 +43,9 @@ public:
 	virtual void onMousePressed(float x, float y);
 	virtual void onMouseReleased(float x, float y);
 
+	virtual void onKeyPressed(sf::Keyboard::Key key);
+	virtual void onKeyReleased(sf::Keyboard::Key key);
+
 protected:
 	/**
 	 * Set size occupied by the widget

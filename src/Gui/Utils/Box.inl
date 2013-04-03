@@ -1,5 +1,6 @@
 #include "../Theme.hpp"
 
+
 namespace gui
 {
 
@@ -7,37 +8,100 @@ template <class T>
 Box<T>::Box():
 	m_pressed(false)
 {
-	m_background.setFillColor(Theme::BG_COLOR);
-	m_background.setOutlineColor(Theme::BORDER_COLOR);
-	m_background.setOutlineThickness(1);
+	setBodyColor(Theme::BG_COLOR);
+	setBorderColor(Theme::BORDER_COLOR);
 }
+
+
+template <class T>
+Box<T>::Box(const T& item):
+	m_item(item),
+	m_pressed(false)
+{
+	setBodyColor(Theme::BG_COLOR);
+	setBorderColor(Theme::BORDER_COLOR);
+}
+
+// Geometry --------------------------------------------------------------------
 
 template <class T>
 void Box<T>::move(float dx, float dy)
 {
-	m_background.move(dx, dy);
+	for (size_t i = 0; i < 8; ++i)
+		m_background[i].position += sf::Vector2f(dx, dy);
+
 	m_item.move(dx, dy);
 }
+
 
 template <class T>
 void Box<T>::pack(float width, float height)
 {
-	m_background.setSize({width, height});
+	// Borders
+	m_background[0].position = sf::Vector2f(0,     0);
+	m_background[1].position = sf::Vector2f(width, 0);
+	m_background[2].position = sf::Vector2f(width, height);
+	m_background[3].position = sf::Vector2f(0,     height);
 
-	// center item
+	// Body
+	float border = Theme::BORDER_SIZE;
+	m_background[4].position = sf::Vector2f(border,         border);
+	m_background[5].position = sf::Vector2f(width - border, border);
+	m_background[6].position = sf::Vector2f(width - border, height - border);
+	m_background[7].position = sf::Vector2f(border,         height - border);
+
+	// Center item
 	m_item.move((width - m_item.getSize().x) / 2,
 				(height - m_item.getSize().y) / 2);
 
 }
+
+
+template <class T>
+sf::Vector2f Box<T>::getSize() const
+{
+	// bottom right corner - top left corner
+	return m_background[2].position - m_background[0].position;
+}
+
+
+template <class T>
+bool Box<T>::containsPoint(float x, float y) const
+{
+	return x >= m_background[0].position.x  // Left
+	    && x <= m_background[2].position.x  // Right
+	    && y >= m_background[0].position.y  // Top
+	    && y <= m_background[2].position.y; // Bottom
+}
+
+
+// Visual properties -----------------------------------------------------------
+
+template <class T>
+void Box<T>::setBodyColor(const sf::Color& color)
+{
+	for (size_t i = 4; i < 8; ++i)
+		m_background[i].color = color;
+}
+
+
+template <class T>
+void Box<T>::setBorderColor(const sf::Color& color)
+{
+	for (size_t i = 0; i < 4; ++i)
+		m_background[i].color = color;
+}
+
 
 template <class T>
 void Box<T>::prelight()
 {
 	if (!m_pressed)
 	{
-		m_background.setFillColor(Theme::BG_COLOR_HOVER);
+		setBodyColor(Theme::BG_COLOR_HOVER);
 	}
 }
+
 
 template <class T>
 void Box<T>::press()
@@ -46,9 +110,10 @@ void Box<T>::press()
 	{
 		m_item.move(0, 1);
 		m_pressed = true;
-		m_background.setFillColor(Theme::BG_COLOR_PRESSED);
+		setBodyColor(Theme::BG_COLOR_PRESSED);
 	}
 }
+
 
 template <class T>
 void Box<T>::release()
@@ -58,23 +123,15 @@ void Box<T>::release()
 		m_item.move(0, -1);
 		m_pressed = false;
 	}
-	m_background.setFillColor(Theme::BG_COLOR);
+	setBodyColor(Theme::BG_COLOR);
 }
 
-template <class T>
-bool Box<T>::containsPoint(float x, float y) const
-{
-	const sf::Vector2f& pos = m_background.getPosition();
-	return x >= pos.x &&
-	       x <  pos.x + m_background.getSize().x&&
-	       y >= pos.y &&
-	       y <  pos.y + m_background.getSize().y;
-}
+
 
 template <class T>
 void Box<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_background, states);
+	target.draw(m_background, 8, sf::Quads, states);
 	target.draw(m_item, states);
 }
 

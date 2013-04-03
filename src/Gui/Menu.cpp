@@ -80,6 +80,13 @@ int Menu::onEvent(const sf::Event& event)
 			}
 		}
 		break;
+
+	case sf::Event::MouseWheelMoved:
+		if (event.mouseWheel.delta)
+		{
+
+		}
+		break;
 	default:
 		break;
 	}

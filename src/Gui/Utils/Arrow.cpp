@@ -1,4 +1,5 @@
 #include "Arrow.hpp"
+#include <SFML/OpenGL.hpp>
 
 using namespace gui;
 
@@ -69,5 +70,6 @@ sf::Vector2f Arrow::getSize() const
 
 void Arrow::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	glLineWidth(0);
 	target.draw(m_triangle, 3, sf::Triangles, states);
 }

@@ -63,8 +63,7 @@ private:
 	size_t             m_current_index;
 
 	// Visual components
-	sf::RectangleShape m_box;
-	BitmapText         m_text;
+	Box<BitmapText>    m_box;
 	Box<Arrow>         m_arrow_left;
 	Box<Arrow>         m_arrow_right;
 };

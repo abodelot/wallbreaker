@@ -60,3 +60,7 @@ void Widget::onMouseLeave() {}
 void Widget::onMouseMoved(float, float) {}
 void Widget::onMousePressed(float, float) {}
 void Widget::onMouseReleased(float, float) {}
+
+void Widget::onKeyPressed(sf::Keyboard::Key key) {}
+void Widget::onKeyReleased(sf::Keyboard::Key key) {}
+
