@@ -25,6 +25,13 @@ Box<T>::Box(const T& item):
 // Geometry --------------------------------------------------------------------
 
 template <class T>
+const sf::Vector2f& Box<T>::getPosition() const
+{
+	return m_background[0].position;
+}
+
+
+template <class T>
 void Box<T>::move(float dx, float dy)
 {
 	for (size_t i = 0; i < 8; ++i)
@@ -35,7 +42,7 @@ void Box<T>::move(float dx, float dy)
 
 
 template <class T>
-void Box<T>::pack(float width, float height)
+void Box<T>::setSize(float width, float height)
 {
 	// Borders
 	m_background[0].position = sf::Vector2f(0,     0);
@@ -50,9 +57,7 @@ void Box<T>::pack(float width, float height)
 	m_background[6].position = sf::Vector2f(width - border, height - border);
 	m_background[7].position = sf::Vector2f(border,         height - border);
 
-	// Center item
-	m_item.move((width - m_item.getSize().x) / 2,
-				(height - m_item.getSize().y) / 2);
+	adjustItem();
 
 }
 
@@ -66,6 +71,20 @@ sf::Vector2f Box<T>::getSize() const
 
 
 template <class T>
+void Box<T>::adjustItem()
+{
+	sf::Vector2f size = getSize();
+	// Center item
+	m_item.setPosition(m_background[0].position.x + (size.x - m_item.getSize().x) / 2,
+	                   m_background[0].position.y + (size.y - m_item.getSize().y) / 2);
+
+	// If item adjusted while pressed, set the offset back
+	if (m_pressed)
+		m_item.move(0, 1);
+}
+
+
+template <class T>
 bool Box<T>::containsPoint(float x, float y) const
 {
 	return x >= m_background[0].position.x  // Left
@@ -73,7 +92,6 @@ bool Box<T>::containsPoint(float x, float y) const
 	    && y >= m_background[0].position.y  // Top
 	    && y <= m_background[2].position.y; // Bottom
 }
-
 
 // Visual properties -----------------------------------------------------------
 
@@ -110,7 +128,7 @@ void Box<T>::press()
 	{
 		m_item.move(0, 1);
 		m_pressed = true;
-		setBodyColor(Theme::BG_COLOR_PRESSED);
+		setBodyColor(Theme::BG_COLOR_FOCUS);
 	}
 }
 
@@ -123,9 +141,29 @@ void Box<T>::release()
 		m_item.move(0, -1);
 		m_pressed = false;
 	}
-	setBodyColor(Theme::BG_COLOR);
 }
 
+
+template <class T>
+void Box<T>::applyState(State state)
+{
+	switch (state)
+	{
+        case StateHovered:
+			prelight();
+			break;
+		case StateFocused:
+			release();
+			setBodyColor(Theme::BG_COLOR_FOCUS);
+			break;
+		case StateDefault:
+			release();
+			setBodyColor(Theme::BG_COLOR);
+			break;
+		default:
+			break;
+	}
+}
 
 
 template <class T>

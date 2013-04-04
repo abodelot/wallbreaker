@@ -6,6 +6,13 @@
 namespace gui
 {
 
+enum State
+{
+	StateDefault,
+	StateHovered,
+	StateFocused,
+};
+
 class Menu;
 
 /**
@@ -35,14 +42,17 @@ public:
 	 */
 	bool containsPoint(const sf::Vector2f& point) const;
 
+	/**
+	 * Check if the widget can be select and trigger events
+	 */
+	bool isSelectable() const;
+
 	// callbacks ---------------------------------------------------------------
 
-	virtual void onMouseEnter();
-	virtual void onMouseLeave();
+	virtual void onStateChanged(State state);
 	virtual void onMouseMoved(float x, float y);
 	virtual void onMousePressed(float x, float y);
 	virtual void onMouseReleased(float x, float y);
-
 	virtual void onKeyPressed(sf::Keyboard::Key key);
 	virtual void onKeyReleased(sf::Keyboard::Key key);
 
@@ -51,6 +61,8 @@ protected:
 	 * Set size occupied by the widget
 	 */
 	void setSize(const sf::Vector2f& size);
+
+	void setSelectable(bool selectable);
 
 	/**
 	 * Notify parent that the widget has been triggered by user input
@@ -64,6 +76,7 @@ private:
 	Menu*        m_parent;
 	sf::Vector2f m_size;
 	int          m_id;
+	bool         m_selectable;
 };
 
 }

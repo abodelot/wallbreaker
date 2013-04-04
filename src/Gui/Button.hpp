@@ -25,10 +25,11 @@ public:
 
 	// callbacks ---------------------------------------------------------------
 
-	void onMouseEnter();
-	void onMouseLeave();
+	void onStateChanged(State state);
 	void onMousePressed(float x, float y);
 	void onMouseReleased(float x, float y);
+	void onKeyPressed(sf::Keyboard::Key key);
+	void onKeyReleased(sf::Keyboard::Key key);
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

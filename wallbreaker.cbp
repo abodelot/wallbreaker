@@ -16,6 +16,12 @@
 					<Add option="-g" />
 					<Add option="-DWALLBREAKER_DEBUG" />
 				</Compiler>
+				<Linker>
+					<Add library="sfml-audio" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/wallbreaker" prefix_auto="1" extension_auto="1" />
@@ -27,6 +33,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
 				</Linker>
 			</Target>
 		</Build>
@@ -36,13 +46,6 @@
 			<Add option="-Wall" />
 			<Add directory="src" />
 		</Compiler>
-		<Linker>
-			<Add library="sfml-audio" />
-			<Add library="sfml-graphics" />
-			<Add library="sfml-network" />
-			<Add library="sfml-system" />
-			<Add library="sfml-window" />
-		</Linker>
 		<Unit filename="bin/resources/levels/levels.txt" />
 		<Unit filename="src/Core/Config.hpp" />
 		<Unit filename="src/Core/Easing.cpp" />

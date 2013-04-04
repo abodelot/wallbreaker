@@ -1,7 +1,7 @@
 #ifndef GUI_MENU_HPP
 #define GUI_MENU_HPP
 
-#include <vector>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 namespace gui
@@ -48,12 +48,19 @@ private:
 	 */
 	sf::Vector2f getMousePosition(int x, int y, const Widget* relative = NULL) const;
 
+	void focusNextWidget();
+
+	void focusPreviousWidget();
+
+	void giveFocus(Widget* widget);
+
 	typedef std::vector<Widget*> WidgetVector;
 
 	sf::RenderTarget& m_window;
 	sf::Vector2f      m_position;
 	WidgetVector      m_widgets;
 	Widget*           m_hover;
+	Widget*           m_focus;
 	const Widget*     m_triggered;
 };
 

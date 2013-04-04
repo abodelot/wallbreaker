@@ -2,6 +2,7 @@
 #define GUI_BOX_HPP
 
 #include <SFML/Graphics.hpp>
+#include "../Widget.hpp"
 
 namespace gui
 {
@@ -16,18 +17,29 @@ public:
 	Box();
 	Box(const T& item);
 
-	void pack(float width, float height);
+	/**
+	 * Get box position
+	 */
+	const sf::Vector2f& getPosition() const;
+
 	void move(float dx, float dy);
 
 	/**
-	 * @return true if point is inside the box limits
+	 * Set the box dimensions
 	 */
-	bool containsPoint(float x, float y) const;
+	void setSize(float width, float height);
 
 	/**
 	 * Get box dimensions
 	 */
 	sf::Vector2f getSize() const;
+
+	void adjustItem();
+
+	/**
+	 * @return true if point is inside the box limits
+	 */
+	bool containsPoint(float x, float y) const;
 
 	/**
 	 * Apply "hovered" effect
@@ -44,9 +56,7 @@ public:
 	 */
 	void release();
 
-
-
-
+	void applyState(State state);
 
 	/**
 	 * Access to the encapsulated object

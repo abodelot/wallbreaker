@@ -39,13 +39,29 @@ public:
 	 */
 	const T& getSelectedValue() const;
 
+	/**
+	 * Get the index of the selected item
+	 */
+	size_t getSelectedIndex() const;
+
+	/**
+	 * Select next item in the list
+	 */
+	void selectNext();
+
+	/**
+	 * Select previous item in the list
+	 */
+	void selectPrevious();
+
 	// callbacks ---------------------------------------------------------------
 
-	void onMouseEnter();
-	void onMouseLeave();
+	void onStateChanged(State state);
 	void onMouseMoved(float x, float y);
 	void onMousePressed(float x, float y);
 	void onMouseReleased(float x, float y);
+	void onKeyPressed(sf::Keyboard::Key key);
+	void onKeyReleased(sf::Keyboard::Key key);
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

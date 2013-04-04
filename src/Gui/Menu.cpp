@@ -9,6 +9,7 @@ using namespace gui;
 Menu::Menu(sf::RenderTarget& window):
 	m_window(window),
 	m_hover(NULL),
+	m_focus(NULL),
 	m_triggered(NULL)
 {
 }
@@ -39,10 +40,10 @@ int Menu::onEvent(const sf::Event& event)
 				{
 					// A new widget is hovered
 					if (m_hover != NULL)
-						m_hover->onMouseLeave();
+						m_hover->onStateChanged(StateDefault);
 
 					m_hover = widget;
-					widget->onMouseEnter();
+					widget->onStateChanged(StateHovered);
 				}
 				else
 				{
@@ -52,9 +53,10 @@ int Menu::onEvent(const sf::Event& event)
 				return -1;
 			}
 		}
+		// Removed hovered state
 		if (m_hover != NULL)
 		{
-			m_hover->onMouseLeave();
+			m_hover->onStateChanged(m_focus == m_hover ? StateFocused : StateDefault);
 			m_hover = NULL;
 		}
 		break;
@@ -65,8 +67,19 @@ int Menu::onEvent(const sf::Event& event)
 			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
 			if (m_hover->containsPoint(mouse))
 			{
+				// Clicked widget takes focus
+				if (m_focus != m_hover)
+				{
+					giveFocus(m_hover);
+				}
 				m_hover->onMousePressed(mouse.x, mouse.y);
 			}
+		}
+		else if (m_focus != NULL)
+		{
+			// User didn't click on a widget, focus is lost
+			m_focus->onStateChanged(StateDefault);
+			m_focus = NULL;
 		}
 		break;
 
@@ -87,6 +100,29 @@ int Menu::onEvent(const sf::Event& event)
 
 		}
 		break;
+
+	case sf::Event::KeyPressed:
+		if (event.key.code == Theme::NEXT_WIDGET_KEY)
+		{
+			focusNextWidget();
+		}
+		else if (event.key.code == Theme::PREV_WIDGET_KEY)
+		{
+			focusPreviousWidget();
+		}
+		else if (m_focus != NULL)
+		{
+			m_focus->onKeyPressed(event.key.code);
+		}
+		break;
+
+	case sf::Event::KeyReleased:
+		if (m_focus != NULL)
+		{
+			m_focus->onKeyReleased(event.key.code);
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -153,6 +189,11 @@ Widget* Menu::add(Widget* widget, int id)
 	widget->setParent(this);
 	widget->setPosition(pos);
 	m_widgets.push_back(widget);
+
+	// Focus first widget
+	if (m_focus == NULL && widget->isSelectable())
+		giveFocus(widget);
+
 	return widget;
 }
 
@@ -179,4 +220,80 @@ sf::Vector2f Menu::getMousePosition(int x, int y, const Widget* relative) const
 	if (relative != NULL)
 		mouse -= relative->getPosition();
 	return mouse;
+}
+
+
+void Menu::focusNextWidget()
+{
+	if (m_widgets.empty())
+		return;
+
+	// Don't search the focused widget if none is focused
+	bool found_current = m_focus == NULL;
+	Widget* first_selectable = NULL;
+
+	for (size_t i = 0; i < m_widgets.size(); ++i)
+	{
+		if (m_widgets[i] == m_focus)
+		{
+			found_current = true;
+		}
+		else if (m_widgets[i]->isSelectable())
+		{
+			if (first_selectable == NULL)
+				first_selectable = m_widgets[i];
+
+			if (found_current)
+			{
+				giveFocus(m_widgets[i]);
+				return;
+			}
+		}
+	}
+	giveFocus(first_selectable);
+}
+
+
+void Menu::focusPreviousWidget()
+{
+	if (m_widgets.empty())
+		return;
+
+	// Don't search the focused widget if none is focused
+	bool found_current = m_focus == NULL;
+	Widget* last_selectable = NULL;
+	for (auto it = m_widgets.rbegin(); it != m_widgets.rend(); ++it)
+	{
+		if (*it == m_focus)
+		{
+			found_current = true;
+		}
+		else if ((**it).isSelectable())
+		{
+			if (last_selectable == NULL)
+			{
+				last_selectable = *it;
+			}
+
+			if (found_current)
+			{
+				giveFocus(*it);
+				return;
+			}
+		}
+	}
+	giveFocus(last_selectable);
+}
+
+
+void Menu::giveFocus(Widget* widget)
+{
+	if (widget == NULL)
+		return;
+
+	if (m_focus != NULL)
+		m_focus->onStateChanged(StateDefault);
+
+	m_focus = widget;
+	widget->onStateChanged(StateFocused);
 }

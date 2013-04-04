@@ -6,12 +6,14 @@ using namespace gui;
 Label::Label():
 	m_text(Theme::getFont())
 {
+	setSelectable(false);
 }
 
 
 Label::Label(const sf::String& string):
 	m_text(Theme::getFont())
 {
+	setSelectable(false);
 	setString(string);
 }
 

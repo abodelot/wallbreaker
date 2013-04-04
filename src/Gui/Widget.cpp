@@ -5,7 +5,8 @@ using namespace gui;
 
 Widget::Widget(int id):
 	m_parent(NULL),
-	m_id(id)
+	m_id(id),
+	m_selectable(true)
 {
 }
 
@@ -41,6 +42,18 @@ bool Widget::containsPoint(const sf::Vector2f& point) const
 }
 
 
+bool Widget::isSelectable() const
+{
+	return m_selectable;
+}
+
+
+void Widget::setSelectable(bool selectable)
+{
+	m_selectable = selectable;
+}
+
+
 void Widget::triggerCallback()
 {
 	if (m_parent != NULL)
@@ -55,12 +68,10 @@ void Widget::setParent(Menu* menu)
 
 // callbacks -------------------------------------------------------------------
 
-void Widget::onMouseEnter() {}
-void Widget::onMouseLeave() {}
+void Widget::onStateChanged(State) {}
 void Widget::onMouseMoved(float, float) {}
 void Widget::onMousePressed(float, float) {}
 void Widget::onMouseReleased(float, float) {}
-
 void Widget::onKeyPressed(sf::Keyboard::Key key) {}
 void Widget::onKeyReleased(sf::Keyboard::Key key) {}
 

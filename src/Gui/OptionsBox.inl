@@ -9,18 +9,17 @@ OptionsBox<T>::OptionsBox():
 	m_box(BitmapText(Theme::getFont()))
 {
 	// Build visual components
-	m_box.pack(Theme::WIDGET_WIDTH, Theme::getBaseLine());
+	m_box.setSize(Theme::WIDGET_WIDTH, Theme::getBaseLine());
 
 	// Pack left arrow
 	float arrow_size = Theme::getFont().getGlyphHeight() - 4;
-	m_arrow_left.item().build(arrow_size, Arrow::Left);
-	m_arrow_left.pack(Theme::getBaseLine(), Theme::getBaseLine());
+	m_arrow_left.item().set(arrow_size, Arrow::Left);
+	m_arrow_left.setSize(Theme::getBaseLine(), Theme::getBaseLine());
 
 	// Pack right arrow
-	m_arrow_right.item().build(arrow_size, Arrow::Right);
-	m_arrow_right.pack(Theme::getBaseLine(), Theme::getBaseLine());
+	m_arrow_right.item().set(arrow_size, Arrow::Right);
+	m_arrow_right.setSize(Theme::getBaseLine(), Theme::getBaseLine());
 	m_arrow_right.move(Theme::WIDGET_WIDTH - Theme::getBaseLine(), 0);
-
 
 	// Widget local bounds
 	setSize(m_box.getSize());
@@ -47,8 +46,7 @@ void OptionsBox<T>::selectItem(size_t item_index)
 	{
 		m_current_index = item_index;
 		m_box.item().setString(m_items[item_index].label);
-		// Keep text centered
-		m_box.item().setPosition((m_box.getSize().x - m_box.item().getSize().x) / 2, Theme::PADDING);
+		m_box.adjustItem();
 	}
 }
 
@@ -57,6 +55,37 @@ template <class T>
 const T& OptionsBox<T>::getSelectedValue() const
 {
 	return m_items[m_current_index].value;
+}
+
+
+template <class T>
+size_t OptionsBox<T>::getSelectedIndex() const
+{
+	return m_current_index;
+}
+
+
+template <class T>
+void OptionsBox<T>::selectNext()
+{
+	if (m_items.size() > 1)
+	{
+		// Get next item index
+		selectItem(m_current_index == (m_items.size() - 1) ? 0 : m_current_index + 1);
+		triggerCallback();
+	}
+}
+
+
+template <class T>
+void OptionsBox<T>::selectPrevious()
+{
+	if (m_items.size() > 1)
+	{
+		// Get previous item index
+		selectItem(m_current_index == 0 ? m_items.size() - 1 : m_current_index - 1);
+		triggerCallback();
+	}
 }
 
 
@@ -72,16 +101,14 @@ void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 // callbacks -------------------------------------------------------------------
 
 template <class T>
-void OptionsBox<T>::onMouseEnter()
+void OptionsBox<T>::onStateChanged(State state)
 {
-}
-
-
-template <class T>
-void OptionsBox<T>::onMouseLeave()
-{
-	m_arrow_left.release();
-	m_arrow_right.release();
+	if (state == StateDefault || state == StateFocused)
+	{
+		m_arrow_left.applyState(state);
+		m_arrow_right.applyState(state);
+		m_box.applyState(state);
+	}
 }
 
 
@@ -116,17 +143,43 @@ void OptionsBox<T>::onMouseReleased(float x, float y)
 {
 	if (m_arrow_left.containsPoint(x, y))
 	{
-		// Select previous item
-		selectItem(m_current_index == 0 ? m_items.size() - 1 : m_current_index - 1);
-		m_arrow_left.release();
+		selectPrevious();
 		triggerCallback();
 	}
 	else if (m_arrow_right.containsPoint(x, y))
 	{
-		// Select next item
-		selectItem(m_current_index == (m_items.size() - 1) ? 0 : m_current_index + 1);
+		selectNext();
 		m_arrow_right.release();
-		triggerCallback();
+	}
+}
+
+
+template <class T>
+void OptionsBox<T>::onKeyPressed(sf::Keyboard::Key key)
+{
+	if (key == sf::Keyboard::Left)
+	{
+		selectPrevious();
+		m_arrow_left.press();
+	}
+	else if (key == sf::Keyboard::Right)
+	{
+		selectNext();
+		m_arrow_right.press();
+	}
+}
+
+
+template <class T>
+void OptionsBox<T>::onKeyReleased(sf::Keyboard::Key key)
+{
+	if (key == sf::Keyboard::Left)
+	{
+		m_arrow_left.release();
+	}
+	else if (key == sf::Keyboard::Right)
+	{
+		m_arrow_right.release();
 	}
 }
 
