@@ -10,87 +10,109 @@
 class Easing
 {
 public:
-	static void scale(sf::Sprite& target, float from, float to, float duration = 1.f);
-	static void scaleAndReset(sf::Sprite& target, float from, float to, float duration = 1.f);
+	/**
+	 * Zoom animation
+	 * @param target: sprite to zoom
+	 * @param factor: final scale factor
+	 */
+	static void zoom         (sf::Sprite& target, float factor, float duration = 1.f);
+	static void zoomAndRevert(sf::Sprite& target, float factor, float duration = 1.f);
 
-	static void move(sf::Sprite& target, const sf::Vector2f& pos, float duration = 1.f);
-	static void moveAndReset(sf::Sprite& target, const sf::Vector2f& pos, float duration = 1.f);
+	/**
+	 * Move animation
+	 * @param target: sprite to move
+	 * @param distance: relative movement, final position is current position + distance
+	 */
+	static void move         (sf::Sprite& target, const sf::Vector2f& distance, float duration = 1.f);
+	static void moveAndRevert(sf::Sprite& target, const sf::Vector2f& distance, float duration = 1.f);
 
-	static void rotate(sf::Sprite& target, float to_angle, float duration = 1.f);
+	/**
+	 * Rotate animation
+	 * @param target: sprite to rotate
+	 * @param angle: angle of the rotation (degrees), final rotation is current rotation + angle
+	 */
+	static void rotate         (sf::Sprite& target, float angle, float duration = 1.f);
+	static void rotateAndRevert(sf::Sprite& target, float angle, float duration = 1.f);
 
+	/**
+	 * Fade-in animation
+	 */
 	static void fadeIn(sf::Sprite& target, float duration = 1.f);
+
+	/**
+	 * Fade-out animation
+	 */
 	static void fadeOut(sf::Sprite& target, float duration = 1.f);
 
-
+	/**
+	 * Update animations for the current frame
+	 */
 	static void update(float frametime);
 
+	/**
+	 * Stop and delete running animations
+	 * All animations will be immiediatly set to their final state
+	 */
 	static void stopAll();
 
 private:
 	enum Effect
 	{
-		SCALE,
-		SCALE_AND_RESET,
+		ZOOM,
+		ZOOM_REVERT,
 		MOVE,
-		MOVE_AND_RESET,
+		MOVE_REVERT,
+		ROTATE,
+		ROTATE_REVERT,
 		FADE_IN,
 		FADE_OUT,
-		ROTATE
-	};
-
-	struct Vector2
-	{
-		float x;
-		float y;
 	};
 
 	struct Object
 	{
+		struct Zoom
+		{
+			float final_scale;
+			float scale_per_sec;
+		};
+
+		struct Move
+		{
+			float final_x;
+			float final_y;
+			float x_per_sec;
+			float y_per_sec;
+		};
+
+		struct Rotate
+		{
+			float final_angle;
+			float angle_per_sec;
+		};
+
 		union Data
 		{
-			struct Scale
-			{
-				float from;
-				float to;
-			};
-			Scale scale;
-
-			struct Move
-			{
-				float from_x;
-				float from_y;
-				float to_x;
-				float to_y;
-				float speed_x;
-				float speed_y;
-			};
+			Zoom zoom;
 			Move move;
-
-			struct Rotate
-			{
-				float angle;
-			};
 			Rotate rotate;
 		};
 
-		Object(Effect _effect, sf::Sprite& _target, float _duration):
-			effect(_effect), target(&_target), duration(_duration)
+		Object(Effect _effect, sf::Sprite& t, float _duration):
+			effect(_effect), target(t), duration(_duration)
 		{
 			created_at.restart();
 		}
 
-		Object(Data& _data, Effect _effect, sf::Sprite& _target, float _duration):
-			data(_data), effect(_effect), target(&_target), duration(_duration)
+		Object(Data& _data, Effect _effect, sf::Sprite& t, float _duration):
+			data(_data), effect(_effect), target(t), duration(_duration)
 		{
 			created_at.restart();
 		}
-
-
 
 		Data data;
 		Effect effect;
-		sf::Sprite*  target;
-		float duration;
+		sf::Sprite& target;
+		const float duration;
 		sf::Clock created_at;
 	};
 

@@ -4,58 +4,61 @@
 Easing::ObjectList Easing::m_objects;
 
 
-void Easing::scale(sf::Sprite& target, float from, float to, float duration)
+void Easing::zoom(sf::Sprite& target, float factor, float duration)
 {
 	Object::Data data;
-	data.scale.from = from;
-	data.scale.to = to;
-	pushObject(data, SCALE, target, duration);
+	data.zoom.final_scale = factor;
+	data.zoom.scale_per_sec = (factor - target.getScale().x) / duration;
+	pushObject(data, ZOOM, target, duration);
 }
 
 
-void Easing::scaleAndReset(sf::Sprite& target, float from, float to, float duration)
+void Easing::zoomAndRevert(sf::Sprite& target, float factor, float duration)
 {
 	Object::Data data;
-	data.scale.from = from;
-	data.scale.to = to;
-	pushObject(data, SCALE_AND_RESET, target, duration);
+	data.zoom.final_scale = factor;
+	data.zoom.scale_per_sec = (factor - target.getScale().x) / duration;
+	pushObject(data, ZOOM_REVERT, target, duration);
 }
 
 
-void Easing::move(sf::Sprite& target, const sf::Vector2f& pos, float duration)
+void Easing::move(sf::Sprite& target, const sf::Vector2f& delta, float duration)
 {
 	Object::Data data;
-	data.move.from_x = target.getPosition().x;
-	data.move.from_y = target.getPosition().y;
-	data.move.to_x = pos.x;
-	data.move.to_y = pos.y;
-
-	data.move.speed_x = (pos.x - data.move.from_x) / duration;
-	data.move.speed_y = (pos.y - data.move.from_y) / duration;
+	data.move.final_x = target.getPosition().x + delta.x;
+	data.move.final_y = target.getPosition().y + delta.y;
+	data.move.x_per_sec = delta.x / duration;
+	data.move.y_per_sec = delta.y / duration;
 	pushObject(data, MOVE, target, duration);
 }
 
 
-void Easing::moveAndReset(sf::Sprite& target, const sf::Vector2f& pos, float duration)
+void Easing::moveAndRevert(sf::Sprite& target, const sf::Vector2f& delta, float duration)
 {
 	Object::Data data;
-	data.move.from_x = target.getPosition().x;
-	data.move.from_y = target.getPosition().y;
-	data.move.to_x = pos.x;
-	data.move.to_y = pos.y;
-
-	data.move.speed_x = (pos.x - data.move.from_x) / duration;
-	data.move.speed_y = (pos.y - data.move.from_y) / duration;
-	pushObject(data, MOVE, target, duration);
-	pushObject(data, MOVE_AND_RESET, target, duration);
+	data.move.final_x = target.getPosition().x + delta.x;
+	data.move.final_y = target.getPosition().y + delta.y;
+	data.move.x_per_sec = delta.x / duration;
+	data.move.y_per_sec = delta.y / duration;
+	pushObject(data, MOVE_REVERT, target, duration);
 }
 
 
-void Easing::rotate(sf::Sprite& target, float to_angle, float duration)
+void Easing::rotate(sf::Sprite& target, float angle, float duration)
 {
 	Object::Data data;
-	data.rotate.angle = to_angle;
+	data.rotate.final_angle = target.getRotation() + angle;
+	data.rotate.angle_per_sec = angle / duration;
 	pushObject(data, ROTATE, target, duration);
+}
+
+
+void Easing::rotateAndRevert(sf::Sprite& target, float angle, float duration)
+{
+	Object::Data data;
+	data.rotate.final_angle = target.getRotation() + angle;
+	data.rotate.angle_per_sec = angle / duration;
+	pushObject(data, ROTATE_REVERT, target, duration);
 }
 
 
@@ -78,30 +81,53 @@ void Easing::update(float frametime)
 		float elapsed = it->created_at.getElapsedTime().asSeconds();
 		if (elapsed >= it->duration)
 		{
-
 			switch (it->effect)
 			{
-				case SCALE_AND_RESET:
-					Easing::scale(*it->target, it->data.scale.to, it->data.scale.from, it->duration);
-					break;
-				case MOVE_AND_RESET:
+				// Apply the opposite animation
+				case ZOOM_REVERT:
 				{
-					it->target->setPosition(it->data.move.to_x, it->data.move.to_y);
-					sf::Vector2f pos(it->data.move.from_x, it->data.move.from_y);
-					Easing::move(*it->target, pos, it->duration);
-					break;
+					Object::Zoom& zoom = it->data.zoom;
+					zoom.scale_per_sec *= -1;
+					zoom.final_scale = zoom.final_scale + zoom.scale_per_sec * it->duration;
+					it->effect = ZOOM;
+					it->created_at.restart();
+					continue;
 				}
-				// When effect ends, make sure to stop at the actual value
-				case FADE_IN:
-					it->target->setColor({255, 255, 255, 255});
+				case MOVE_REVERT:
+				{
+					Object::Move& move = it->data.move;
+					move.x_per_sec *= -1;
+					move.y_per_sec *= -1;
+					move.final_x = move.final_x + move.x_per_sec * it->duration;
+					move.final_y = move.final_y + move.y_per_sec * it->duration;
+					it->effect = MOVE;
+					it->created_at.restart();
+					continue;
+				}
+				case ROTATE_REVERT:
+				{
+					Object::Rotate& rotate = it->data.rotate;
+					rotate.angle_per_sec *= -1;
+					rotate.final_angle = rotate.final_angle + rotate.angle_per_sec * it->duration;
+					it->effect = ROTATE;
+					it->created_at.restart();
+					continue;
+				}
+				// When effect ends, make sure it reaches the actual final value
+				case ZOOM:
+					it->target.setScale(it->data.zoom.final_scale, it->data.zoom.final_scale);
 					break;
-				case FADE_OUT:
-					it->target->setColor({255, 255, 255, 0});
+				case MOVE:
+					it->target.setPosition(it->data.move.final_x, it->data.move.final_y);
 					break;
 				case ROTATE:
-					it->target->setRotation(it->data.rotate.angle);
+					it->target.setRotation(it->data.rotate.final_angle);
 					break;
-				default:
+				case FADE_IN:
+					it->target.setColor({255, 255, 255, 255});
+					break;
+				case FADE_OUT:
+					it->target.setColor({255, 255, 255, 0});
 					break;
 			}
 			it = m_objects.erase(it);
@@ -110,37 +136,32 @@ void Easing::update(float frametime)
 		{
 			switch (it->effect)
 			{
-				case SCALE:
-				case SCALE_AND_RESET:
-				{
-					Object::Data::Scale& s = it->data.scale;
-					float new_scale = elapsed * (s.to - s.from) / it->duration + s.from;
-					it->target->setScale(new_scale, new_scale);
+				case ZOOM:
+				case ZOOM_REVERT:
+					it->target.setScale(it->target.getScale().x + frametime * it->data.zoom.scale_per_sec,
+					                    it->target.getScale().y + frametime * it->data.zoom.scale_per_sec);
 					break;
-				}
+
 				case MOVE:
-				case MOVE_AND_RESET:
-				{
-					Object::Data::Move& move = it->data.move;
-					it->target->move(move.speed_x * frametime, move.speed_y * frametime);
+				case MOVE_REVERT:
+					it->target.move(frametime * it->data.move.x_per_sec, frametime * it->data.move.y_per_sec);
 					break;
-				}
+
+				case ROTATE:
+				case ROTATE_REVERT:
+					it->target.rotate(frametime * it->data.rotate.angle_per_sec);
+					break;
+
 				case FADE_IN:
 				{
 					sf::Uint8 delta = elapsed * 255 / it->duration;
-					it->target->setColor(sf::Color(255, 255, 255, delta));
+					it->target.setColor(sf::Color(255, 255, 255, delta));
 					break;
 				}
 				case FADE_OUT:
 				{
 					sf::Uint8 delta = elapsed * 255 / it->duration;
-					it->target->setColor(sf::Color(255, 255, 255, 255 - delta));
-					break;
-				}
-				case ROTATE:
-				{
-					float delta = elapsed * it->data.rotate.angle / it->duration;
-					it->target->setRotation(delta);
+					it->target.setColor(sf::Color(255, 255, 255, 255 - delta));
 					break;
 				}
 			}

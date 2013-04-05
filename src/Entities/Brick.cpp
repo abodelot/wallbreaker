@@ -72,10 +72,10 @@ bool Brick::takeDamage(bool force_destruction)
 
 	if (m_broken)
 	{
-		Easing::move(*this, {getPosition().x, getPosition().y + math::rand(20, 40)});
+		Easing::move(*this, {0, math::rand(20, 40)});
 		Easing::fadeOut(*this);
 		Easing::rotate(*this, math::rand(-60, 60));
-		Easing::scale(*this, 1, 0.5);
+		Easing::zoom(*this, 0.5);
 		launchParticles();
 	}
 	return m_broken;
