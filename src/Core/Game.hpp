@@ -13,34 +13,54 @@ class Screen;
 class Game
 {
 public:
-	/// Get singleton instance
+	/**
+	 * Get application controller singleton instance
+	 */
 	static Game& getInstance();
 
-	/// Init application and set current working directory
+	/**
+	 * Init application and set current working directory
+	 */
 	void init(const std::string& path);
 
-	/// Enter application main loop
+	/**
+	 * Enter application main loop
+	 */
 	void run();
 
-	/// Exit application
+	/**
+	 * Exit application
+	 */
 	void quit();
 
-	/// Set next screen to be displayed
+	/**
+	 * Set next screen to be displayed
+	 */
 	void nextScreen(Screen* screen);
 
-	/// Go back to the previous displayed screen
+	/**
+	 * Go back to the previous displayed screen
+	 */
 	void previousScreen();
 
-	/// Set application window dimension
+	/**
+	 * Set application window dimension
+	 */
 	void setResolution(size_t width, size_t height);
 
-	/// Get execution current directory
+	/**
+	 * Get current working directory
+	 */
 	const std::string& getCurrentDir() const;
 
-	/// Get application render window
+	/**
+	 * Get application render window
+	 */
 	sf::RenderWindow& getWindow();
 
-	/// Save a picture of the screen
+	/**
+	 * Save a picture of the screen
+	 */
 	void takeScreenshot() const;
 
 private:

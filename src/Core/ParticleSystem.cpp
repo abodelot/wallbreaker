@@ -72,19 +72,25 @@ ParticleSystem& ParticleSystem::instance()
 }
 
 
+ParticleSystem::ParticleSystem():
+	m_vertices(sf::Quads, 4000)
+{
+}
+
+
 void ParticleSystem::create(const Emitter& emitter)
 {
-	const sf::Vector2f& position = emitter.getSpawnPosition();
-	const sf::Color& color = emitter.getColor();
 	for (int i = emitter.getParticleCount(); i >= 0; --i)
 	{
-		m_particles.push_back(Particle(emitter, position, color));
+		m_particles.push_back(Particle(emitter));
 	}
 }
 
 
 void ParticleSystem::update(float frametime)
 {
+	m_vertices.clear();
+
 	for (ParticleList::iterator it = m_particles.begin(); it != m_particles.end();)
 	{
 		Particle& p = *it;
@@ -93,31 +99,50 @@ void ParticleSystem::update(float frametime)
 		{
 			if (p.emitter.m_looping)
 			{
-				m_particles.push_back(Particle(p.emitter, p.emitter.getSpawnPosition(), p.emitter.getColor()));
+				// Reset properties
+				p.color = p.emitter.getColor();
+				p.position = p.emitter.getSpawnPosition();
+				p.lifespan = p.remaining_time = math::rand(0.f, p.emitter.m_time_to_live);
 
+				// Compute velocity
+				float angle = p.emitter.getParticleAngle();
+				float speed = p.emitter.getParticleSpeed();
+				p.velocity.x = speed * std::cos(angle);
+				p.velocity.y = speed * -std::sin(angle);
 			}
-			// delete the particle
-			it = m_particles.erase(it);
+			else
+			{
+				// Delete the particle
+				it = m_particles.erase(it);
+			}
 		}
 		else
 		{
-			// update position
-			float dx = p.speed.x * frametime;
-			float dy = p.speed.y * frametime;
-			for (int i = 0; i < 4; ++i)
-			{
-				p.vertex[i].position.x += dx;
-				p.vertex[i].position.y += dy;
-			}
+			// Update position
+			p.position.x += p.velocity.x * frametime;
+			p.position.y += p.velocity.y * frametime;
 
-			// update color
+			// Update color
 			float elapsed = p.lifespan - p.remaining_time;
+			p.color.r = p.emitter.m_color.r + (elapsed * (p.emitter.m_to_color.r - p.emitter.m_color.r) / p.lifespan);
+			p.color.g = p.emitter.m_color.g + (elapsed * (p.emitter.m_to_color.g - p.emitter.m_color.g) / p.lifespan);
+			p.color.b = p.emitter.m_color.b + (elapsed * (p.emitter.m_to_color.b - p.emitter.m_color.b) / p.lifespan);
+			p.color.a = p.emitter.m_color.a + (elapsed * (p.emitter.m_to_color.a - p.emitter.m_color.a) / p.lifespan);
+
+			// Build the vertices
+			sf::Vertex vertices[4];
+
+			// 1px width square
+			++vertices[1].position.x;
+			++vertices[2].position.x;
+			++vertices[2].position.y;
+			++vertices[3].position.y;
+
 			for (int i = 0; i < 4; ++i)
 			{
-				p.vertex[i].color.r = p.emitter.m_color.r + (elapsed * (p.emitter.m_to_color.r - p.emitter.m_color.r) / p.lifespan);
-				p.vertex[i].color.g = p.emitter.m_color.g + (elapsed * (p.emitter.m_to_color.g - p.emitter.m_color.g) / p.lifespan);
-				p.vertex[i].color.b = p.emitter.m_color.b + (elapsed * (p.emitter.m_to_color.b - p.emitter.m_color.b) / p.lifespan);
-				p.vertex[i].color.a = p.emitter.m_color.a + (elapsed * (p.emitter.m_to_color.a - p.emitter.m_color.a) / p.lifespan);
+				vertices[i].position += p.position;
+				vertices[i].color = p.color;
+				m_vertices.append(vertices[i]);
 			}
 
 			++it;
@@ -136,10 +161,7 @@ void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) con
 {
 	states.blendMode = sf::BlendAdd;
 
-	for (ParticleList::const_iterator it = m_particles.begin(); it != m_particles.end(); ++it)
-	{
-		target.draw(it->vertex, 4, sf::Quads, states);
-	}
+	target.draw(m_vertices);
 }
 
 
@@ -155,23 +177,17 @@ void ParticleSystem::removeByEmitter(const Emitter* emitter)
 }
 
 
-ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e, const sf::Vector2f& pos, const sf::Color& color):
-	emitter(e)
+ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
+	emitter(e),
+	position(e.getSpawnPosition()),
+	color(e.getColor())
 {
 	lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
-	float angle = e.getParticleAngle();
-	int velocity = e.getParticleSpeed();
-	speed.x = velocity * std::cos(angle);
-	speed.y = velocity * -std::sin(angle);
 
-	for (int i = 0; i < 4; ++i)
-	{
-		vertex[i].position = pos;
-		vertex[i].color = color;
-	}
-	vertex[1].position.x += 1;
-	vertex[2].position.x += 1;
-	vertex[2].position.y += 1;
-	vertex[3].position.y += 1;
+	// Compute velocity
+	float angle = e.getParticleAngle();
+	float speed = e.getParticleSpeed();
+	velocity.x = speed * std::cos(angle);
+	velocity.y = speed * -std::sin(angle);
 }
 

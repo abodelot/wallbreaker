@@ -71,25 +71,26 @@ public:
 	void clear();
 
 private:
+    ParticleSystem();
+
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	struct Particle
 	{
-		Particle(const ParticleSystem::Emitter& e, const sf::Vector2f& pos, const sf::Color& color);
+		Particle(const ParticleSystem::Emitter& e);
 
-		const Emitter&      emitter;
-		sf::Vertex   vertex[4];
-		float lifespan;
-		float remaining_time;
-		sf::Vector2f speed;
-
+		const Emitter& emitter;
+		sf::Vector2f   position;
+		sf::Vector2f   velocity;
+		sf::Color      color;
+		float          lifespan;
+		float          remaining_time;
 	};
 
-
 	typedef std::list<Particle> ParticleList;
-
-	ParticleList m_particles;
+	ParticleList    m_particles;
+	sf::VertexArray m_vertices;
 };
 
 #endif // PARTICLE_SYSTEM_HPP

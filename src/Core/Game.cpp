@@ -164,6 +164,10 @@ void Game::setResolution(size_t width, size_t height)
 	// Center window on desktop
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	m_app.setPosition({(desktop.width - width) / 2, (desktop.height - height) / 2});
+
+	// Set application icon
+	static sf::Image icon = Resources::getTexture("application-icon.png").copyToImage();
+	m_app.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 
