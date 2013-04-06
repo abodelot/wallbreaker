@@ -17,13 +17,13 @@ ParticleSystem::Emitter::Emitter():
 }
 
 
-void ParticleSystem::Emitter::setColor(const sf::Color& color)
+void ParticleSystem::Emitter::setParticleColor(const sf::Color& color)
 {
 	m_color = color;
 }
 
 
-const sf::Color& ParticleSystem::Emitter::getColor() const
+const sf::Color& ParticleSystem::Emitter::getParticleColor() const
 {
 	return m_color;
 }
@@ -100,7 +100,7 @@ void ParticleSystem::update(float frametime)
 			if (p.emitter.m_looping)
 			{
 				// Reset properties
-				p.color = p.emitter.getColor();
+				p.color = p.emitter.getParticleColor();
 				p.position = p.emitter.getSpawnPosition();
 				p.lifespan = p.remaining_time = math::rand(0.f, p.emitter.m_time_to_live);
 
@@ -129,14 +129,12 @@ void ParticleSystem::update(float frametime)
 			p.color.b = p.emitter.m_color.b + (elapsed * (p.emitter.m_to_color.b - p.emitter.m_color.b) / p.lifespan);
 			p.color.a = p.emitter.m_color.a + (elapsed * (p.emitter.m_to_color.a - p.emitter.m_color.a) / p.lifespan);
 
-			// Build the vertices
+			// Build the vertices (1px width square)
 			sf::Vertex vertices[4];
-
-			// 1px width square
-			++vertices[1].position.x;
-			++vertices[2].position.x;
-			++vertices[2].position.y;
-			++vertices[3].position.y;
+			vertices[1].position.x = 1;
+			vertices[2].position.x = 1;
+			vertices[2].position.y = 1;
+			vertices[3].position.y = 1;
 
 			for (int i = 0; i < 4; ++i)
 			{
@@ -159,9 +157,9 @@ void ParticleSystem::clear()
 
 void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.blendMode = sf::BlendAdd;
+	//states.blendMode = sf::BlendAdd;
 
-	target.draw(m_vertices);
+	target.draw(m_vertices, states);
 }
 
 
@@ -180,7 +178,7 @@ void ParticleSystem::removeByEmitter(const Emitter* emitter)
 ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
 	emitter(e),
 	position(e.getSpawnPosition()),
-	color(e.getColor())
+	color(e.getParticleColor())
 {
 	lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
 

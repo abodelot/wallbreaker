@@ -27,7 +27,8 @@ Wallbreaker::Wallbreaker():
 
 	// Sprites used for render textures
 	m_level_sprite.setTexture(m_level_texture.getTexture());
-	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
+	m_level_sprite.setOrigin(m_width / 2, m_height / 2);
+	m_level_sprite.setPosition(m_width / 2 + GAME_BORDER_SIZE, m_height / 2 + GAME_BORDER_SIZE);
 
 	m_hud_sprite.setTexture(m_hud.getTexture());
 	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
@@ -52,6 +53,10 @@ Wallbreaker::Wallbreaker():
 	m_hud.setScore(m_score);
 	m_hud.setHighscore(Settings::highscore);
 	setStatus(READY);
+
+	Easing::stopAll();
+	m_level_sprite.move(0, m_height);
+	Easing::move(m_level_sprite, {0, -m_height});
 }
 
 
@@ -111,6 +116,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::P: // Simulate POWER_BALL
 							applyOnEachBall(&Ball::activePower);
 							break;
+						case sf::Keyboard::A:
 #endif
 						default:
 							break;
@@ -198,11 +204,19 @@ void Wallbreaker::update(float frametime)
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_hud_sprite, states);
 	target.draw(m_level_sprite, states);
-	if (m_status == PAUSED)
+	target.draw(m_hud_sprite, states);
+
+	if (m_status != PLAYING)
 	{
-		m_menu.draw();
+		sf::RectangleShape overlay({APP_WIDTH, APP_HEIGHT});
+		overlay.setFillColor({0, 0, 0, 128});
+		target.draw(overlay);
+		target.draw(m_info_text);
+		if (m_status == PAUSED)
+		{
+			m_menu.draw();
+		}
 	}
 }
 
@@ -222,13 +236,6 @@ void Wallbreaker::updateTexture()
 		m_level_texture.draw(**it);
 	}
 
-	if (m_status != PLAYING)
-	{
-		sf::RectangleShape overlay({m_width, m_height});
-		overlay.setFillColor({0, 0, 0, 192});
-		m_level_texture.draw(overlay);
-		m_level_texture.draw(m_info_text);
-	}
 	m_level_texture.display();
 }
 
@@ -377,11 +384,15 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 
 bool Wallbreaker::loadNextLevel()
 {
+	Easing::stopAll();
+
 	m_remaining_bricks = m_level.loadNext();
 	m_hud.setLevel(m_level.getCurrentLevel());
 	m_hud.setBrickCount(m_remaining_bricks);
 	SoundSystem::playSound("level-complete.ogg");
-	Easing::stopAll();
+
+	m_level_sprite.move(0, m_height);
+	Easing::move(m_level_sprite, {0, -m_height});
 	return m_remaining_bricks > 0; // No brick found = no more level
 }
 
@@ -399,22 +410,22 @@ void Wallbreaker::setStatus(Status status)
 		createBall();
 		m_info_text.setString("Ready?");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, (m_height - m_info_text.getSize().y) / 2);
+		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, (APP_HEIGHT - m_info_text.getSize().y) / 2);
 	}
 	else if (status == GAME_OVER)
 	{
 		m_info_text.setString(
 			m_player_lives > 0 ?
 			"Congratulations!\nGame complete!" :
-			"GAME OVER.\nTry harder\nnext time!");
+			"Game Over");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, (m_height - m_info_text.getSize().y) / 2);
+		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, (APP_HEIGHT - m_info_text.getSize().y) / 2);
 	}
 	else if (status == PAUSED)
 	{
 		m_info_text.setString("Paused");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((m_width - m_info_text.getSize().x) / 2, 60);
+		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
 	}
 	Game::getInstance().getWindow().setMouseCursorVisible(status == PAUSED);
 }

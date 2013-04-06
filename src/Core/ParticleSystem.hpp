@@ -20,8 +20,8 @@ public:
 
 		Emitter();
 
-		void setColor(const sf::Color& color);
-		const sf::Color& getColor() const;
+		void setParticleColor(const sf::Color& color);
+		const sf::Color& getParticleColor() const;
 
 		// Create particles linked to the emitter in the particle system
 		void launchParticles();

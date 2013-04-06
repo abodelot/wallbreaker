@@ -34,10 +34,9 @@ void Brick::setType(int type)
 		int x = (tile_id % 4) * Brick::WIDTH;
 		int y = (tile_id / 4) * Brick::HEIGHT;
 
-		sf::Sprite::setColor(sf::Color::White);
 		setTextureRect(sf::IntRect(x, y, Brick::WIDTH, Brick::HEIGHT));
-
-		Emitter::setColor(getBaseColor());
+		setColor(sf::Color::White);
+		setParticleColor(getBaseColor());
 	}
 }
 

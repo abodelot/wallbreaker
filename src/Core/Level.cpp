@@ -179,15 +179,45 @@ int Level::load()
 	return m_brick_count;
 }
 
-
+#include "Resources.hpp"
 void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.clear({0x16, 0x1e, 0x26});
+	// Draw background gradient
+	sf::Vertex background[4];
+	background[1].position.x = target.getSize().x;
+	background[2].position.x = target.getSize().x;
+	background[2].position.y = target.getSize().y;
+	background[3].position.y = target.getSize().y;
+
+	background[0].color = {0x1a, 0x35, 0x49};
+	background[1].color = {0x1a, 0x35, 0x49};
+	background[2].color = {0x2c, 0x80, 0xb8};
+	background[3].color = {0x2c, 0x80, 0xb8};
+
+	target.draw(background, 4, sf::Quads, states);
+
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
 		for (int j = 0; j < NB_BRICK_COLS; ++j)
 		{
 			const Brick& brick = m_bricks[i][j];
+			if (brick.isActive())
+			{
+				// Cast drop shadow
+				sf::Vertex shadow[4];
+				for (int i = 0; i < 4; ++i)
+				{
+					shadow[i].color = sf::Color(0, 0, 0, 128);
+					shadow[i].position = brick.getPosition() + sf::Vector2f(3, 3);
+				}
+				shadow[1].position.x += Brick::WIDTH;
+				shadow[2].position.x += Brick::WIDTH;
+				shadow[2].position.y += Brick::HEIGHT;
+				shadow[3].position.y += Brick::HEIGHT;
+				target.draw(shadow, 4, sf::Quads, states);
+			}
+
+
 			if (brick.getType() != Brick::NONE)
 				target.draw(brick, states);
 		}
