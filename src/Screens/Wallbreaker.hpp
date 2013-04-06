@@ -63,6 +63,7 @@ private:
 	BitmapText        m_info_text;
 	sf::Sprite        m_hud_sprite;
 	HUD               m_hud;
+	sf::Sprite        m_borders_sprite;
 	sf::Sprite        m_level_sprite;
 	sf::RenderTexture m_level_texture;
 

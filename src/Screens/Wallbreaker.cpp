@@ -33,6 +33,8 @@ Wallbreaker::Wallbreaker():
 	m_hud_sprite.setTexture(m_hud.getTexture());
 	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
 
+	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
+
 	// Pause menu
 	m_menu.setPosition(80, 100);
 	m_menu.addButton("Resume", 1);
@@ -117,6 +119,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 							applyOnEachBall(&Ball::activePower);
 							break;
 						case sf::Keyboard::A:
+							Easing::zoomAndRevert(m_level_sprite, 2);
 #endif
 						default:
 							break;
@@ -204,6 +207,7 @@ void Wallbreaker::update(float frametime)
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.draw(m_borders_sprite, states);
 	target.draw(m_level_sprite, states);
 	target.draw(m_hud_sprite, states);
 

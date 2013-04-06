@@ -165,6 +165,10 @@ void Ball::onPaddleHit(Paddle& paddle)
 		m_glued_to = &paddle;
 		m_glued_at = paddle.getX() - getX();
 	}
+	else
+	{
+		Easing::zoomAndRevert(*this, 1.8, 0.1);
+	}
 }
 
 
