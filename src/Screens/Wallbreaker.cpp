@@ -14,12 +14,15 @@
 
 
 Wallbreaker::Wallbreaker():
+	m_width(NB_BRICK_COLS * Brick::WIDTH),
+	m_height(NB_BRICK_LINES * Brick::HEIGHT),
 	m_remaining_bricks(0),
 	m_particles(ParticleSystem::instance()),
 	m_info_text(gui::Theme::getFont()),
 	m_score(0),
 	m_status(READY),
 	m_player_lives(MAX_PLAYER_LIVES),
+	m_blackout(false),
 	m_menu(Game::getInstance().getWindow())
 {
 	// Initialize render texture
@@ -57,8 +60,8 @@ Wallbreaker::Wallbreaker():
 	setStatus(READY);
 
 	Easing::stopAll();
-	m_level_sprite.move(0, m_height);
-	Easing::move(m_level_sprite, {0, -m_height});
+	m_level_sprite.setScale(0, 0);
+	Easing::zoom(m_level_sprite, 1);
 }
 
 
@@ -118,8 +121,8 @@ void Wallbreaker::onEvent(const sf::Event& event)
 						case sf::Keyboard::P: // Simulate POWER_BALL
 							applyOnEachBall(&Ball::activePower);
 							break;
-						case sf::Keyboard::A:
-							Easing::zoomAndRevert(m_level_sprite, 2);
+						case sf::Keyboard::B:
+							blackout();
 #endif
 						default:
 							break;
@@ -227,8 +230,17 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Wallbreaker::updateTexture()
 {
-	// Draw bricks
-	m_level_texture.draw(m_level);
+	if (!m_blackout)
+	{
+		// Draw bricks
+		m_level_texture.draw(m_level);
+	}
+	else
+	{
+		m_level_texture.clear();
+		if (m_blackout_clock.getElapsedTime().asSeconds() > 20)
+			m_blackout = false;
+	}
 
 	// Draw particles
 	m_level_texture.draw(m_particles);
@@ -248,6 +260,13 @@ void Wallbreaker::addPlayerLife()
 {
 	if (m_player_lives < MAX_PLAYER_LIVES)
 		m_hud.setLiveCount(++m_player_lives);
+}
+
+
+void Wallbreaker::blackout()
+{
+	m_blackout = true;
+	m_blackout_clock.restart();
 }
 
 
@@ -389,14 +408,14 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 bool Wallbreaker::loadNextLevel()
 {
 	Easing::stopAll();
-
+	m_blackout = false; // Reset blackout power-up
 	m_remaining_bricks = m_level.loadNext();
 	m_hud.setLevel(m_level.getCurrentLevel());
 	m_hud.setBrickCount(m_remaining_bricks);
 	SoundSystem::playSound("level-complete.ogg");
 
-	m_level_sprite.move(0, m_height);
-	Easing::move(m_level_sprite, {0, -m_height});
+	m_level_sprite.setScale(0, 0);
+	Easing::zoom(m_level_sprite, 1);
 	return m_remaining_bricks > 0; // No brick found = no more level
 }
 

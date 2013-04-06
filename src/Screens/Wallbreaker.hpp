@@ -33,6 +33,8 @@ public:
 
 	void addPlayerLife();
 
+	void blackout();
+
 	void applyOnEachBall(Ball::ActionPointer action);
 
 private:
@@ -54,9 +56,8 @@ private:
 	// Delete all entities
 	void clearEntities();
 
-	static const int m_width  = NB_BRICK_COLS  * Brick::WIDTH;
-	static const int m_height = NB_BRICK_LINES * Brick::HEIGHT;
-
+	const int         m_width;
+	const int         m_height;
 	Level             m_level;
 	int               m_remaining_bricks;
 	ParticleSystem&   m_particles;
@@ -74,6 +75,10 @@ private:
 	Paddle     m_paddle;
 	Status     m_status;
 	int        m_player_lives;
+
+	// BLACKOUT power-up
+	bool       m_blackout;
+	sf::Clock  m_blackout_clock;
 
 	// GUI elements for pause
 	gui::Menu m_menu;

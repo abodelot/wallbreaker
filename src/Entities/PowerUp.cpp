@@ -9,7 +9,7 @@
 
 PowerUp* PowerUp::createRandom()
 {
-	return new PowerUp((Type) math::rand(0, RANDOM));
+	return new PowerUp((Type) math::rand(0, BLACKOUT));
 }
 
 
@@ -50,11 +50,9 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 		case EXTRA_LIFE:
 			getParent()->addPlayerLife();
 			break;
-		case RANDOM:
-			m_type = ((Type) math::rand(0, EXTRA_LIFE));
-			onPaddleHit(paddle);
+		case BLACKOUT:
+			getParent()->blackout();
 			break;
-
 	}
 	kill();
 	SoundSystem::playSound("power-up.ogg");
