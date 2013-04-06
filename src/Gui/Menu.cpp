@@ -62,29 +62,29 @@ int Menu::onEvent(const sf::Event& event)
 		break;
 
 	case sf::Event::MouseButtonPressed:
-		if (m_hover != NULL)
+		if (event.mouseButton.button == sf::Mouse::Left)
 		{
-			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
-			if (m_hover->containsPoint(mouse))
+			if (m_hover != NULL)
 			{
 				// Clicked widget takes focus
 				if (m_focus != m_hover)
 				{
 					giveFocus(m_hover);
 				}
+				sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
 				m_hover->onMousePressed(mouse.x, mouse.y);
 			}
-		}
-		else if (m_focus != NULL)
-		{
-			// User didn't click on a widget, focus is lost
-			m_focus->onStateChanged(StateDefault);
-			m_focus = NULL;
+			else if (m_focus != NULL)
+			{
+				// User didn't click on a widget, focus is lost
+				m_focus->onStateChanged(StateDefault);
+				m_focus = NULL;
+			}
 		}
 		break;
 
 	case sf::Event::MouseButtonReleased:
-		if (m_hover != NULL)
+		if (event.mouseButton.button == sf::Mouse::Left && m_hover != NULL)
 		{
 			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
 			if (m_hover->containsPoint(mouse))
@@ -95,10 +95,6 @@ int Menu::onEvent(const sf::Event& event)
 		break;
 
 	case sf::Event::MouseWheelMoved:
-		if (event.mouseWheel.delta)
-		{
-
-		}
 		break;
 
 	case sf::Event::KeyPressed:
@@ -121,6 +117,9 @@ int Menu::onEvent(const sf::Event& event)
 		{
 			m_focus->onKeyReleased(event.key.code);
 		}
+		break;
+
+	case sf::Event::TextEntered:
 		break;
 
 	default:
