@@ -23,7 +23,8 @@ Wallbreaker::Wallbreaker():
 	m_status(READY),
 	m_player_lives(MAX_PLAYER_LIVES),
 	m_blackout(false),
-	m_menu(Game::getInstance().getWindow())
+	m_pause_menu(Game::getInstance().getWindow()),
+	m_game_over_menu(Game::getInstance().getWindow())
 {
 	// Initialize render texture
 	m_level_texture.create(m_width, m_height);
@@ -38,17 +39,10 @@ Wallbreaker::Wallbreaker():
 
 	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 
-	// Pause menu
-	m_menu.setPosition(80, 100);
-	m_menu.addButton("Resume", 1);
-	m_menu.addButton("Options", 2);
-	m_menu.addButton("Main menu", 3);
-
 	// Player paddle positioned at the bottom-center
 	m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
 	m_paddle.setParent(this);
 
-	m_player_lives = 5;
 	m_remaining_bricks = m_level.getBrickCount();
 
 	// Initialize HUD
@@ -62,6 +56,17 @@ Wallbreaker::Wallbreaker():
 	Easing::stopAll();
 	m_level_sprite.setScale(0, 0);
 	Easing::zoom(m_level_sprite, 1);
+
+	// Pause menu
+	m_pause_menu.setPosition(77, 100);
+	m_pause_menu.addButton("Resume",    1);
+	m_pause_menu.addButton("Options",   2);
+	m_pause_menu.addButton("Main menu", 3);
+
+	// Game over menu
+	m_game_over_menu.setPosition(77, 100);
+	m_game_over_menu.addButton("Continue",  1);
+	m_game_over_menu.addButton("Main menu", 2);
 }
 
 
@@ -146,7 +151,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 			break;
 
 		case PAUSED:
-			switch (m_menu.onEvent(event))
+			switch (m_pause_menu.onEvent(event))
 			{
 				case 1: // Resume
 					setStatus(PLAYING);
@@ -171,8 +176,29 @@ void Wallbreaker::onEvent(const sf::Event& event)
 			break;
 
 		case GAME_OVER:
-			if (event.type == sf::Event::MouseButtonPressed)
-				Game::getInstance().previousScreen();
+			switch (m_game_over_menu.onEvent(event))
+			{
+				case 1: // Continue
+					Easing::stopAll();
+					m_blackout = false;
+
+					// Reset score
+					m_score = 0;
+					m_hud.setScore(0);
+
+					// Reset lives
+					m_player_lives = MAX_PLAYER_LIVES;
+					m_hud.setLiveCount(MAX_PLAYER_LIVES);
+
+					// Reload current level
+					m_remaining_bricks = m_level.reload();
+					m_hud.setBrickCount(m_remaining_bricks);
+					setStatus(READY);
+					break;
+				case 2: // Back to main menu
+					Game::getInstance().previousScreen();
+					break;
+			}
 			break;
 	}
 }
@@ -222,7 +248,11 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(m_info_text);
 		if (m_status == PAUSED)
 		{
-			m_menu.draw();
+			m_pause_menu.draw();
+		}
+		else if (m_status == GAME_OVER)
+		{
+			m_game_over_menu.draw();
 		}
 	}
 }
@@ -340,10 +370,15 @@ void Wallbreaker::updateEntities(float frametime)
 				{
 					if (m_remaining_bricks == 0)
 					{
-						if (loadNextLevel())
-							setStatus(READY);
-						else
+						if (m_level.getCurrentLevel() == m_level.getLevelCount())
+						{
 							setStatus(GAME_OVER);
+						}
+						else
+						{
+							loadNextLevel();
+							setStatus(READY);
+						}
 						break;
 					}
 				}
@@ -405,7 +440,7 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 }
 
 
-bool Wallbreaker::loadNextLevel()
+void Wallbreaker::loadNextLevel()
 {
 	Easing::stopAll();
 	m_blackout = false; // Reset blackout power-up
@@ -416,15 +451,15 @@ bool Wallbreaker::loadNextLevel()
 
 	m_level_sprite.setScale(0, 0);
 	Easing::zoom(m_level_sprite, 1);
-	return m_remaining_bricks > 0; // No brick found = no more level
 }
 
 
 void Wallbreaker::setStatus(Status status)
 {
 	m_status = status;
-	if (status == READY)
+	switch (status)
 	{
+	case READY:
 		// Remove power-ups applied to the paddle
 		m_paddle.reset();
 
@@ -433,24 +468,28 @@ void Wallbreaker::setStatus(Status status)
 		createBall();
 		m_info_text.setString("Ready?");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, (APP_HEIGHT - m_info_text.getSize().y) / 2);
-	}
-	else if (status == GAME_OVER)
-	{
-		m_info_text.setString(
-			m_player_lives > 0 ?
-			"Congratulations!\nGame complete!" :
-			"Game Over");
+		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
+		Game::getInstance().getWindow().setMouseCursorVisible(false);
+		break;
+
+	case GAME_OVER:
+		m_info_text.setString(m_player_lives > 0 ? "Game complete!" : "Game Over");
 		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, (APP_HEIGHT - m_info_text.getSize().y) / 2);
-	}
-	else if (status == PAUSED)
-	{
+		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
+		Game::getInstance().getWindow().setMouseCursorVisible(true);
+		break;
+
+	case PAUSED:
 		m_info_text.setString("Paused");
 		m_info_text.setScale(2, 2);
 		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
+		Game::getInstance().getWindow().setMouseCursorVisible(true);
+		break;
+
+	case PLAYING:
+		Game::getInstance().getWindow().setMouseCursorVisible(false);
+		break;
 	}
-	Game::getInstance().getWindow().setMouseCursorVisible(status == PAUSED);
 }
 
 

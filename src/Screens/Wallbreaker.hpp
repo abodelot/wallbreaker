@@ -41,7 +41,7 @@ private:
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	bool loadNextLevel();
+	void loadNextLevel();
 
 	void updateTexture();
 
@@ -80,8 +80,9 @@ private:
 	bool       m_blackout;
 	sf::Clock  m_blackout_clock;
 
-	// GUI elements for pause
-	gui::Menu m_menu;
+	// GUI elements for menus
+	gui::Menu m_pause_menu;
+	gui::Menu m_game_over_menu;
 };
 
 #endif // WALLBREAKER_HPP

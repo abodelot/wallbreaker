@@ -31,6 +31,9 @@ public:
 	Widget* add(Widget* widget, int id = -1);
 	Widget* add(const sf::String& label, Widget* widget, int id = -1);
 
+	/**
+	 * Menu position
+	 */
 	void setPosition(float x, float y);
 	const sf::Vector2f& getPosition() const;
 
