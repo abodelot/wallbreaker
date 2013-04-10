@@ -47,7 +47,7 @@ public:
 	 * Get index of the current level
 	 * @return level number (first is 1)
 	 */
-	int getCurrentLevel() const;
+	size_t getCurrentLevel() const;
 
 	Brick& getBrick(int i, int j);
 

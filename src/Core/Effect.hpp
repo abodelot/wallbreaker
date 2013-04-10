@@ -1,5 +1,5 @@
-#ifndef EASING_HPP
-#define EASING_HPP
+#ifndef EFFECT_HPP
+#define EFFECT_HPP
 
 #include <list>
 #include <SFML/Graphics.hpp>
@@ -7,7 +7,7 @@
 /**
  * Animation manager based on sprite transformations
  */
-class Easing
+class Effect
 {
 public:
 	/**
@@ -56,7 +56,7 @@ public:
 	static void stopAll();
 
 private:
-	enum Effect
+	enum Type
 	{
 		ZOOM,
 		ZOOM_REVERT,
@@ -97,30 +97,30 @@ private:
 			Rotate rotate;
 		};
 
-		Object(Effect _effect, sf::Sprite& t, float _duration):
-			effect(_effect), target(t), duration(_duration)
+		Object(Type t, sf::Sprite& s, float dur):
+			type(t), target(s), duration(dur)
 		{
 			created_at.restart();
 		}
 
-		Object(Data& _data, Effect _effect, sf::Sprite& t, float _duration):
-			data(_data), effect(_effect), target(t), duration(_duration)
+		Object(Data& d, Type t, sf::Sprite& s, float dur):
+			data(d), type(t), target(s), duration(dur)
 		{
 			created_at.restart();
 		}
 
 		Data data;
-		Effect effect;
+		Type type;
 		sf::Sprite& target;
 		const float duration;
 		sf::Clock created_at;
 	};
 
-	static void pushObject(Object::Data& data, Effect effect, sf::Sprite& target, float duration);
+	static void pushObject(Object::Data& data, Type type, sf::Sprite& target, float duration);
 
 	typedef std::list<Object> ObjectList;
 
 	static ObjectList m_objects;
 };
 
-#endif // EASING_HPP
+#endif // EFFECT_HPP

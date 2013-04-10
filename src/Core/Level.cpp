@@ -108,7 +108,7 @@ size_t Level::append()
 }
 
 
-int Level::getCurrentLevel() const
+size_t Level::getCurrentLevel() const
 {
 	return m_current_level;
 }

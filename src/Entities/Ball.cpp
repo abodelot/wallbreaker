@@ -1,7 +1,7 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Paddle.hpp"
-#include "Core/Easing.hpp"
+#include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Utils/Math.hpp"
@@ -167,7 +167,7 @@ void Ball::onPaddleHit(Paddle& paddle)
 	}
 	else
 	{
-		Easing::zoomAndRevert(*this, 1.8, 0.1);
+		Effect::zoomAndRevert(*this, 1.8, 0.1);
 	}
 }
 

@@ -3,7 +3,7 @@
 
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
-#include "Core/Easing.hpp"
+#include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/Settings.hpp"
 #include "Core/SoundSystem.hpp"
@@ -53,9 +53,9 @@ Wallbreaker::Wallbreaker():
 	m_hud.setHighscore(Settings::highscore);
 	setStatus(READY);
 
-	Easing::stopAll();
+	Effect::stopAll();
 	m_level_sprite.setScale(0, 0);
-	Easing::zoom(m_level_sprite, 1);
+	Effect::zoom(m_level_sprite, 1);
 
 	// Pause menu
 	m_pause_menu.setPosition(77, 100);
@@ -179,7 +179,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 			switch (m_game_over_menu.onEvent(event))
 			{
 				case 1: // Continue
-					Easing::stopAll();
+					Effect::stopAll();
 					m_blackout = false;
 
 					// Reset score
@@ -208,7 +208,7 @@ void Wallbreaker::update(float frametime)
 {
 	if (m_status == PLAYING || m_status == READY)
 	{
-		Easing::update(frametime);
+		Effect::update(frametime);
 
 		// Update player paddle and make sure it remains inside bounds
 		m_paddle.onUpdate(frametime);
@@ -442,7 +442,7 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 
 void Wallbreaker::loadNextLevel()
 {
-	Easing::stopAll();
+	Effect::stopAll();
 	m_blackout = false; // Reset blackout power-up
 	m_remaining_bricks = m_level.loadNext();
 	m_hud.setLevel(m_level.getCurrentLevel());
@@ -450,7 +450,7 @@ void Wallbreaker::loadNextLevel()
 	SoundSystem::playSound("level-complete.ogg");
 
 	m_level_sprite.setScale(0, 0);
-	Easing::zoom(m_level_sprite, 1);
+	Effect::zoom(m_level_sprite, 1);
 }
 
 

@@ -187,7 +187,7 @@ void Game::takeScreenshot() const
 {
 	char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
 	time_t t = time(NULL);
-	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
+	strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
 	std::string filename = m_current_dir + "screenshots/" + current_time + ".png";
 
 	if (m_app.capture().saveToFile(filename))

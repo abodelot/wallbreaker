@@ -1,10 +1,10 @@
-#include "Easing.hpp"
+#include "Effect.hpp"
 
 
-Easing::ObjectList Easing::m_objects;
+Effect::ObjectList Effect::m_objects;
 
 
-void Easing::zoom(sf::Sprite& target, float factor, float duration)
+void Effect::zoom(sf::Sprite& target, float factor, float duration)
 {
 	Object::Data data;
 	data.zoom.final_scale = factor;
@@ -13,7 +13,7 @@ void Easing::zoom(sf::Sprite& target, float factor, float duration)
 }
 
 
-void Easing::zoomAndRevert(sf::Sprite& target, float factor, float duration)
+void Effect::zoomAndRevert(sf::Sprite& target, float factor, float duration)
 {
 	Object::Data data;
 	data.zoom.final_scale = factor;
@@ -22,7 +22,7 @@ void Easing::zoomAndRevert(sf::Sprite& target, float factor, float duration)
 }
 
 
-void Easing::move(sf::Sprite& target, const sf::Vector2f& delta, float duration)
+void Effect::move(sf::Sprite& target, const sf::Vector2f& delta, float duration)
 {
 	Object::Data data;
 	data.move.final_x = target.getPosition().x + delta.x;
@@ -33,7 +33,7 @@ void Easing::move(sf::Sprite& target, const sf::Vector2f& delta, float duration)
 }
 
 
-void Easing::moveAndRevert(sf::Sprite& target, const sf::Vector2f& delta, float duration)
+void Effect::moveAndRevert(sf::Sprite& target, const sf::Vector2f& delta, float duration)
 {
 	Object::Data data;
 	data.move.final_x = target.getPosition().x + delta.x;
@@ -44,7 +44,7 @@ void Easing::moveAndRevert(sf::Sprite& target, const sf::Vector2f& delta, float 
 }
 
 
-void Easing::rotate(sf::Sprite& target, float angle, float duration)
+void Effect::rotate(sf::Sprite& target, float angle, float duration)
 {
 	Object::Data data;
 	data.rotate.final_angle = target.getRotation() + angle;
@@ -53,7 +53,7 @@ void Easing::rotate(sf::Sprite& target, float angle, float duration)
 }
 
 
-void Easing::rotateAndRevert(sf::Sprite& target, float angle, float duration)
+void Effect::rotateAndRevert(sf::Sprite& target, float angle, float duration)
 {
 	Object::Data data;
 	data.rotate.final_angle = target.getRotation() + angle;
@@ -62,26 +62,26 @@ void Easing::rotateAndRevert(sf::Sprite& target, float angle, float duration)
 }
 
 
-void Easing::fadeIn(sf::Sprite& target, float duration)
+void Effect::fadeIn(sf::Sprite& target, float duration)
 {
 	m_objects.push_back(Object(FADE_IN, target, duration));
 }
 
 
-void Easing::fadeOut(sf::Sprite& target, float duration)
+void Effect::fadeOut(sf::Sprite& target, float duration)
 {
 	m_objects.push_back(Object(FADE_OUT, target, duration));
 }
 
 
-void Easing::update(float frametime)
+void Effect::update(float frametime)
 {
 	for (ObjectList::iterator it = m_objects.begin(); it != m_objects.end();)
 	{
 		float elapsed = it->created_at.getElapsedTime().asSeconds();
 		if (elapsed >= it->duration)
 		{
-			switch (it->effect)
+			switch (it->type)
 			{
 				// Apply the opposite animation
 				case ZOOM_REVERT:
@@ -89,7 +89,7 @@ void Easing::update(float frametime)
 					Object::Zoom& zoom = it->data.zoom;
 					zoom.scale_per_sec *= -1;
 					zoom.final_scale = zoom.final_scale + zoom.scale_per_sec * it->duration;
-					it->effect = ZOOM;
+					it->type = ZOOM;
 					it->created_at.restart();
 					continue;
 				}
@@ -100,7 +100,7 @@ void Easing::update(float frametime)
 					move.y_per_sec *= -1;
 					move.final_x = move.final_x + move.x_per_sec * it->duration;
 					move.final_y = move.final_y + move.y_per_sec * it->duration;
-					it->effect = MOVE;
+					it->type = MOVE;
 					it->created_at.restart();
 					continue;
 				}
@@ -109,7 +109,7 @@ void Easing::update(float frametime)
 					Object::Rotate& rotate = it->data.rotate;
 					rotate.angle_per_sec *= -1;
 					rotate.final_angle = rotate.final_angle + rotate.angle_per_sec * it->duration;
-					it->effect = ROTATE;
+					it->type = ROTATE;
 					it->created_at.restart();
 					continue;
 				}
@@ -134,7 +134,7 @@ void Easing::update(float frametime)
 		}
 		else
 		{
-			switch (it->effect)
+			switch (it->type)
 			{
 				case ZOOM:
 				case ZOOM_REVERT:
@@ -171,13 +171,13 @@ void Easing::update(float frametime)
 }
 
 
-void Easing::stopAll()
+void Effect::stopAll()
 {
 	m_objects.clear();
 }
 
 
-void Easing::pushObject(Object::Data& data, Effect effect, sf::Sprite& target, float duration)
+void Effect::pushObject(Object::Data& data, Type type, sf::Sprite& target, float duration)
 {
-	m_objects.push_back(Object(data, effect, target, duration));
+	m_objects.push_back(Object(data, type, target, duration));
 }

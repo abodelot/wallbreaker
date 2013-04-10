@@ -29,7 +29,8 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-O3" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -48,8 +49,8 @@
 		</Compiler>
 		<Unit filename="bin/resources/levels/levels.txt" />
 		<Unit filename="src/Core/Config.hpp" />
-		<Unit filename="src/Core/Easing.cpp" />
-		<Unit filename="src/Core/Easing.hpp" />
+		<Unit filename="src/Core/Effect.cpp" />
+		<Unit filename="src/Core/Effect.hpp" />
 		<Unit filename="src/Core/Game.cpp" />
 		<Unit filename="src/Core/Game.hpp" />
 		<Unit filename="src/Core/HUD.cpp" />

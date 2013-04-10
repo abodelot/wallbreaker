@@ -12,6 +12,7 @@ How to play?
 - Move your mouse to catch the ball.
 - Click or press [Space] to release balls glued to sticky paddle.
 - Click or press [Space] to shoot lasers with laser paddle.
+- Press [F2] to take a screenshot.
 
 
 How to use the editor?

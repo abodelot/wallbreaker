@@ -1,7 +1,7 @@
 #include "Brick.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
-#include "Core/Easing.hpp"
+#include "Core/Effect.hpp"
 #include "Utils/Math.hpp"
 
 
@@ -71,10 +71,10 @@ bool Brick::takeDamage(bool force_destruction)
 
 	if (m_broken)
 	{
-		Easing::move(*this, {0, math::rand(20, 40)});
-		Easing::fadeOut(*this);
-		Easing::rotate(*this, math::rand(-60, 60));
-		Easing::zoom(*this, 0.5);
+		Effect::move(*this, {0, math::rand(20.f, 40.f)});
+		Effect::fadeOut(*this);
+		Effect::rotate(*this, math::rand(-60, 60));
+		Effect::zoom(*this, 0.5);
 		launchParticles();
 	}
 	return m_broken;
