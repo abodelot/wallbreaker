@@ -18,9 +18,9 @@ sf::Keyboard::Key Theme::PREV_WIDGET_KEY = sf::Keyboard::Up;
 BitmapFont Theme::m_font;
 
 
-void Theme::load(const std::string& name)
+bool Theme::loadFont(const std::string& name)
 {
-	m_font.loadFromFile(name);
+	return m_font.loadFromFile(name);
 }
 
 

@@ -12,9 +12,9 @@ class Theme
 {
 public:
 	/**
-	 * Load the font
+	 * Load the GUI global font
 	 */
-	static void load(const std::string& path);
+	static bool loadFont(const std::string& path);
 
 	/**
 	 * Get font
