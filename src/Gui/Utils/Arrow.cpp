@@ -13,7 +13,7 @@ Arrow::Arrow(float size, Direction direction)
 }
 
 
-void Arrow::set(float size, Direction direction)
+void Arrow::build(float size, Direction direction)
 {
 	updateGeometry(0, 0, size, direction);
 }

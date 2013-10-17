@@ -84,6 +84,8 @@
 		<Unit filename="src/Gui/BitmapText.hpp" />
 		<Unit filename="src/Gui/Button.cpp" />
 		<Unit filename="src/Gui/Button.hpp" />
+		<Unit filename="src/Gui/CheckBox.cpp" />
+		<Unit filename="src/Gui/CheckBox.hpp" />
 		<Unit filename="src/Gui/Label.cpp" />
 		<Unit filename="src/Gui/Label.hpp" />
 		<Unit filename="src/Gui/Menu.cpp" />
@@ -96,6 +98,8 @@
 		<Unit filename="src/Gui/Utils/Arrow.hpp" />
 		<Unit filename="src/Gui/Utils/Box.hpp" />
 		<Unit filename="src/Gui/Utils/Box.inl" />
+		<Unit filename="src/Gui/Utils/Cross.cpp" />
+		<Unit filename="src/Gui/Utils/Cross.hpp" />
 		<Unit filename="src/Gui/Widget.cpp" />
 		<Unit filename="src/Gui/Widget.hpp" />
 		<Unit filename="src/Screens/Editor.cpp" />

@@ -17,7 +17,7 @@ public:
 	Arrow();
 	Arrow(float size, Direction direction);
 
-	void set(float size, Direction direction);
+	void build(float size, Direction direction);
 
 	void setColor(const sf::Color& color);
 

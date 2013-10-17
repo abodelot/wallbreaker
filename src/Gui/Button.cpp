@@ -8,6 +8,7 @@ Button::Button(const sf::String& string, int id):
 	Widget(id),
 	m_box(BitmapText(Theme::getFont()))
 {
+	m_box.item().setColor(Theme::TEXT_COLOR);
 	m_box.setSize(Theme::WIDGET_WIDTH, Theme::getBaseLine());
 	setString(string);
 	setSize(m_box.getSize());

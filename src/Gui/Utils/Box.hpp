@@ -64,11 +64,12 @@ public:
 	inline       T& item()       { return m_item; }
 	inline const T& item() const { return m_item; }
 
-	void setBodyColor(const sf::Color& color);
-	void setBorderColor(const sf::Color& color);
-
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	void setBodyColor(const sf::Color& color);
+
+	void setBorderColor(const sf::Color& color);
 
 	T          m_item;
 	bool       m_pressed;

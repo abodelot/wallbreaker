@@ -6,6 +6,7 @@ sf::Color Theme::BG_COLOR         = sf::Color::Blue;
 sf::Color Theme::BG_COLOR_HOVER   = sf::Color(64, 128, 255);
 sf::Color Theme::BG_COLOR_FOCUS   = sf::Color(0, 0, 128);
 sf::Color Theme::BORDER_COLOR     = sf::Color::Cyan;
+sf::Color Theme::TEXT_COLOR       = sf::Color::White;
 
 float     Theme::BORDER_SIZE      = 1.f;
 float     Theme::WIDGET_WIDTH     = 86.f;

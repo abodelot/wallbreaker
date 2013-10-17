@@ -96,22 +96,6 @@ bool Box<T>::containsPoint(float x, float y) const
 // Visual properties -----------------------------------------------------------
 
 template <class T>
-void Box<T>::setBodyColor(const sf::Color& color)
-{
-	for (size_t i = 4; i < 8; ++i)
-		m_background[i].color = color;
-}
-
-
-template <class T>
-void Box<T>::setBorderColor(const sf::Color& color)
-{
-	for (size_t i = 0; i < 4; ++i)
-		m_background[i].color = color;
-}
-
-
-template <class T>
 void Box<T>::prelight()
 {
 	if (!m_pressed)
@@ -171,6 +155,22 @@ void Box<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_background, 8, sf::Quads, states);
 	target.draw(m_item, states);
+}
+
+
+template <class T>
+void Box<T>::setBodyColor(const sf::Color& color)
+{
+	for (size_t i = 4; i < 8; ++i)
+		m_background[i].color = color;
+}
+
+
+template <class T>
+void Box<T>::setBorderColor(const sf::Color& color)
+{
+	for (size_t i = 0; i < 4; ++i)
+		m_background[i].color = color;
 }
 
 }

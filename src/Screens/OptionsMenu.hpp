@@ -5,6 +5,7 @@
 #include "Gui/Menu.hpp"
 #include "Gui/OptionsBox.hpp"
 #include "Gui/Button.hpp"
+#include "Gui/CheckBox.hpp"
 
 /**
  * Menu dedicated to settings management
@@ -29,6 +30,7 @@ private:
 	// Gui elements
 	gui::Menu    m_menu;
 	gui::Button* m_but_sound;
+	gui::CheckBox* m_ck_sound;
 	gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
 };
 

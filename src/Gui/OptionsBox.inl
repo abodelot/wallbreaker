@@ -10,14 +10,17 @@ OptionsBox<T>::OptionsBox():
 {
 	// Build visual components
 	m_box.setSize(Theme::WIDGET_WIDTH, Theme::getBaseLine());
+	m_box.item().setColor(Theme::TEXT_COLOR);
 
 	// Pack left arrow
-	float arrow_size = Theme::getFont().getGlyphHeight() - 4;
-	m_arrow_left.item().set(arrow_size, Arrow::Left);
+	float arrow_size = Theme::getFont().getGlyphHeight() - Theme::PADDING * 2;
+	m_arrow_left.item().build(arrow_size, Arrow::Left);
+	m_arrow_left.item().setColor(Theme::TEXT_COLOR);
 	m_arrow_left.setSize(Theme::getBaseLine(), Theme::getBaseLine());
 
 	// Pack right arrow
-	m_arrow_right.item().set(arrow_size, Arrow::Right);
+	m_arrow_right.item().build(arrow_size, Arrow::Right);
+	m_arrow_right.item().setColor(Theme::TEXT_COLOR);
 	m_arrow_right.setSize(Theme::getBaseLine(), Theme::getBaseLine());
 	m_arrow_right.move(Theme::WIDGET_WIDTH - Theme::getBaseLine(), 0);
 

@@ -14,7 +14,10 @@ OptionsMenu::OptionsMenu():
 
 	// Create button for turning sound on/off
 	m_but_sound = new gui::Button(SoundSystem::isSoundEnabled() ? "Turn off" : "Turn on");
-	m_menu.add("Sound:", m_but_sound, 1);
+	//m_menu.add("Sound:", m_but_sound, 1);
+
+	m_ck_sound = new gui::CheckBox(SoundSystem::isSoundEnabled());
+	m_menu.add("Sound:", m_ck_sound, 1);
 
 	// Create options box for selecting a resolution
 	m_opt_resolution = new gui::OptionsBox<sf::Vector2u>;
@@ -31,18 +34,12 @@ void OptionsMenu::onEvent(const sf::Event& event)
 {
 	switch (m_menu.onEvent(event))
 	{
-		case 1: // Sound
+		case 1: // Sound on/off
 		{
-			bool sound = !SoundSystem::isSoundEnabled();
-			SoundSystem::enableSound(sound);
-			if (sound)
+			SoundSystem::enableSound(m_ck_sound->isChecked());
+			if (m_ck_sound->isChecked())
 			{
 				SoundSystem::playSound("ball.ogg");
-				m_but_sound->setString("Turn off");
-			}
-			else
-			{
-				m_but_sound->setString("Turn on");
 			}
 			break;
 		}
@@ -52,7 +49,7 @@ void OptionsMenu::onEvent(const sf::Event& event)
 			Game::getInstance().setResolution(res.x, res.y);
 			break;
 		}
-		case 3:
+		case 3: // Back
 			Game::getInstance().previousScreen();
 			break;
 
