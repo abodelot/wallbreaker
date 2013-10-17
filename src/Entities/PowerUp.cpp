@@ -9,7 +9,7 @@
 
 PowerUp* PowerUp::createRandom()
 {
-	return new PowerUp((Type) math::rand(0, BLACKOUT));
+	return new PowerUp((Type) math::rand(0, SPEED_RESET));
 }
 
 
@@ -45,13 +45,13 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 			getParent()->createBall();
 			break;
 		case POWER_BALL:
-			getParent()->applyOnEachBall(&Ball::activePower);
+			getParent()->applyOnEachBall(&Ball::enablePowerBall);
 			break;
 		case EXTRA_LIFE:
 			getParent()->addPlayerLife();
 			break;
-		case BLACKOUT:
-			getParent()->blackout();
+		case SPEED_RESET:
+			getParent()->applyOnEachBall(&Ball::resetSpeed);
 			break;
 	}
 	kill();

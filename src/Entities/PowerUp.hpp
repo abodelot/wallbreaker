@@ -17,7 +17,7 @@ public:
 		TRIPLE_BALL,   // +2 balls
 		POWER_BALL,    // Ball goes through bricks (lasts 10 bricks)
 		EXTRA_LIFE,    // +1 life
-		BLACKOUT       // Bricks are invisible (lasts 20 sec)
+		SPEED_RESET    // Reset balls to their initial speed
 	};
 
 	/**

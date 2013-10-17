@@ -25,8 +25,9 @@ public:
 	 */
 	void unstick();
 
-	void activePower();
+	void enablePowerBall();
 
+	void resetSpeed();
 
 	// callbacks ---------------------------------------------------------------
 

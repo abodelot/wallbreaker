@@ -33,8 +33,6 @@ public:
 
 	void addPlayerLife();
 
-	void blackout();
-
 	void applyOnEachBall(Ball::ActionPointer action);
 
 private:
@@ -75,10 +73,6 @@ private:
 	Paddle     m_paddle;
 	Status     m_status;
 	int        m_player_lives;
-
-	// BLACKOUT power-up
-	bool       m_blackout;
-	sf::Clock  m_blackout_clock;
 
 	// GUI elements for menus
 	gui::Menu m_pause_menu;

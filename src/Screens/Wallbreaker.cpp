@@ -22,7 +22,6 @@ Wallbreaker::Wallbreaker():
 	m_score(0),
 	m_status(READY),
 	m_player_lives(MAX_PLAYER_LIVES),
-	m_blackout(false),
 	m_pause_menu(Game::getInstance().getWindow()),
 	m_game_over_menu(Game::getInstance().getWindow())
 {
@@ -124,10 +123,11 @@ void Wallbreaker::onEvent(const sf::Event& event)
 							createBall();
 							break;
 						case sf::Keyboard::P: // Simulate POWER_BALL
-							applyOnEachBall(&Ball::activePower);
+							applyOnEachBall(&Ball::enablePowerBall);
 							break;
-						case sf::Keyboard::B:
-							blackout();
+						case sf::Keyboard::E: // Simulate SPEED_RESET
+							applyOnEachBall(&Ball::resetSpeed);
+							break;
 #endif
 						default:
 							break;
@@ -180,7 +180,6 @@ void Wallbreaker::onEvent(const sf::Event& event)
 			{
 				case 1: // Continue
 					Effect::stopAll();
-					m_blackout = false;
 
 					// Reset score
 					m_score = 0;
@@ -260,17 +259,8 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Wallbreaker::updateTexture()
 {
-	if (!m_blackout)
-	{
-		// Draw bricks
-		m_level_texture.draw(m_level);
-	}
-	else
-	{
-		m_level_texture.clear();
-		if (m_blackout_clock.getElapsedTime().asSeconds() > 20)
-			m_blackout = false;
-	}
+	// Draw bricks
+	m_level_texture.draw(m_level);
 
 	// Draw particles
 	m_level_texture.draw(m_particles);
@@ -290,13 +280,6 @@ void Wallbreaker::addPlayerLife()
 {
 	if (m_player_lives < MAX_PLAYER_LIVES)
 		m_hud.setLiveCount(++m_player_lives);
-}
-
-
-void Wallbreaker::blackout()
-{
-	m_blackout = true;
-	m_blackout_clock.restart();
 }
 
 
@@ -443,7 +426,6 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 void Wallbreaker::loadNextLevel()
 {
 	Effect::stopAll();
-	m_blackout = false; // Reset blackout power-up
 	m_remaining_bricks = m_level.loadNext();
 	m_hud.setLevel(m_level.getCurrentLevel());
 	m_hud.setBrickCount(m_remaining_bricks);

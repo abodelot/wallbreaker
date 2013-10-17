@@ -55,12 +55,18 @@ void Ball::unstick()
 }
 
 
-void Ball::activePower()
+void Ball::enablePowerBall()
 {
 	m_powered = POWER_BALL_COUNT;
 	setTextureRect({8, 0, 8, 8});
 	Emitter::m_color = sf::Color::Cyan;
 	Emitter::m_to_color = sf::Color(0, 0, 255, 0);
+}
+
+
+void Ball::resetSpeed()
+{
+	m_velocity = BALL_START_SPEED;
 }
 
 
