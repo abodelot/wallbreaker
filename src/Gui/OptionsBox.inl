@@ -147,7 +147,7 @@ void OptionsBox<T>::onMouseReleased(float x, float y)
 	if (m_arrow_left.containsPoint(x, y))
 	{
 		selectPrevious();
-		triggerCallback();
+		m_arrow_left.release();
 	}
 	else if (m_arrow_right.containsPoint(x, y))
 	{

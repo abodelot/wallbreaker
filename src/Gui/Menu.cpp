@@ -53,7 +53,7 @@ int Menu::onEvent(const sf::Event& event)
 				return -1;
 			}
 		}
-		// Removed hovered state
+		// No widget hovered, remove hovered state
 		if (m_hover != NULL)
 		{
 			m_hover->onStateChanged(m_focus == m_hover ? StateFocused : StateDefault);
@@ -84,12 +84,12 @@ int Menu::onEvent(const sf::Event& event)
 		break;
 
 	case sf::Event::MouseButtonReleased:
-		if (event.mouseButton.button == sf::Mouse::Left && m_hover != NULL)
+		if (event.mouseButton.button == sf::Mouse::Left && m_focus != NULL)
 		{
-			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_hover);
-			if (m_hover->containsPoint(mouse))
+			sf::Vector2f mouse = getMousePosition(event.mouseButton.x, event.mouseButton.y, m_focus);
+			if (m_focus->containsPoint(mouse))
 			{
-				m_hover->onMouseReleased(mouse.x, mouse.y);
+				m_focus->onMouseReleased(mouse.x, mouse.y);
 			}
 		}
 		break;
