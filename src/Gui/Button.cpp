@@ -43,6 +43,15 @@ void Button::onStateChanged(State state)
 }
 
 
+void Button::onMouseMoved(float, float)
+{
+	if (isFocused() && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		m_box.press();
+	}
+}
+
+
 void Button::onMousePressed(float, float)
 {
 	m_box.press();

@@ -38,10 +38,12 @@ public:
 
 	sf::FloatRect getLocalBounds() const { return m_bounds; }
 
+	// Position helpers
 	void setX(float x);
 	void setY(float y);
 	float getX() const;
 	float getY() const;
+
 	/// Get the text dimensions
 	sf::Vector2f getSize() const;
 

@@ -26,6 +26,7 @@ public:
 	// callbacks ---------------------------------------------------------------
 
 	void onStateChanged(State state);
+	void onMouseMoved(float x, float y);
 	void onMousePressed(float x, float y);
 	void onMouseReleased(float x, float y);
 	void onKeyPressed(sf::Keyboard::Key key);

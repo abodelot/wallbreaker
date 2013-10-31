@@ -40,10 +40,14 @@ int Menu::onEvent(const sf::Event& event)
 				{
 					// A new widget is hovered
 					if (m_hover != NULL)
-						m_hover->onStateChanged(StateDefault);
+						m_hover->setState(StateDefault);
 
 					m_hover = widget;
-					widget->onStateChanged(StateHovered);
+					// Don't send Hovered state if widget is already focused
+					if (m_hover != m_focus)
+					{
+						widget->setState(StateHovered);
+					}
 				}
 				else
 				{
@@ -56,7 +60,7 @@ int Menu::onEvent(const sf::Event& event)
 		// No widget hovered, remove hovered state
 		if (m_hover != NULL)
 		{
-			m_hover->onStateChanged(m_focus == m_hover ? StateFocused : StateDefault);
+			m_hover->setState(m_focus == m_hover ? StateFocused : StateDefault);
 			m_hover = NULL;
 		}
 		break;
@@ -77,7 +81,7 @@ int Menu::onEvent(const sf::Event& event)
 			else if (m_focus != NULL)
 			{
 				// User didn't click on a widget, focus is lost
-				m_focus->onStateChanged(StateDefault);
+				m_focus->setState(StateDefault);
 				m_focus = NULL;
 			}
 		}
@@ -120,6 +124,10 @@ int Menu::onEvent(const sf::Event& event)
 		break;
 
 	case sf::Event::TextEntered:
+		if (m_focus != NULL)
+		{
+			m_focus->onTextEntered(event.text.unicode);
+		}
 		break;
 
 	default:
@@ -291,8 +299,8 @@ void Menu::giveFocus(Widget* widget)
 		return;
 
 	if (m_focus != NULL)
-		m_focus->onStateChanged(StateDefault);
+		m_focus->setState(StateDefault);
 
 	m_focus = widget;
-	widget->onStateChanged(StateFocused);
+	widget->setState(StateFocused);
 }

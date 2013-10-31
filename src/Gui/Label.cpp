@@ -14,11 +14,11 @@ Label::Label(const sf::String& string):
 	m_text(Theme::getFont())
 {
 	setSelectable(false);
-	setString(string);
+	setText(string);
 }
 
 
-void Label::setString(const sf::String& string)
+void Label::setText(const sf::String& string)
 {
 	m_text.setString(string);
 	m_text.setPosition(Theme::PADDING, Theme::PADDING);
@@ -26,10 +26,23 @@ void Label::setString(const sf::String& string)
 }
 
 
-const sf::String& Label::getString() const
+const sf::String& Label::getText() const
 {
 	return m_text.getString();
 }
+
+
+void Label::setColor(const sf::Color& color)
+{
+	m_text.setColor(color);
+}
+
+
+const sf::Color& Label::getColor() const
+{
+	return m_text.getColor();
+}
+
 
 void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

@@ -20,6 +20,7 @@ class Menu;
  */
 class Widget: public sf::Drawable, public sf::Transformable
 {
+friend class Menu;
 public:
 	Widget(int id = -1);
 
@@ -43,9 +44,14 @@ public:
 	bool containsPoint(const sf::Vector2f& point) const;
 
 	/**
-	 * Check if the widget can be select and trigger events
+	 * Check if the widget can be selected and trigger events
 	 */
 	bool isSelectable() const;
+
+	/**
+	 * Check if the widget is currently focused
+	 */
+	bool isFocused() const;
 
 	// callbacks ---------------------------------------------------------------
 
@@ -55,6 +61,7 @@ public:
 	virtual void onMouseReleased(float x, float y);
 	virtual void onKeyPressed(sf::Keyboard::Key key);
 	virtual void onKeyReleased(sf::Keyboard::Key key);
+	virtual void onTextEntered(sf::Uint32 unicode);
 
 protected:
 	/**
@@ -69,11 +76,14 @@ protected:
 	 */
 	void triggerCallback();
 
+	void setState(State state);
+	State getState() const;
+
 private:
-	friend class Menu;
 	void setParent(Menu* menu);
 
 	Menu*        m_parent;
+	State        m_state;
 	sf::Vector2f m_size;
 	int          m_id;
 	bool         m_selectable;

@@ -101,11 +101,30 @@ void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	target.draw(m_arrow_right, states);
 }
 
+
+template <class T>
+void OptionsBox<T>:: updateArrow(Box<Arrow>& arrow, float x, float y)
+{
+	if (arrow.containsPoint(x, y))
+	{
+		if (isFocused() && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			arrow.press();
+		else
+			arrow.prelight();
+	}
+	else
+	{
+		arrow.applyState(isFocused() ? StateFocused : StateDefault);
+	}
+}
+
+
 // callbacks -------------------------------------------------------------------
 
 template <class T>
 void OptionsBox<T>::onStateChanged(State state)
 {
+	// Hovered state is handled in the onMouseMoved callback
 	if (state == StateDefault || state == StateFocused)
 	{
 		m_arrow_left.applyState(state);
@@ -118,15 +137,8 @@ void OptionsBox<T>::onStateChanged(State state)
 template <class T>
 void OptionsBox<T>::onMouseMoved(float x, float y)
 {
-	if (m_arrow_left.containsPoint(x, y))
-		m_arrow_left.prelight();
-	else
-		m_arrow_left.release();
-
-	if (m_arrow_right.containsPoint(x, y))
-		m_arrow_right.prelight();
-	else
-		m_arrow_right.release();
+	updateArrow(m_arrow_left, x, y);
+	updateArrow(m_arrow_right, x, y);
 }
 
 

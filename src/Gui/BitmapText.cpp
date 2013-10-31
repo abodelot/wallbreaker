@@ -62,6 +62,12 @@ void BitmapText::setColor(const sf::Color& color)
 }
 
 
+const sf::Color& BitmapText::getColor() const
+{
+	return m_color;
+}
+
+
 sf::Vector2f BitmapText::getSize() const
 {
 	sf::Vector2f size(m_bounds.width, m_bounds.height);
@@ -123,9 +129,9 @@ void BitmapText::updateGeometry()
 		// Handle special characters
 		switch (current)
 		{
-			case L'\t' : x += m_font->getGlyphWidth() * 4;	continue;
-			case L'\n' : y += m_font->getGlyphHeight(); x = 0; continue;
-			case L'\v' : y += m_font->getGlyphWidth() * 4;	continue;
+			case L'\t': x += m_font->getGlyphWidth() * 4;	continue;
+			case L'\n': y += m_font->getGlyphHeight(); x = 0; continue;
+			case L'\v': y += m_font->getGlyphWidth() * 4;	continue;
 		}
 
 

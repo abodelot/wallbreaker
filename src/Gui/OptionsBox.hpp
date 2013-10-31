@@ -66,6 +66,8 @@ public:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	void updateArrow(Box<Arrow>& arrow, float x, float y);
+
 	struct Item
 	{
 		Item(const sf::String& string, const T& value);

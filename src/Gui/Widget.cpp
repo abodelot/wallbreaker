@@ -5,6 +5,7 @@ using namespace gui;
 
 Widget::Widget(int id):
 	m_parent(NULL),
+	m_state(StateDefault),
 	m_id(id),
 	m_selectable(true)
 {
@@ -48,6 +49,12 @@ bool Widget::isSelectable() const
 }
 
 
+bool Widget::isFocused() const
+{
+	return m_state == StateFocused;
+}
+
+
 void Widget::setSelectable(bool selectable)
 {
 	m_selectable = selectable;
@@ -66,12 +73,24 @@ void Widget::setParent(Menu* menu)
 }
 
 
+void Widget::setState(State state)
+{
+	m_state = state;
+	onStateChanged(state);
+}
+
+
+State Widget::getState() const
+{
+	return m_state;
+}
+
 // callbacks -------------------------------------------------------------------
 
 void Widget::onStateChanged(State) {}
 void Widget::onMouseMoved(float, float) {}
 void Widget::onMousePressed(float, float) {}
 void Widget::onMouseReleased(float, float) {}
-void Widget::onKeyPressed(sf::Keyboard::Key key) {}
-void Widget::onKeyReleased(sf::Keyboard::Key key) {}
-
+void Widget::onKeyPressed(sf::Keyboard::Key) {}
+void Widget::onKeyReleased(sf::Keyboard::Key) {}
+void Widget::onTextEntered(sf::Uint32) {}

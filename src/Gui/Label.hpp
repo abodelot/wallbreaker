@@ -18,10 +18,16 @@ public:
 	Label(const sf::String& string);
 
 	/**
-	 * Set the label's text
+	 * Label's text
 	 */
-	void setString(const sf::String& string);
-	const sf::String& getString() const;
+	void setText(const sf::String& string);
+	const sf::String& getText() const;
+
+	/**
+	 * Label's color
+	 */
+	void setColor(const sf::Color& color);
+	const sf::Color& getColor() const;
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
