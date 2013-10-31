@@ -14,8 +14,7 @@ MainMenu::MainMenu():
 	m_about_text(gui::Theme::getFont()),
 	m_menu(Game::getInstance().getWindow())
 {
-	const sf::Texture& t = Resources::getTexture("title.png");
-	m_title.setTexture(t);
+	m_title.setTexture(Resources::getTexture("title.png"));
 	m_title.setPosition(0, 16);
 
 	m_about_text.setString(ABOUT_TEXT);

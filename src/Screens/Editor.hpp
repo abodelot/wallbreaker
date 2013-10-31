@@ -11,7 +11,7 @@ namespace gui
 {
 template <class T>
 class OptionsBox;
-class Button;
+class CheckBox;
 }
 
 class Editor: public Screen
@@ -60,7 +60,7 @@ private:
 	// GUI elements
 	gui::Menu                m_menu;
 	gui::OptionsBox<size_t>* m_opt_levels;
-	gui::Button*             m_but_grid;
+	gui::CheckBox*           m_ck_grid;
 };
 
 #endif // EDITOR_HPP

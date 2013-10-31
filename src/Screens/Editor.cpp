@@ -2,6 +2,8 @@
 #include "Editor.hpp"
 #include "Gui/OptionsBox.hpp"
 #include "Gui/Button.hpp"
+#include "Gui/CheckBox.hpp"
+
 
 Editor::Editor():
 	m_show_grid(true),
@@ -53,7 +55,8 @@ Editor::Editor():
 	m_menu.addButton("Save",      2);
 	m_menu.addButton("Reload",    3);
 	m_menu.addButton("New level", 4)->setPosition(130, m_menu.getPosition().y);
-	m_but_grid = m_menu.addButton("Grid off", 5);
+	m_ck_grid = new gui::CheckBox(m_show_grid);
+	m_menu.add("Show grid:", m_ck_grid, 5);
 	m_menu.addButton("Back",      6);
 }
 
@@ -156,6 +159,7 @@ void Editor::onEvent(const sf::Event& event)
 
 void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.clear({0x16, 0x1e, 0x26});
 	target.draw(m_level_sprite);
 	target.draw(m_cursor);
 
@@ -184,10 +188,6 @@ void Editor::updateTexture()
 void Editor::toggleGrid()
 {
 	m_show_grid = !m_show_grid;
-	if (m_show_grid)
-		m_but_grid->setString("Grid off");
-	else
-		m_but_grid->setString("Grid on");
 
 	updateTexture();
 }

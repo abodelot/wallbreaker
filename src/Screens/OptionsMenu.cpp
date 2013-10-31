@@ -11,22 +11,24 @@ OptionsMenu::OptionsMenu():
 	m_menu.setPosition(20, 80);
 
 	m_menu.add(new gui::Label("Options"))->setScale(2, 2);
+	sf::Vector2f pos = m_menu.add(new gui::Label("Sound:"))->getPosition();
+	m_menu.add(new gui::Label("Resolution:"));
 
-	// Create button for turning sound on/off
-	m_but_sound = new gui::Button(SoundSystem::isSoundEnabled() ? "Turn off" : "Turn on");
-	//m_menu.add("Sound:", m_but_sound, 1);
-
+	// Create checkbox for turning sound on/off
 	m_ck_sound = new gui::CheckBox(SoundSystem::isSoundEnabled());
-	m_menu.add("Sound:", m_ck_sound, 1);
+	m_menu.add(m_ck_sound, 1);
+	pos.x += gui::Theme::WIDGET_WIDTH;
+	m_ck_sound->setPosition(pos);
+
 
 	// Create options box for selecting a resolution
 	m_opt_resolution = new gui::OptionsBox<sf::Vector2u>;
 	addResolution({APP_WIDTH,     APP_HEIGHT});
 	addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
 	addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
-	m_menu.add("Resolution:", m_opt_resolution, 2);
+	m_menu.add(m_opt_resolution, 2);
 
-	m_menu.add("", new gui::Button("Back"), 3);
+	m_menu.addButton("Back", 3);
 }
 
 

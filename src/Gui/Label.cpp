@@ -22,7 +22,7 @@ void Label::setText(const sf::String& string)
 {
 	m_text.setString(string);
 	m_text.setPosition(Theme::PADDING, Theme::PADDING);
-	setSize({Theme::WIDGET_WIDTH, Theme::getBaseLine()});
+	setSize({m_text.getSize().x + Theme::PADDING * 2, Theme::getBaseLine()});
 }
 
 
