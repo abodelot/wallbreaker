@@ -16,8 +16,8 @@ public:
 		UNBREAKABLE = 'l'
 	};
 
-	static const int HEIGHT = 10;
-	static const int WIDTH  = 20;
+	static const int HEIGHT = 8;
+	static const int WIDTH  = 16;
 
 	Brick();
 

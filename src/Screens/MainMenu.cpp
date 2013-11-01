@@ -15,12 +15,12 @@ MainMenu::MainMenu():
 	m_menu(Game::getInstance().getWindow())
 {
 	m_title.setTexture(Resources::getTexture("title.png"));
-	m_title.setPosition(0, 16);
+	m_title.setPosition(40, 16);
 
 	m_about_text.setString(ABOUT_TEXT);
 	m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
 
-	m_menu.setPosition(77, 100);
+	m_menu.setPosition(117, 100);
 	m_menu.addButton("New game", 1);
 	m_menu.addButton("Editor",   2);
 	m_menu.addButton("Options",  3);

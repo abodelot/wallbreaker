@@ -8,7 +8,7 @@
 OptionsMenu::OptionsMenu():
 	m_menu(Game::getInstance().getWindow())
 {
-	m_menu.setPosition(20, 80);
+	m_menu.setPosition(40, 40);
 
 	m_menu.add(new gui::Label("Options"))->setScale(2, 2);
 	sf::Vector2f pos = m_menu.add(new gui::Label("Sound:"))->getPosition();

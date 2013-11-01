@@ -6,6 +6,8 @@
 #include "Screens/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
+#define POWERUP_WIDTH 20
+#define POWERUP_HEIGHT 10
 
 PowerUp* PowerUp::createRandom()
 {
@@ -16,10 +18,10 @@ PowerUp* PowerUp::createRandom()
 PowerUp::PowerUp(Type type):
 	m_type(type)
 {
-	int x = (type % 4) * Brick::WIDTH;
-	int y = (type / 4) * Brick::HEIGHT;
+	int x = (type % 4) * POWERUP_WIDTH;
+	int y = (type / 4) * POWERUP_HEIGHT;
 
-	setTextureRect({x, y, Brick::WIDTH, Brick::HEIGHT});
+	setTextureRect({x, y, POWERUP_WIDTH, POWERUP_HEIGHT});
 	setTexture(Resources::getTexture("power-ups.png"));
 }
 

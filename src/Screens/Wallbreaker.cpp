@@ -34,7 +34,7 @@ Wallbreaker::Wallbreaker():
 	m_level_sprite.setPosition(m_width / 2 + GAME_BORDER_SIZE, m_height / 2 + GAME_BORDER_SIZE);
 
 	m_hud_sprite.setTexture(m_hud.getTexture());
-	m_hud_sprite.setPosition(0, m_height + GAME_BORDER_SIZE);
+	m_hud_sprite.setPosition(m_width + GAME_BORDER_SIZE * 2, 0);
 
 	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 
@@ -57,13 +57,13 @@ Wallbreaker::Wallbreaker():
 	Effect::zoom(m_level_sprite, 1);
 
 	// Pause menu
-	m_pause_menu.setPosition(77, 100);
+	m_pause_menu.setPosition(GAME_BORDER_SIZE + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
 	m_pause_menu.addButton("Resume",    1);
 	m_pause_menu.addButton("Options",   2);
 	m_pause_menu.addButton("Main menu", 3);
 
 	// Game over menu
-	m_game_over_menu.setPosition(77, 100);
+	m_game_over_menu.setPosition(m_pause_menu.getPosition());
 	m_game_over_menu.addButton("Continue",  1);
 	m_game_over_menu.addButton("Main menu", 2);
 }
@@ -449,22 +449,16 @@ void Wallbreaker::setStatus(Status status)
 		clearEntities();
 		createBall();
 		m_info_text.setString("Ready?");
-		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
 		Game::getInstance().getWindow().setMouseCursorVisible(false);
 		break;
 
 	case GAME_OVER:
 		m_info_text.setString(m_player_lives > 0 ? "Game complete!" : "Game Over");
-		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
 		Game::getInstance().getWindow().setMouseCursorVisible(true);
 		break;
 
 	case PAUSED:
 		m_info_text.setString("Paused");
-		m_info_text.setScale(2, 2);
-		m_info_text.setPosition((APP_WIDTH - m_info_text.getSize().x) / 2, 60);
 		Game::getInstance().getWindow().setMouseCursorVisible(true);
 		break;
 
@@ -472,6 +466,9 @@ void Wallbreaker::setStatus(Status status)
 		Game::getInstance().getWindow().setMouseCursorVisible(false);
 		break;
 	}
+
+	m_info_text.setScale(2, 2);
+	m_info_text.setPosition(GAME_BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
 }
 
 

@@ -151,6 +151,12 @@ void Menu::setPosition(float x, float y)
 }
 
 
+void Menu::setPosition(const sf::Vector2f& position)
+{
+	m_position = position;
+}
+
+
 const sf::Vector2f& Menu::getPosition() const
 {
 	return m_position;

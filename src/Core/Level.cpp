@@ -179,7 +179,7 @@ int Level::load()
 	return m_brick_count;
 }
 
-#include "Resources.hpp"
+
 void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Draw background gradient
@@ -196,6 +196,28 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	target.draw(background, 4, sf::Quads, states);
 
+	// Cast borders shadow
+	sf::Vertex shadow[4];
+	for (int i = 0; i < 4; ++i)
+		shadow[i].color = sf::Color(0, 0, 0, 96);
+
+	// Vertical top border
+	shadow[1].position.x = GAME_BORDER_SIZE / 2;
+	shadow[2].position.x = GAME_BORDER_SIZE / 2;
+	shadow[2].position.y = target.getSize().y;
+	shadow[3].position.y = target.getSize().y;
+	target.draw(shadow, 4, sf::Quads, states);
+
+	// Horizontal left border
+	shadow[0].position.x = GAME_BORDER_SIZE / 2;
+	shadow[1].position.x = target.getSize().x;
+	shadow[2].position.x = target.getSize().x;
+	shadow[2].position.y = GAME_BORDER_SIZE / 2;
+	shadow[3].position.x = shadow[0].position.x;
+	shadow[3].position.y = shadow[2].position.y;
+	target.draw(shadow, 4, sf::Quads, states);
+
+	// Draw bricks
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
 	{
 		for (int j = 0; j < NB_BRICK_COLS; ++j)
@@ -203,20 +225,16 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			const Brick& brick = m_bricks[i][j];
 			if (brick.isActive())
 			{
-				// Cast drop shadow
-				sf::Vertex shadow[4];
+				// Cast brick shadow
 				for (int i = 0; i < 4; ++i)
-				{
-					shadow[i].color = sf::Color(0, 0, 0, 128);
 					shadow[i].position = brick.getPosition() + sf::Vector2f(3, 3);
-				}
+
 				shadow[1].position.x += Brick::WIDTH;
 				shadow[2].position.x += Brick::WIDTH;
 				shadow[2].position.y += Brick::HEIGHT;
 				shadow[3].position.y += Brick::HEIGHT;
 				target.draw(shadow, 4, sf::Quads, states);
 			}
-
 
 			if (brick.getType() != Brick::NONE)
 				target.draw(brick, states);

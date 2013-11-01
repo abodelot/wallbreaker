@@ -19,17 +19,17 @@ Editor::Editor():
 	// Initialize visual grid (+0.5 for portable pixel-perfect rendition)
 	for (int i = 1; i < NB_BRICK_LINES; ++i)
 	{
-		m_grid_lines[i * 2].color        = sf::Color::Black;
+		m_grid_lines[i * 2].color        = sf::Color(0, 0, 0, 128);
 		m_grid_lines[i * 2].position     = sf::Vector2f(0.5, Brick::HEIGHT * i - 0.5);
-		m_grid_lines[i * 2 + 1].color    = sf::Color::Black;
+		m_grid_lines[i * 2 + 1].color    = sf::Color(0, 0, 0, 128);
 		m_grid_lines[i * 2 + 1].position = sf::Vector2f(m_width + 0.5, Brick::HEIGHT * i - 0.5);
 	}
 
 	for (int i = 1; i < NB_BRICK_COLS; ++i)
 	{
-		m_grid_cols[i * 2].color        = sf::Color::Black;
+		m_grid_cols[i * 2].color        = sf::Color(0, 0, 0, 128);
 		m_grid_cols[i * 2].position     = sf::Vector2f(Brick::WIDTH * i - 0.5, 0.5);
-		m_grid_cols[i * 2 + 1].color    = sf::Color::Black;
+		m_grid_cols[i * 2 + 1].color    = sf::Color(0, 0, 0, 128);
 		m_grid_cols[i * 2 + 1].position = sf::Vector2f(Brick::WIDTH * i - 0.5, m_height + 0.5);
 	}
 
@@ -44,17 +44,16 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(20, m_height + GAME_BORDER_SIZE);
+	m_menu.setPosition(m_width + GAME_BORDER_SIZE * 2 + 2, GAME_BORDER_SIZE);
 
 	// Populate level list
 	m_opt_levels = new gui::OptionsBox<size_t>;
 	for (size_t i = 1; i <= m_level.getLevelCount(); ++i)
 		m_opt_levels->addItem("Level " + std::to_string(i), i);
 	m_menu.add(m_opt_levels,      1);
-
 	m_menu.addButton("Save",      2);
 	m_menu.addButton("Reload",    3);
-	m_menu.addButton("New level", 4)->setPosition(130, m_menu.getPosition().y);
+	m_menu.addButton("New level", 4);
 	m_ck_grid = new gui::CheckBox(m_show_grid);
 	m_menu.add("Show grid:", m_ck_grid, 5);
 	m_menu.addButton("Back",      6);

@@ -9,8 +9,8 @@
 // When hitting the pad, the ball bounces from PADDLE_ANGLE to 90 + PADDLE_ANGLE
 #define PADDLE_ANGLE           30 // degrees
 #define BALL_START_SPEED      150 // pixels/second
-#define BALL_MAX_SPEED        450 // pixels/second
-#define BALL_SPEED_STEP         5 // pixels/second
+#define BALL_MAX_SPEED        400 // pixels/second
+#define BALL_SPEED_STEP         4 // pixels/second
 #define POWER_BALL_COUNT       10 // nb bricks
 
 int Ball::s_instance_count = 0;
