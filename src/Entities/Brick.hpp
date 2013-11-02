@@ -3,7 +3,7 @@
 
 #include "Core/ParticleSystem.hpp"
 
-class Brick: public sf::Sprite, public ParticleSystem::Emitter
+class Brick: public sf::Sprite
 {
 public:
 	enum Type
@@ -27,6 +27,8 @@ public:
 	void setType(int id);
 	inline Type getType() const { return m_type; }
 
+	void setPosition(int x, int y);
+
 	bool isActive() const;
 
 	bool takeDamage(bool force_destruction=false);
@@ -36,9 +38,6 @@ public:
 	 */
 	void playSound();
 
-	// override
-	sf::Vector2f getSpawnPosition() const;
-
 private:
 	/**
 	 * Get color associated to the birck type
@@ -47,6 +46,7 @@ private:
 
 	Type m_type;
 	bool m_broken;
+	ParticleSystem::Emitter m_emitter;
 };
 
 #endif // BRICK_HPP

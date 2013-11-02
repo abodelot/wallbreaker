@@ -41,6 +41,15 @@ Ball* Entity::toBall()
 }
 
 
+sf::Vector2f Entity::getCenter() const
+{
+	sf::Vector2f pos = getPosition() - getOrigin();
+	pos.x += getTextureRect().width / 2;
+	pos.y += getTextureRect().height / 2;
+	return pos;
+}
+
+
 sf::IntRect Entity::getCollisionRect() const
 {
 	sf::IntRect rect = getTextureRect();

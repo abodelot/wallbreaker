@@ -2,30 +2,65 @@
 #include "Utils/Math.hpp"
 
 
+// ParticleSystem::Emitter -----------------------------------------------------
+
 ParticleSystem::Emitter::Emitter():
 	m_type(LINEAR),
-	m_particle_count(100),
 	m_looping(false),
-	m_color(sf::Color(255, 128, 128, 255)),
-	m_to_color(sf::Color(0, 0, 0, 0)),
+	m_time_to_live(5),
+	m_particle_count(100),
+	m_start_color(sf::Color::White),
+	m_end_color(sf::Color(0, 0, 0, 0)),
 	m_angle(0),
 	m_angle_variation(0.4),
-	m_time_to_live(5),
 	m_speed(100),
 	m_speed_variation(50)
 {
 }
 
 
-void ParticleSystem::Emitter::setParticleColor(const sf::Color& color)
+void ParticleSystem::Emitter::setType(Type type)
 {
-	m_color = color;
+	m_type = type;
 }
 
 
-const sf::Color& ParticleSystem::Emitter::getParticleColor() const
+void ParticleSystem::Emitter::setLooping(bool looping)
 {
-	return m_color;
+	m_looping = looping;
+}
+
+
+void ParticleSystem::Emitter::setTimeToLive(float duration)
+{
+	m_time_to_live = duration;
+}
+
+
+void ParticleSystem::Emitter::setParticleColor(const sf::Color& color)
+{
+	m_start_color = color;
+}
+
+
+void ParticleSystem::Emitter::setParticleColor(const sf::Color& start, const sf::Color& end)
+{
+	m_start_color = start;
+	m_end_color = end;
+}
+
+
+void ParticleSystem::Emitter::setAngle(float angle, float variation)
+{
+	m_angle = angle;
+	m_angle_variation = variation;
+}
+
+
+void ParticleSystem::Emitter::setSpeed(float speed, float variation)
+{
+	m_speed = speed;
+	m_speed_variation = variation;
 }
 
 
@@ -41,15 +76,27 @@ void ParticleSystem::Emitter::clearParticles()
 }
 
 
+void ParticleSystem::Emitter::setParticleCount(int count)
+{
+	m_particle_count = count;
+}
+
+
 int ParticleSystem::Emitter::getParticleCount() const
 {
 	return m_particle_count;
 }
 
 
-void ParticleSystem::Emitter::setParticleCount(int count)
+void ParticleSystem::Emitter::setSpawnPosition(const sf::Vector2f& position)
 {
-	m_particle_count = count;
+	m_spawn_position = position;
+}
+
+
+const sf::Vector2f& ParticleSystem::Emitter::getSpawnPosition() const
+{
+	return m_spawn_position;
 }
 
 
@@ -64,6 +111,7 @@ float ParticleSystem::Emitter::getParticleSpeed() const
 	return math::rand(m_speed - m_speed_variation, m_speed + m_speed_variation);
 }
 
+// ParticleSystem --------------------------------------------------------------
 
 ParticleSystem& ParticleSystem::instance()
 {
@@ -99,16 +147,8 @@ void ParticleSystem::update(float frametime)
 		{
 			if (p.emitter.m_looping)
 			{
-				// Reset properties
-				p.color = p.emitter.getParticleColor();
-				p.position = p.emitter.getSpawnPosition();
-				p.lifespan = p.remaining_time = math::rand(0.f, p.emitter.m_time_to_live);
-
-				// Compute velocity
-				float angle = p.emitter.getParticleAngle();
-				float speed = p.emitter.getParticleSpeed();
-				p.velocity.x = speed * std::cos(angle);
-				p.velocity.y = speed * -std::sin(angle);
+				// Reset the particle
+				new (&p) Particle(p.emitter);
 			}
 			else
 			{
@@ -124,10 +164,10 @@ void ParticleSystem::update(float frametime)
 
 			// Update color
 			float elapsed = p.lifespan - p.remaining_time;
-			p.color.r = p.emitter.m_color.r + (elapsed * (p.emitter.m_to_color.r - p.emitter.m_color.r) / p.lifespan);
-			p.color.g = p.emitter.m_color.g + (elapsed * (p.emitter.m_to_color.g - p.emitter.m_color.g) / p.lifespan);
-			p.color.b = p.emitter.m_color.b + (elapsed * (p.emitter.m_to_color.b - p.emitter.m_color.b) / p.lifespan);
-			p.color.a = p.emitter.m_color.a + (elapsed * (p.emitter.m_to_color.a - p.emitter.m_color.a) / p.lifespan);
+			p.color.r = p.emitter.m_start_color.r + (elapsed * (p.emitter.m_end_color.r - p.emitter.m_start_color.r) / p.lifespan);
+			p.color.g = p.emitter.m_start_color.g + (elapsed * (p.emitter.m_end_color.g - p.emitter.m_start_color.g) / p.lifespan);
+			p.color.b = p.emitter.m_start_color.b + (elapsed * (p.emitter.m_end_color.b - p.emitter.m_start_color.b) / p.lifespan);
+			p.color.a = p.emitter.m_start_color.a + (elapsed * (p.emitter.m_end_color.a - p.emitter.m_start_color.a) / p.lifespan);
 
 			// Build the vertices (1px width square)
 			sf::Vertex vertices[4];
@@ -157,8 +197,6 @@ void ParticleSystem::clear()
 
 void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//states.blendMode = sf::BlendAdd;
-
 	target.draw(m_vertices, states);
 }
 
@@ -174,13 +212,15 @@ void ParticleSystem::removeByEmitter(const Emitter* emitter)
 	}
 }
 
+// ParticleSystem::Particle ----------------------------------------------------
 
 ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
 	emitter(e),
 	position(e.getSpawnPosition()),
-	color(e.getParticleColor())
+	color(e.m_start_color),
+	lifespan(math::rand(0.f, e.m_time_to_live))
 {
-	lifespan = remaining_time = math::rand(0.f, e.m_time_to_live);
+	remaining_time = lifespan;
 
 	// Compute velocity
 	float angle = e.getParticleAngle();

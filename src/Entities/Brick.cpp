@@ -10,13 +10,11 @@ Brick::Brick():
 	m_broken(false)
 {
 	setTexture(Resources::getTexture("bricks.png"));
-	setParticleCount(20);
-	Emitter::m_type = Emitter::TRAIL;
-	Emitter::m_speed = 15;
-	Emitter::m_speed_variation = 5;
-	Emitter::m_angle = 0.f;
-	Emitter::m_angle_variation = 2 * math::PI;
-	Emitter::m_time_to_live = 5.f;
+	m_emitter.setType(ParticleSystem::Emitter::TRAIL);
+	m_emitter.setParticleCount(20);
+	m_emitter.setTimeToLive(5.f);
+	m_emitter.setSpeed(15, 5);
+	m_emitter.setAngle(0.f, math::PI * 2);
 }
 
 
@@ -36,8 +34,18 @@ void Brick::setType(int type)
 
 		setTextureRect(sf::IntRect(x, y, Brick::WIDTH, Brick::HEIGHT));
 		setColor(sf::Color::White);
-		setParticleColor(getBaseColor());
+		m_emitter.setParticleColor(getBaseColor());
 	}
+}
+
+
+void Brick::setPosition(int x, int y)
+{
+	sf::Vector2f pos(x, y);
+	sf::Sprite::setPosition(pos);
+	pos.x += WIDTH / 2;
+	pos.y += HEIGHT / 2;
+	m_emitter.setSpawnPosition(pos);
 }
 
 
@@ -75,7 +83,7 @@ bool Brick::takeDamage(bool force_destruction)
 		Effect::fadeOut(*this);
 		Effect::rotate(*this, math::rand(-60, 60));
 		Effect::zoom(*this, 0.5);
-		launchParticles();
+		m_emitter.launchParticles();
 	}
 	return m_broken;
 }
@@ -86,15 +94,6 @@ void Brick::playSound()
 	// The higher the ID, the higher the pitch
 	float pitch = 0.7f + (float)(m_type - START) / 5;
 	SoundSystem::playSound("ball.ogg", pitch);
-}
-
-
-sf::Vector2f Brick::getSpawnPosition() const
-{
-	sf::Vector2f pos = getPosition();
-	pos.x += WIDTH / 2;
-	pos.y += HEIGHT / 2;
-	return pos;
 }
 
 

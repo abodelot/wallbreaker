@@ -68,7 +68,7 @@ void Editor::onEvent(const sf::Event& event)
 		{
 			// Convert mouse position and update cursor
 			sf::Vector2f mouse = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-			m_cursor.setPosition(mouse);
+			m_cursor.setPosition(mouse.x, mouse.y);
 
 			// Find brick index at the mouse position
 			sf::Vector2i new_pos;

@@ -25,20 +25,18 @@ Ball::Ball():
 	setTextureRect({0, 0, 8, 8});
 	++s_instance_count;
 
-	setParticleCount(100);
-	Emitter::m_color = sf::Color::Red;
-	Emitter::m_to_color = sf::Color(255, 255, 0, 0);
-	Emitter::m_angle_variation = math::PI * 2;
-	Emitter::m_time_to_live = 1;
-	Emitter::m_speed = 10;
-	Emitter::m_speed_variation = 5;
-	Emitter::m_looping = true;
+	m_emitter.setParticleCount(100);
+	m_emitter.setParticleColor(sf::Color::Red, sf::Color(255, 255, 0, 0));
+	m_emitter.setSpeed(10, 5);
+	m_emitter.setAngle(0, math::PI * 2);
+	m_emitter.setTimeToLive(1);
+	m_emitter.setLooping(true);
 }
 
 
 Ball::~Ball()
 {
-	Emitter::clearParticles();
+	m_emitter.clearParticles();
 	--s_instance_count;
 }
 
@@ -59,14 +57,20 @@ void Ball::enablePowerBall()
 {
 	m_powered = POWER_BALL_COUNT;
 	setTextureRect({8, 0, 8, 8});
-	Emitter::m_color = sf::Color::Cyan;
-	Emitter::m_to_color = sf::Color(0, 0, 255, 0);
+	m_emitter.setParticleColor(sf::Color::Cyan, sf::Color(0, 0, 255, 0));
 }
 
 
 void Ball::resetSpeed()
 {
 	m_velocity = BALL_START_SPEED;
+}
+
+
+void Ball::onInit()
+{
+	m_emitter.setSpawnPosition(getCenter());
+	m_emitter.launchParticles();
 }
 
 
@@ -82,6 +86,7 @@ void Ball::onUpdate(float frametime)
 		// Stick to the paddle
 		setX(m_glued_to->getX() - m_glued_at);
 	}
+	m_emitter.setSpawnPosition(getCenter());
 }
 
 
@@ -119,8 +124,7 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previous_pos)
 			// Turn off the Power-ball
 			m_powered = false;
 			setTextureRect({0, 0, 8, 8});
-			Emitter::m_color = sf::Color::Red;
-			Emitter::m_to_color = sf::Color(255, 255, 0, 0);
+			m_emitter.setParticleColor(sf::Color::Red, sf::Color(255, 255, 0, 0));
 		}
 		return;
 	}
@@ -176,13 +180,3 @@ void Ball::onPaddleHit(Paddle& paddle)
 		Effect::zoomAndRevert(*this, 1.8, 0.1);
 	}
 }
-
-
-sf::Vector2f Ball::getSpawnPosition() const
-{
-	sf::Vector2f center = getPosition();
-	center.x += getWidth() / 2;
-	center.y += getHeight() / 2;
-	return center;
-}
-

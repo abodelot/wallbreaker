@@ -32,6 +32,7 @@ public:
 
 	// callbacks ---------------------------------------------------------------
 
+	virtual void onInit() {};
 	virtual void onUpdate(float frametime) = 0;
 
 	virtual void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos) {};
@@ -46,6 +47,7 @@ public:
 	inline float getY() const { return getPosition().y; }
 	inline void setX(float x) { setPosition(x, getPosition().y); }
 	inline void setY(float y) { setPosition(getPosition().x, y); }
+	sf::Vector2f getCenter() const;
 
 	// size helpers ------------------------------------------------------------
 

@@ -479,7 +479,6 @@ void Wallbreaker::createBall()
 	float x = m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2;
 	float y = m_height - m_paddle.getHeight() - ball->getHeight();
 	ball->setPosition(x, y);
-	ball->launchParticles();
 	addEntity(ball);
 }
 
@@ -487,6 +486,7 @@ void Wallbreaker::createBall()
 void Wallbreaker::addEntity(Entity* entity)
 {
 	entity->setParent(this);
+	entity->onInit();
 	m_entities.push_back(entity);
 }
 

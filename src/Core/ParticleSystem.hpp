@@ -11,6 +11,7 @@ class ParticleSystem: public sf::Drawable
 public:
 	class Emitter
 	{
+	friend class ParticleSystem;
 	public:
 		enum Type
 		{
@@ -20,8 +21,15 @@ public:
 
 		Emitter();
 
+		void setType(Type type);
+		void setTimeToLive(float duration);
+		void setLooping(bool looping);
+
 		void setParticleColor(const sf::Color& color);
-		const sf::Color& getParticleColor() const;
+		void setParticleColor(const sf::Color& start, const sf::Color& end);
+
+		void setAngle(float angle, float variation = 0.f);
+		void setSpeed(float speed, float variation = 0.f);
 
 		// Create particles linked to the emitter in the particle system
 		void launchParticles();
@@ -31,26 +39,24 @@ public:
 		void setParticleCount(int count);
 		int getParticleCount() const;
 
-		virtual sf::Vector2f getSpawnPosition() const = 0;
+		void setSpawnPosition(const sf::Vector2f& position);
+		const sf::Vector2f& getSpawnPosition() const;
 
 		float getParticleAngle() const;
 		float getParticleSpeed() const;
 
 	private:
-
-
-
-	public:
-		Type m_type;
-		int m_particle_count;
-		bool m_looping;
-		sf::Color m_color;
-		sf::Color m_to_color;
-		float m_angle;
-		float m_angle_variation;
-		float m_time_to_live;
-		float m_speed;
-		float m_speed_variation;
+		Type         m_type;
+		bool         m_looping;
+		float        m_time_to_live;
+		sf::Vector2f m_spawn_position;
+		int          m_particle_count;
+		sf::Color    m_start_color;
+		sf::Color    m_end_color;
+		float        m_angle;
+		float        m_angle_variation;
+		float        m_speed;
+		float        m_speed_variation;
 	};
 
 
@@ -84,7 +90,7 @@ private:
 		sf::Vector2f   position;
 		sf::Vector2f   velocity;
 		sf::Color      color;
-		float          lifespan;
+		const float    lifespan;
 		float          remaining_time;
 	};
 
