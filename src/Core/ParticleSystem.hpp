@@ -13,15 +13,8 @@ public:
 	{
 	friend class ParticleSystem;
 	public:
-		enum Type
-		{
-			LINEAR,
-			TRAIL
-		};
-
 		Emitter();
 
-		void setType(Type type);
 		void setTimeToLive(float duration);
 		void setLooping(bool looping);
 
@@ -45,8 +38,10 @@ public:
 		float getParticleAngle() const;
 		float getParticleSpeed() const;
 
+		void setTextureRect(const sf::IntRect& rect);
+		const sf::IntRect& getTextureRect() const;
+
 	private:
-		Type         m_type;
 		bool         m_looping;
 		float        m_time_to_live;
 		sf::Vector2f m_spawn_position;
@@ -57,19 +52,24 @@ public:
 		float        m_angle_variation;
 		float        m_speed;
 		float        m_speed_variation;
+		sf::IntRect  m_texture_rect;
 	};
-
 
 	static ParticleSystem& instance();
 
-	// create particles
+	/**
+	 * Create particles from an emitter
+	 */
 	void create(const Emitter& emitter);
 
-
-	// update all the particles
+	/**
+	 * Update all particles
+	 */
 	void update(float frametime);
 
 	void removeByEmitter(const Emitter* emitter);
+
+	void setTexture(const sf::Texture* texture);
 
 	/**
 	 * Remove all particles
@@ -95,8 +95,9 @@ private:
 	};
 
 	typedef std::list<Particle> ParticleList;
-	ParticleList    m_particles;
-	sf::VertexArray m_vertices;
+	ParticleList       m_particles;
+	sf::VertexArray    m_vertices;
+	const sf::Texture* m_texture;
 };
 
 #endif // PARTICLE_SYSTEM_HPP

@@ -29,7 +29,7 @@ Ball::Ball():
 	m_emitter.setParticleColor(sf::Color::Red, sf::Color(255, 255, 0, 0));
 	m_emitter.setSpeed(10, 5);
 	m_emitter.setAngle(0, math::PI * 2);
-	m_emitter.setTimeToLive(1);
+	m_emitter.setTimeToLive(1.f);
 	m_emitter.setLooping(true);
 }
 

@@ -5,7 +5,6 @@
 // ParticleSystem::Emitter -----------------------------------------------------
 
 ParticleSystem::Emitter::Emitter():
-	m_type(LINEAR),
 	m_looping(false),
 	m_time_to_live(5),
 	m_particle_count(100),
@@ -16,12 +15,9 @@ ParticleSystem::Emitter::Emitter():
 	m_speed(100),
 	m_speed_variation(50)
 {
-}
-
-
-void ParticleSystem::Emitter::setType(Type type)
-{
-	m_type = type;
+	// Default particle are just 1 pixel
+	m_texture_rect.width = 1;
+	m_texture_rect.height = 1;
 }
 
 
@@ -111,6 +107,18 @@ float ParticleSystem::Emitter::getParticleSpeed() const
 	return math::rand(m_speed - m_speed_variation, m_speed + m_speed_variation);
 }
 
+
+void ParticleSystem::Emitter::setTextureRect(const sf::IntRect& rect)
+{
+	m_texture_rect = rect;
+}
+
+
+const sf::IntRect& ParticleSystem::Emitter::getTextureRect() const
+{
+	return m_texture_rect;
+}
+
 // ParticleSystem --------------------------------------------------------------
 
 ParticleSystem& ParticleSystem::instance()
@@ -121,7 +129,8 @@ ParticleSystem& ParticleSystem::instance()
 
 
 ParticleSystem::ParticleSystem():
-	m_vertices(sf::Quads, 4000)
+	m_vertices(sf::Quads, 4000),
+	m_texture(NULL)
 {
 }
 
@@ -169,16 +178,22 @@ void ParticleSystem::update(float frametime)
 			p.color.b = p.emitter.m_start_color.b + (elapsed * (p.emitter.m_end_color.b - p.emitter.m_start_color.b) / p.lifespan);
 			p.color.a = p.emitter.m_start_color.a + (elapsed * (p.emitter.m_end_color.a - p.emitter.m_start_color.a) / p.lifespan);
 
-			// Build the vertices (1px width square)
+			// Build the vertices
 			sf::Vertex vertices[4];
-			vertices[1].position.x = 1;
-			vertices[2].position.x = 1;
-			vertices[2].position.y = 1;
-			vertices[3].position.y = 1;
+			const sf::IntRect& r = p.emitter.getTextureRect();
+
+			vertices[0].texCoords = {r.left,           r.top};
+			vertices[1].texCoords = {r.left,           r.top + r.height};
+			vertices[2].texCoords = {r.left + r.width, r.top + r.height};
+			vertices[3].texCoords = {r.left + r.width, r.top};
+
+			vertices[0].position  = {p.position.x,           p.position.y};
+			vertices[1].position  = {p.position.x,           p.position.y + r.height};
+			vertices[2].position  = {p.position.x + r.width, p.position.y + r.height};
+			vertices[3].position  = {p.position.x + r.width, p.position.y};
 
 			for (int i = 0; i < 4; ++i)
 			{
-				vertices[i].position += p.position;
 				vertices[i].color = p.color;
 				m_vertices.append(vertices[i]);
 			}
@@ -195,9 +210,9 @@ void ParticleSystem::clear()
 }
 
 
-void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void ParticleSystem::setTexture(const sf::Texture* texture)
 {
-	target.draw(m_vertices, states);
+	m_texture = texture;
 }
 
 
@@ -210,6 +225,13 @@ void ParticleSystem::removeByEmitter(const Emitter* emitter)
 		else
 			++it;
 	}
+}
+
+
+void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	states.texture = m_texture;
+	target.draw(m_vertices, states);
 }
 
 // ParticleSystem::Particle ----------------------------------------------------
@@ -227,5 +249,8 @@ ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
 	float speed = e.getParticleSpeed();
 	velocity.x = speed * std::cos(angle);
 	velocity.y = speed * -std::sin(angle);
+
+	position.x -= e.getTextureRect().width / 2;
+	position.y -= e.getTextureRect().height / 2;
 }
 

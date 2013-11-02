@@ -10,7 +10,6 @@ Brick::Brick():
 	m_broken(false)
 {
 	setTexture(Resources::getTexture("bricks.png"));
-	m_emitter.setType(ParticleSystem::Emitter::TRAIL);
 	m_emitter.setParticleCount(20);
 	m_emitter.setTimeToLive(5.f);
 	m_emitter.setSpeed(15, 5);
