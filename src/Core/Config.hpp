@@ -13,6 +13,7 @@
 
 #define LEVEL_FILE        "resources/levels/levels.txt"
 #define SETTINGS_FILE     "settings.ini"
+#define SCREENSHOT_DIR    "screenshots"
 
 #define NB_BRICK_LINES    29 // number of lines
 #define NB_BRICK_COLS     13 // number of columns

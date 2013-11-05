@@ -113,6 +113,8 @@
 		<Unit filename="src/Screens/Screen.hpp" />
 		<Unit filename="src/Screens/Wallbreaker.cpp" />
 		<Unit filename="src/Screens/Wallbreaker.hpp" />
+		<Unit filename="src/Utils/FileSystem.cpp" />
+		<Unit filename="src/Utils/FileSystem.hpp" />
 		<Unit filename="src/Utils/IniParser.cpp" />
 		<Unit filename="src/Utils/IniParser.hpp" />
 		<Unit filename="src/Utils/Math.cpp" />

@@ -6,7 +6,7 @@
 /**
  * Abstract base class for screens
  */
-class Screen: public sf::Drawable
+class Screen: public sf::Drawable, sf::NonCopyable
 {
 public:
 	virtual ~Screen() {}

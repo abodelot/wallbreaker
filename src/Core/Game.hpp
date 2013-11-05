@@ -49,9 +49,9 @@ public:
 	void setResolution(size_t width, size_t height);
 
 	/**
-	 * Get current working directory
+	 * Get application root directory
 	 */
-	const std::string& getCurrentDir() const;
+	const std::string& getApplicationDir() const;
 
 	/**
 	 * Get application render window
@@ -68,9 +68,9 @@ private:
 	Game(const Game&);
 	~Game();
 
-	sf::RenderWindow m_app;
+	sf::RenderWindow m_window;
 	bool             m_running;
-	std::string      m_current_dir;
+	std::string      m_app_dir;
 	sf::View         m_view;
 
 	// Screen management

@@ -19,7 +19,7 @@ Level::Level():
 
 
 	// Open the file containing the levels
-	std::string filename = Game::getInstance().getCurrentDir() + LEVEL_FILE;
+	std::string filename = Game::getInstance().getApplicationDir() + LEVEL_FILE;
 	m_level_file.open(filename.c_str(), std::ios::in | std::ios::out | std::ios::binary);
 	if (!m_level_file)
 	{
