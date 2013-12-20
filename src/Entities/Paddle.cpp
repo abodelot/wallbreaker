@@ -72,7 +72,7 @@ void Paddle::activeLaser()
 	if (m_sticky)
 	{
 		m_sticky = false;
-		getParent()->applyOnEachBall(&Ball::unstick);
+		getManager()->applyOnEachBall(&Ball::unstick);
 	}
 }
 

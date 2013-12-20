@@ -33,9 +33,8 @@ Level::Level():
 #ifdef WALLBREAKER_DEBUG
 		printf("%s contains %u levels\n", LEVEL_FILE, m_level_count);
 #endif
-		// Load first level
+		// Restore cursor position
 		m_level_file.seekg(0);
-		load();
 	}
 }
 

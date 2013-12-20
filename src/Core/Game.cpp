@@ -1,10 +1,10 @@
 #include <iostream>
 #include "Game.hpp"
 #include "Config.hpp"
-#include "Screens/Screen.hpp"
 #include "Resources.hpp"
 #include "Settings.hpp"
 #include "SoundSystem.hpp"
+#include "Screens/Screen.hpp"
 #include "Gui/Theme.hpp"
 #include "Utils/IniParser.hpp"
 #include "Utils/FileSystem.hpp"
@@ -19,19 +19,16 @@ Game& Game::getInstance()
 
 Game::Game():
 	m_running(true),
-	m_current_screen(NULL),
-	m_next_screen(NULL)
+	m_current_screen(NULL)
 {
 }
 
 
 Game::~Game()
 {
-	while (!m_screen_history.empty())
-	{
-		delete m_screen_history.top();
-		m_screen_history.pop();
-	}
+	// Delete all allocated screens
+	for (auto it = m_screens.begin(); it != m_screens.end(); ++it)
+		delete it->second;
 }
 
 
@@ -77,23 +74,6 @@ void Game::run()
 
 	while (m_running)
 	{
-		// Check for next screen
-		if (m_next_screen != NULL)
-		{
-			if (!m_screen_history.empty() && m_next_screen == m_screen_history.top())
-			{
-				delete m_current_screen;
-				m_screen_history.pop();
-			}
-			else
-			{
-				m_screen_history.push(m_current_screen);
-			}
-			m_current_screen = m_next_screen;
-			m_current_screen->onFocus();
-			m_next_screen = NULL;
-		}
-
 		// Poll events and send them to the current screen
 		sf::Event event;
 		while (m_window.pollEvent(event))
@@ -136,20 +116,42 @@ void Game::quit()
 }
 
 
-void Game::nextScreen(Screen* screen)
+void Game::addScreen(const std::string& id, Screen* screen)
 {
-	m_next_screen = screen;
+	m_screens.insert(std::pair<std::string, Screen*>(id, screen));
+}
+
+
+void Game::nextScreen(const std::string& id)
+{
+	auto it = m_screens.find(id);
+	if (it != m_screens.end())
+	{
+		if (m_current_screen != NULL)
+			m_screens_history.push(m_current_screen);
+		m_current_screen = it->second;
+		m_current_screen->onFocus();
+	}
+	else
+	{
+		std::cerr << "[Game] Screen " << id << " is not defined";
+	}
 }
 
 
 void Game::previousScreen()
 {
-	if (!m_screen_history.empty())
+	if (!m_screens_history.empty())
 	{
-		m_next_screen = m_screen_history.top();
+		m_current_screen = m_screens_history.top();
+		m_current_screen->onFocus();
+		m_screens_history.pop();
+	}
+	else
+	{
+		std::cerr << "[Game] No previous screen available" << std::endl;
 	}
 }
-
 
 void Game::setResolution(size_t width, size_t height)
 {
@@ -159,13 +161,13 @@ void Game::setResolution(size_t width, size_t height)
 	m_window.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
 	m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
 	m_window.setView(m_view);
-	m_window.setFramerateLimit(60);
+	m_window.setVerticalSyncEnabled(true);
+	//m_window.setFramerateLimit(60);
 	m_window.setKeyRepeatEnabled(false);
 
 	// Center window on desktop
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	m_window.setPosition({(desktop.width - width) / 2, (desktop.height - height) / 2});
-
+	m_window.setPosition({int(desktop.width - width) / 2, int(desktop.height - height) / 2});
 	// Set application icon
 	static sf::Image icon = Resources::getTexture("application-icon.png").copyToImage();
 	m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());

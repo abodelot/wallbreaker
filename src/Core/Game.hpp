@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <string>
+#include <map>
 #include <stack>
 #include <SFML/Graphics.hpp>
 
@@ -34,9 +35,14 @@ public:
 	void quit();
 
 	/**
-	 * Set next screen to be displayed
+	 * Register a new screen
 	 */
-	void nextScreen(Screen* screen);
+	void addScreen(const std::string& id, Screen* screen);
+
+	/**
+	 * Set the next screen to be displayed
+	 */
+	void nextScreen(const std::string& id);
 
 	/**
 	 * Go back to the previous displayed screen
@@ -74,10 +80,9 @@ private:
 	sf::View         m_view;
 
 	// Screen management
-	typedef std::stack<Screen*> ScreenStack;
-	ScreenStack m_screen_history;
-	Screen*     m_current_screen;
-	Screen*     m_next_screen;
+	std::map<std::string, Screen*> m_screens;
+	std::stack<Screen*>            m_screens_history;
+	Screen*                        m_current_screen;
 };
 
 #endif // GAME_HPP

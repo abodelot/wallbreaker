@@ -43,17 +43,17 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 			paddle.activeLaser();
 			break;
 		case TRIPLE_BALL:
-			getParent()->createBall();
-			getParent()->createBall();
+			getManager()->createBall();
+			getManager()->createBall();
 			break;
 		case POWER_BALL:
-			getParent()->applyOnEachBall(&Ball::enablePowerBall);
+			getManager()->applyOnEachBall(&Ball::enablePowerBall);
 			break;
 		case EXTRA_LIFE:
-			getParent()->addPlayerLife();
+			getManager()->addPlayerLife();
 			break;
 		case SPEED_RESET:
-			getParent()->applyOnEachBall(&Ball::resetSpeed);
+			getManager()->applyOnEachBall(&Ball::resetSpeed);
 			break;
 	}
 	kill();

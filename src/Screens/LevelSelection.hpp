@@ -9,8 +9,7 @@ class LevelSelection: public Screen
 public:
 	LevelSelection();
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	gui::Menu m_menu;
 };

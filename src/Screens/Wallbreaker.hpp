@@ -22,11 +22,9 @@ public:
 	Wallbreaker();
 	~Wallbreaker();
 
-	// override
-	void onEvent(const sf::Event& event);
+	void onEvent(const sf::Event& event) override;
 
-	// override
-	void update(float frametime);
+	void update(float frametime) override;
 
 	// Create a new ball instance
 	void createBall();
@@ -36,23 +34,24 @@ public:
 	void applyOnEachBall(Ball::ActionPointer action);
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	void resetGame(size_t level=1);
 
 	void loadNextLevel();
 
 	void updateTexture();
+
+	void addEntity(Entity* entity);
+
+	// Delete all entities
+	void clearEntities();
 
 	void updateEntities(float frametime);
 
 	bool checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos);
 
 	void setStatus(Status status);
-
-	void addEntity(Entity* entity);
-
-	// Delete all entities
-	void clearEntities();
 
 	const int         m_width;
 	const int         m_height;

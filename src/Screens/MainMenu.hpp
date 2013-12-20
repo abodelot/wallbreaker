@@ -5,23 +5,20 @@
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
+
 class MainMenu: public Screen
 {
 public:
 	MainMenu();
 
-	// override
-	void onEvent(const sf::Event& event);
+	void onEvent(const sf::Event& event) override;
 
-	// override
-	void onFocus();
+	void onFocus() override;
 
-	// override
-	void update(float frametime);
+	void update(float frametime) override;
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	sf::Sprite m_title;
 	BitmapText m_about_text;

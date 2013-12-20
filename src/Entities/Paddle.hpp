@@ -10,8 +10,7 @@ class Paddle: public Entity
 public:
 	Paddle();
 
-	// override
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
 	/**
 	 * Increase paddle size

@@ -6,7 +6,7 @@
 #include "Game.hpp"
 
 
-class ParticleSystem: public sf::Drawable
+class ParticleSystem: public sf::Drawable, sf::NonCopyable
 {
 public:
 	class Emitter
@@ -55,7 +55,7 @@ public:
 		sf::IntRect  m_texture_rect;
 	};
 
-	static ParticleSystem& instance();
+	static ParticleSystem& getInstance();
 
 	/**
 	 * Create particles from an emitter
@@ -67,7 +67,7 @@ public:
 	 */
 	void update(float frametime);
 
-	void removeByEmitter(const Emitter* emitter);
+	void removeByEmitter(const Emitter& emitter);
 
 	void setTexture(const sf::Texture* texture);
 
@@ -78,9 +78,9 @@ public:
 
 private:
     ParticleSystem();
+	~ParticleSystem();
 
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	struct Particle
 	{

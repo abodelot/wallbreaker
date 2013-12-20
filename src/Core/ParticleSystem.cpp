@@ -11,7 +11,7 @@ ParticleSystem::Emitter::Emitter():
 	m_start_color(sf::Color::White),
 	m_end_color(sf::Color(0, 0, 0, 0)),
 	m_angle(0),
-	m_angle_variation(0.4),
+	m_angle_variation(math::PI * 2),
 	m_speed(100),
 	m_speed_variation(50)
 {
@@ -62,13 +62,13 @@ void ParticleSystem::Emitter::setSpeed(float speed, float variation)
 
 void ParticleSystem::Emitter::launchParticles()
 {
-	ParticleSystem::instance().create(*this);
+	ParticleSystem::getInstance().create(*this);
 }
 
 
 void ParticleSystem::Emitter::clearParticles()
 {
-	ParticleSystem::instance().removeByEmitter(this);
+	ParticleSystem::getInstance().removeByEmitter(*this);
 }
 
 
@@ -121,7 +121,7 @@ const sf::IntRect& ParticleSystem::Emitter::getTextureRect() const
 
 // ParticleSystem --------------------------------------------------------------
 
-ParticleSystem& ParticleSystem::instance()
+ParticleSystem& ParticleSystem::getInstance()
 {
 	static ParticleSystem self;
 	return self;
@@ -132,6 +132,12 @@ ParticleSystem::ParticleSystem():
 	m_vertices(sf::Quads, 4000),
 	m_texture(NULL)
 {
+}
+
+
+ParticleSystem::~ParticleSystem()
+{
+	clear();
 }
 
 
@@ -182,15 +188,15 @@ void ParticleSystem::update(float frametime)
 			sf::Vertex vertices[4];
 			const sf::IntRect& r = p.emitter.getTextureRect();
 
-			vertices[0].texCoords = {r.left,           r.top};
-			vertices[1].texCoords = {r.left,           r.top + r.height};
-			vertices[2].texCoords = {r.left + r.width, r.top + r.height};
-			vertices[3].texCoords = {r.left + r.width, r.top};
+			vertices[0].texCoords = sf::Vector2f(r.left,           r.top);
+			vertices[1].texCoords = sf::Vector2f(r.left,           r.top + r.height);
+			vertices[2].texCoords = sf::Vector2f(r.left + r.width, r.top + r.height);
+			vertices[3].texCoords = sf::Vector2f(r.left + r.width, r.top);
 
-			vertices[0].position  = {p.position.x,           p.position.y};
-			vertices[1].position  = {p.position.x,           p.position.y + r.height};
-			vertices[2].position  = {p.position.x + r.width, p.position.y + r.height};
-			vertices[3].position  = {p.position.x + r.width, p.position.y};
+			vertices[0].position  = sf::Vector2f(p.position.x,           p.position.y);
+			vertices[1].position  = sf::Vector2f(p.position.x,           p.position.y + r.height);
+			vertices[2].position  = sf::Vector2f(p.position.x + r.width, p.position.y + r.height);
+			vertices[3].position  = sf::Vector2f(p.position.x + r.width, p.position.y);
 
 			for (int i = 0; i < 4; ++i)
 			{
@@ -216,11 +222,11 @@ void ParticleSystem::setTexture(const sf::Texture* texture)
 }
 
 
-void ParticleSystem::removeByEmitter(const Emitter* emitter)
+void ParticleSystem::removeByEmitter(const Emitter& emitter)
 {
 	for (ParticleList::iterator it = m_particles.begin(); it != m_particles.end();)
 	{
-		if (&(it->emitter) == emitter)
+		if (&(it->emitter) == &emitter)
 			it = m_particles.erase(it);
 		else
 			++it;

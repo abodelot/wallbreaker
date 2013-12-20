@@ -17,12 +17,12 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	void setParent(Wallbreaker* parent);
-	Wallbreaker* getParent();
+	void setManager(Wallbreaker* parent);
+	Wallbreaker* getManager();
 
-	inline bool isAlive() const { return m_alive; }
+	bool isAlive() const;
 
-	inline void kill() { m_alive = false; }
+	void kill();
 
 	bool collidesWith(const Entity& other) const;
 

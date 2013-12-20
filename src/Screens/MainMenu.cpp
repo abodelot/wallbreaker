@@ -3,10 +3,6 @@
 #include "Core/Resources.hpp"
 #include "Core/Config.hpp"
 #include "Gui/Theme.hpp"
-// Screens
-#include "Wallbreaker.hpp"
-#include "Editor.hpp"
-#include "OptionsMenu.hpp"
 
 #define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - " APP_URL)
 
@@ -33,13 +29,13 @@ void MainMenu::onEvent(const sf::Event& event)
 	switch (m_menu.onEvent(event))
 	{
 		case 1:
-			Game::getInstance().nextScreen(new Wallbreaker);
+			Game::getInstance().nextScreen("Wallbreaker");
 			break;
 		case 2:
-			Game::getInstance().nextScreen(new Editor);
+			Game::getInstance().nextScreen("Editor");
 			break;
 		case 3:
-			Game::getInstance().nextScreen(new OptionsMenu);
+			Game::getInstance().nextScreen("OptionsMenu");
 			break;
 		case 4:
 			Game::getInstance().quit();
@@ -68,11 +64,7 @@ void MainMenu::update(float frametime)
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.clear({0x16, 0x1e, 0x26});
-	target.draw(m_title);
-	target.draw(m_about_text);
+	target.draw(m_title, states);
+	target.draw(m_about_text, states);
 	m_menu.draw();
 }
-
-
-
-

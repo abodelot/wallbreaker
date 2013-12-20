@@ -27,9 +27,9 @@ public:
 
 	PowerUp(Type type);
 
-	void onPaddleHit(Paddle& paddle);
+	void onPaddleHit(Paddle& paddle) override;
 
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
 private:
 	Type m_type;

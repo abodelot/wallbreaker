@@ -14,15 +14,27 @@ Entity::~Entity()
 }
 
 
-void Entity::setParent(Wallbreaker* parent)
+void Entity::setManager(Wallbreaker* parent)
 {
 	m_parent = parent;
 }
 
 
-Wallbreaker* Entity::getParent()
+Wallbreaker* Entity::getManager()
 {
 	return m_parent;
+}
+
+
+bool Entity::isAlive() const
+{
+	return m_alive;
+}
+
+
+void Entity::kill()
+{
+	m_alive = false;
 }
 
 

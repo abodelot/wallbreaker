@@ -19,12 +19,12 @@ class Editor: public Screen
 public:
 	Editor();
 
-	// override
-	void onEvent(const sf::Event& event);
+	void onEvent(const sf::Event& event) override;
+
+	void onFocus() override;
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
 	 * Update internal texture used for rendering current level
@@ -47,7 +47,7 @@ private:
 	Level             m_level;
 	Brick             m_cursor;
 	sf::Vertex        m_cursor_prelight[4];
-	sf::Vector2i      m_cursor_pos;
+	sf::Vector2i      m_cursor_coords;
 
 	sf::RenderTexture m_level_texture;
 	sf::Sprite        m_level_sprite;

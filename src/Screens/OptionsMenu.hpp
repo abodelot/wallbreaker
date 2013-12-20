@@ -15,12 +15,10 @@ class OptionsMenu: public Screen
 public:
 	OptionsMenu();
 
-	// override
-	void onEvent(const sf::Event& event);
+	void onEvent(const sf::Event& event) override;
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
 	 * Add a resolution in the option box widget

@@ -66,37 +66,41 @@ void Editor::onEvent(const sf::Event& event)
 	{
 		case sf::Event::MouseMoved:
 		{
-			// Convert mouse position and update cursor
+			// Convert mouse position and update cursor coords
 			sf::Vector2f mouse = Game::getInstance().getWindow().mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
 			m_cursor.setPosition(mouse.x, mouse.y);
 
 			// Find brick index at the mouse position
-			sf::Vector2i new_pos;
-			new_pos.x = int(mouse.x - GAME_BORDER_SIZE) / Brick::WIDTH;
-			new_pos.y = int(mouse.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
+			sf::Vector2i coords;
+			coords.x = int(mouse.x - GAME_BORDER_SIZE) / Brick::WIDTH;
+			coords.y = int(mouse.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
 
-			if (new_pos.x >= 0 && new_pos.x < NB_BRICK_COLS
-			 && new_pos.y >= 0 && new_pos.y < NB_BRICK_LINES
-			 && new_pos != m_cursor_pos)
+			if (coords.x >= 0 && coords.x < NB_BRICK_COLS
+			 && coords.y >= 0 && coords.y < NB_BRICK_LINES
+			 && coords != m_cursor_coords)
 			{
 				// Update prelight position
-				m_cursor_prelight[0].position = {new_pos.x * Brick::WIDTH,       new_pos.y * Brick::HEIGHT};
-				m_cursor_prelight[1].position = {(new_pos.x + 1) * Brick::WIDTH, new_pos.y * Brick::HEIGHT};
-				m_cursor_prelight[2].position = {(new_pos.x + 1) * Brick::WIDTH, (new_pos.y + 1) * Brick::HEIGHT};
-				m_cursor_prelight[3].position = {new_pos.x * Brick::WIDTH,       (new_pos.y + 1) * Brick::HEIGHT};
+				float left   = coords.x * Brick::WIDTH;
+				float top    = coords.y * Brick::HEIGHT;
+				float right  = (coords.x + 1) * Brick::WIDTH;
+				float bottom = (coords.y + 1) * Brick::HEIGHT;
+				m_cursor_prelight[0].position = {left,  top};
+				m_cursor_prelight[1].position = {right, top};
+				m_cursor_prelight[2].position = {right, bottom};
+				m_cursor_prelight[3].position = {left,  bottom};
 
-				setBrick(new_pos);
+				setBrick(coords);
 				updateTexture();
 			}
-			m_cursor_pos = new_pos;
+			m_cursor_coords = coords;
 
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
-			if (m_cursor_pos.x >= 0 && m_cursor_pos.x < NB_BRICK_COLS
-			 && m_cursor_pos.y >= 0 && m_cursor_pos.y < NB_BRICK_LINES)
+			if (m_cursor_coords.x >= 0 && m_cursor_coords.x < NB_BRICK_COLS
+			 && m_cursor_coords.y >= 0 && m_cursor_coords.y < NB_BRICK_LINES)
 			{
-				setBrick(m_cursor_pos);
+				setBrick(m_cursor_coords);
 				updateTexture();
 			}
 			break;
@@ -124,7 +128,7 @@ void Editor::onEvent(const sf::Event& event)
 	{
 		case 1: // Level selector
 		{
-			int level = m_opt_levels->getSelectedValue();
+			size_t level = m_opt_levels->getSelectedValue();
 			if (m_level.loadAt(level))
 			{
 				updateTexture();
@@ -153,6 +157,13 @@ void Editor::onEvent(const sf::Event& event)
 			Game::getInstance().previousScreen();
 			break;
 	}
+}
+
+
+void Editor::onFocus()
+{
+	m_level.loadAt(m_opt_levels->getSelectedValue());
+	updateTexture();
 }
 
 

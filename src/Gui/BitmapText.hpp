@@ -48,8 +48,7 @@ public:
 	sf::Vector2f getSize() const;
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	void updateGeometry();
 

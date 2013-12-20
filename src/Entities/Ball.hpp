@@ -31,17 +31,17 @@ public:
 
 	// callbacks ---------------------------------------------------------------
 
-	void onInit();
+	void onInit() override;
 
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
-	void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos);
+	void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos) override;
 
-	void onPaddleHit(Paddle& paddle);
+	void onPaddleHit(Paddle& paddle) override;
 
-	void onWallHit();
+	void onWallHit() override;
 
-	void onCeilHit();
+	void onCeilHit() override;
 
 private:
 	float   m_angle;
