@@ -161,8 +161,7 @@ void Game::setResolution(size_t width, size_t height)
 	m_window.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
 	m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
 	m_window.setView(m_view);
-	m_window.setVerticalSyncEnabled(true);
-	//m_window.setFramerateLimit(60);
+	m_window.setFramerateLimit(60);
 	m_window.setKeyRepeatEnabled(false);
 
 	// Center window on desktop

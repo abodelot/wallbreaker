@@ -9,6 +9,18 @@
 #define TOKEN_SEPARATOR     '='
 
 
+static void trim_string(std::string& str)
+{
+	const char* WHITESPACES = " \t\n\r\0xb";
+	size_t first = str.find_first_not_of(WHITESPACES);
+	if (first != std::string::npos)
+	{
+		size_t last = str.find_last_not_of(WHITESPACES);
+		str = str.substr(first, last - first + 1);
+	}
+}
+
+
 IniParser::IniParser():
 	cursor_(NULL)
 {
@@ -30,8 +42,9 @@ bool IniParser::load(const char* filename)
 		Section* section = NULL;
 		while (std::getline(file, line))
 		{
-			clear_string(line);
-			if (line.size() > 0)
+			// Ignore comments and empty lines
+			trim_string(line);
+			if (line.size() > 0 && line[0] != TOKEN_COMMENT)
 			{
 				// Look for sections
 				if (line[0] == TOKEN_START_SECTION)
@@ -46,30 +59,39 @@ bool IniParser::load(const char* filename)
 					size_t index = line.find(TOKEN_SEPARATOR);
 					if (index != std::string::npos)
 					{
+						// Store key:value in the current section
 						std::string key = line.substr(0, index);
-						clear_string(key);
+						trim_string(key);
 						std::string value = line.substr(index + 1);
-						clear_string(value);
+						trim_string(value);
 						(*section)[key] = value;
 					}
+					else
+					{
+						std::cerr << "[IniParser] line '" << line << "' ignored: missing '" << TOKEN_SEPARATOR << "' token" << std::endl;
+					}
+				}
+				else
+				{
+					std::cerr << "[IniParser] line '" << line << "' ignored: outside of a section" << std::endl;
 				}
 			}
 		}
 		file.close();
 		return true;
 	}
-	std::cerr << "cannot open file: " << filename << std::endl;
+	std::cerr << "[IniParser] cannot open file: " << filename << std::endl;
 	return false;
 }
 
 
-bool IniParser::save(const std::string& filename)
+bool IniParser::save(const std::string& filename) const
 {
 	return save(filename.c_str());
 }
 
 
-bool IniParser::save(const char* filename)
+bool IniParser::save(const char* filename) const
 {
 	std::ofstream file(filename);
 	if (file)
@@ -89,7 +111,7 @@ bool IniParser::save(const char* filename)
 		file.close();
 		return true;
 	}
-	std::cerr << "cannot open file: " << filename << std::endl;
+	std::cerr << "[IniParser] cannot write file: " << filename << std::endl;
 	return false;
 }
 
@@ -104,25 +126,8 @@ const std::string& IniParser::get(const std::string& key, const std::string& def
 {
 	if (cursor_ != NULL)
 	{
-		return (*cursor_)[key];
+		Section::const_iterator it = cursor_->find(key);
+		return it != cursor_->end() ? it->second : default_value;
 	}
 	return default_value;
-}
-
-
-void IniParser::clear_string(std::string& str) const
-{
-	if (str.size() > 0 && str[0] == TOKEN_COMMENT)
-	{
-		str.clear();
-		return;
-	}
-
-	const char* WHITESPACES = " \t\n\r\0xb";
-	size_t first = str.find_first_not_of(WHITESPACES);
-	if (first != std::string::npos)
-	{
-		size_t last = str.find_last_not_of(WHITESPACES);
-		str = str.substr(first, last - first + 1);
-	}
 }

@@ -4,7 +4,7 @@
 /**
  * Simple INI file parser
  * @author Alexandre Bodelot <alexandre.bodelot@gmail.com>
- * @date 3 November 2011
+ * @version 2013-12-20
  */
 
 #include <string>
@@ -25,15 +25,15 @@ public:
 	 * @return true if document loaded
 	 */
 	bool load(const std::string& filename);
-	bool load(const char* filename);
+	bool load(const char*        filename);
 
 	/**
-	 * Save INI document to a file
+	 * Save the content of the INI document to a file
 	 * @param filename: path to document
 	 * @return true if document saved
 	 */
-	bool save(const std::string& filename);
-	bool save(const char* filename);
+	bool save(const std::string& filename) const;
+	bool save(const char*        filename) const;
 
 	/**
 	 * Set internal cursor on a section
@@ -43,31 +43,29 @@ public:
 	void seek_section(const std::string& section_name);
 
 	/**
-	 * Read a value from the current section
+	 * Read a value from the current section. You must set a current section before (see seek_section).
 	 * @param key: value identifier
-	 * @param default_value: returned value if key not found
+	 * @param default_value: returned value if key is not found in the current section
 	 * @return value stored if key found, otherwise default_value
 	 */
 	template <class T>
-	T get(const std::string& key, const T& default_value) const;
+	T                  get(const std::string& key, const T&           default_value)      const;
 	const std::string& get(const std::string& key, const std::string& default_value = "") const;
 
 	/**
-	 * Write a value
-	 * @param key: value identifer. If key already exists, value will be overridden
+	 * Set a value in the current section. You must set a current section before (see seek_section).
+	 * @param key: value identifer. If key already exists, value will be overwritten
 	 * @param value: value to write
 	 */
 	template <class T>
 	void set(const std::string& key, const T& value);
 
 private:
-	void clear_string(std::string& line) const;
-
 	typedef std::map<std::string, std::string> Section;
 	typedef std::map<std::string, Section> SectionMap;
 
 	SectionMap sections_;
-	Section* cursor_;
+	Section*   cursor_; // Pointer to current section
 };
 
 
