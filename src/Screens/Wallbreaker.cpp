@@ -1,4 +1,5 @@
 #include "Wallbreaker.hpp"
+#include "Core/Game.hpp"
 #include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/Settings.hpp"
@@ -12,8 +13,9 @@
 
 
 Wallbreaker::Wallbreaker():
-	m_width(NB_BRICK_COLS * Brick::WIDTH),
-	m_height(NB_BRICK_LINES * Brick::HEIGHT),
+	m_width(LevelManager::NB_BRICK_COLS * Brick::WIDTH),
+	m_height(LevelManager::NB_BRICK_LINES * Brick::HEIGHT),
+	m_level(LevelManager::getInstance()),
 	m_remaining_bricks(0),
 	m_particles(ParticleSystem::getInstance()),
 	m_info_text(gui::Theme::getFont()),
@@ -29,10 +31,10 @@ Wallbreaker::Wallbreaker():
 	// Sprites used for rendering the game area and the HUD
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setOrigin(m_width / 2, m_height / 2);
-	m_level_sprite.setPosition(m_width / 2 + GAME_BORDER_SIZE, m_height / 2 + GAME_BORDER_SIZE);
+	m_level_sprite.setPosition(m_width / 2 + LevelManager::BORDER_SIZE, m_height / 2 + LevelManager::BORDER_SIZE);
 
 	m_hud_sprite.setTexture(m_hud.getTexture());
-	m_hud_sprite.setPosition(m_width + GAME_BORDER_SIZE * 2, 0);
+	m_hud_sprite.setPosition(m_width + LevelManager::BORDER_SIZE * 2, 0);
 
 	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 
@@ -41,7 +43,7 @@ Wallbreaker::Wallbreaker():
 	m_paddle.setManager(this);
 
 	// Build 'pause' menu
-	m_pause_menu.setPosition(GAME_BORDER_SIZE + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
+	m_pause_menu.setPosition(LevelManager::BORDER_SIZE + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
 	m_pause_menu.addButton("Resume",    1);
 	m_pause_menu.addButton("Options",   2);
 	m_pause_menu.addButton("Main menu", 3);
@@ -403,7 +405,7 @@ void Wallbreaker::updateEntities(float frametime)
 
 bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos)
 {
-	if (i >= 0 && i < NB_BRICK_LINES && j >= 0 && j < NB_BRICK_COLS)
+	if (i >= 0 && i < LevelManager::NB_BRICK_LINES && j >= 0 && j < LevelManager::NB_BRICK_COLS)
 	{
 		Brick& brick = m_level.getBrick(i, j);
 		if (brick.isActive())
@@ -430,7 +432,6 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 					Settings::highscore = m_score;
 					m_hud.setHighscore(Settings::highscore);
 				}
-
 			}
 			return true;
 		}
@@ -482,9 +483,9 @@ void Wallbreaker::setStatus(Status status)
 		Game::getInstance().getWindow().setMouseCursorVisible(false);
 		break;
 	}
-
+	// Center text
 	m_info_text.setScale(2, 2);
-	m_info_text.setPosition(GAME_BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
+	m_info_text.setPosition(LevelManager::BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
 }
 
 

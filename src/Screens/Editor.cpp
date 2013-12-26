@@ -1,11 +1,13 @@
 #include <iostream>
 #include "Editor.hpp"
+#include "Core/Game.hpp"
 #include "Gui/OptionsBox.hpp"
 #include "Gui/Button.hpp"
 #include "Gui/CheckBox.hpp"
 
 
 Editor::Editor():
+	m_level(LevelManager::getInstance()),
 	m_show_grid(true),
 	m_menu(Game::getInstance().getWindow())
 {
@@ -14,10 +16,10 @@ Editor::Editor():
 
 	// Sprites used for render textures
 	m_level_sprite.setTexture(m_level_texture.getTexture());
-	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
+	m_level_sprite.setPosition(LevelManager::BORDER_SIZE, LevelManager::BORDER_SIZE);
 
 	// Initialize visual grid (+0.5 for portable pixel-perfect rendition)
-	for (int i = 1; i < NB_BRICK_LINES; ++i)
+	for (int i = 1; i < LevelManager::NB_BRICK_LINES; ++i)
 	{
 		m_grid_lines[i * 2].color        = sf::Color(0, 0, 0, 128);
 		m_grid_lines[i * 2].position     = sf::Vector2f(0.5, Brick::HEIGHT * i - 0.5);
@@ -25,7 +27,7 @@ Editor::Editor():
 		m_grid_lines[i * 2 + 1].position = sf::Vector2f(m_width + 0.5, Brick::HEIGHT * i - 0.5);
 	}
 
-	for (int i = 1; i < NB_BRICK_COLS; ++i)
+	for (int i = 1; i < LevelManager::NB_BRICK_COLS; ++i)
 	{
 		m_grid_cols[i * 2].color        = sf::Color(0, 0, 0, 128);
 		m_grid_cols[i * 2].position     = sf::Vector2f(Brick::WIDTH * i - 0.5, 0.5);
@@ -44,7 +46,7 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(m_width + GAME_BORDER_SIZE * 2 + 2, GAME_BORDER_SIZE);
+	m_menu.setPosition(m_width + LevelManager::BORDER_SIZE * 2 + 2, LevelManager::BORDER_SIZE);
 
 	// Populate level list
 	m_opt_levels = new gui::OptionsBox<size_t>;
@@ -53,6 +55,7 @@ Editor::Editor():
 	m_menu.add(m_opt_levels,      1);
 	m_menu.addButton("Save",      2);
 	m_menu.addButton("Reload",    3);
+	m_menu.addButton("Test level", 7);
 	m_menu.addButton("New level", 4);
 	m_ck_grid = new gui::CheckBox(m_show_grid);
 	m_menu.add("Show grid:", m_ck_grid, 5);
@@ -72,11 +75,11 @@ void Editor::onEvent(const sf::Event& event)
 
 			// Find brick index at the mouse position
 			sf::Vector2i coords;
-			coords.x = int(mouse.x - GAME_BORDER_SIZE) / Brick::WIDTH;
-			coords.y = int(mouse.y - GAME_BORDER_SIZE) / Brick::HEIGHT;
+			coords.x = int(mouse.x - LevelManager::BORDER_SIZE) / Brick::WIDTH;
+			coords.y = int(mouse.y - LevelManager::BORDER_SIZE) / Brick::HEIGHT;
 
-			if (coords.x >= 0 && coords.x < NB_BRICK_COLS
-			 && coords.y >= 0 && coords.y < NB_BRICK_LINES
+			if (coords.x >= 0 && coords.x < LevelManager::NB_BRICK_COLS
+			 && coords.y >= 0 && coords.y < LevelManager::NB_BRICK_LINES
 			 && coords != m_cursor_coords)
 			{
 				// Update prelight position
@@ -97,8 +100,8 @@ void Editor::onEvent(const sf::Event& event)
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
-			if (m_cursor_coords.x >= 0 && m_cursor_coords.x < NB_BRICK_COLS
-			 && m_cursor_coords.y >= 0 && m_cursor_coords.y < NB_BRICK_LINES)
+			if (m_cursor_coords.x >= 0 && m_cursor_coords.x < LevelManager::NB_BRICK_COLS
+			 && m_cursor_coords.y >= 0 && m_cursor_coords.y < LevelManager::NB_BRICK_LINES)
 			{
 				setBrick(m_cursor_coords);
 				updateTexture();
@@ -156,6 +159,8 @@ void Editor::onEvent(const sf::Event& event)
 		case 6: // Back
 			Game::getInstance().previousScreen();
 			break;
+		case 7: // Test current level
+			break;
 	}
 }
 
@@ -187,8 +192,8 @@ void Editor::updateTexture()
 	// Draw grid
 	if (m_show_grid)
 	{
-		m_level_texture.draw(m_grid_lines, NB_BRICK_LINES * 2, sf::Lines);
-		m_level_texture.draw(m_grid_cols, NB_BRICK_COLS * 2, sf::Lines);
+		m_level_texture.draw(m_grid_lines, LevelManager::NB_BRICK_LINES * 2, sf::Lines);
+		m_level_texture.draw(m_grid_cols, LevelManager::NB_BRICK_COLS * 2, sf::Lines);
 	}
 
 	m_level_texture.display();

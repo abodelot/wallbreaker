@@ -5,11 +5,19 @@
 #include "Config.hpp"
 #include "Entities/Brick.hpp"
 
-class Level: public sf::Drawable
+class LevelManager: public sf::Drawable, sf::NonCopyable
 {
 public:
-	Level();
-	~Level();
+	static const int NB_BRICK_LINES = 29; // number of lines
+	static const int NB_BRICK_COLS  = 13; // number of columns
+	static const int BORDER_SIZE    = 8;  // size of the frame around the game scene
+
+	static LevelManager& getInstance();
+
+	/**
+	 * Open the file containing the levels
+	 */
+	bool openFromFile(const std::string& filename);
 
 	/**
 	 * Load the level located at index
@@ -59,7 +67,10 @@ public:
 	size_t getBrickCount() const;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	LevelManager();
+	~LevelManager();
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
 	 * Load level at the current stream position

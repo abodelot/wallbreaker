@@ -3,7 +3,7 @@
 
 #include "Screen.hpp"
 #include "Core/Config.hpp"
-#include "Core/Level.hpp"
+#include "Core/LevelManager.hpp"
 #include "Entities/Brick.hpp"
 #include "Gui/Menu.hpp"
 
@@ -41,10 +41,10 @@ private:
 	 */
 	void setBrick(const sf::Vector2i& index);
 
-	static const int  m_width  = NB_BRICK_COLS  * Brick::WIDTH;
-	static const int  m_height = NB_BRICK_LINES * Brick::HEIGHT;
+	static const int  m_width  = LevelManager::NB_BRICK_COLS  * Brick::WIDTH;
+	static const int  m_height = LevelManager::NB_BRICK_LINES * Brick::HEIGHT;
 
-	Level             m_level;
+	LevelManager&     m_level;
 	Brick             m_cursor;
 	sf::Vertex        m_cursor_prelight[4];
 	sf::Vector2i      m_cursor_coords;
@@ -53,8 +53,8 @@ private:
 	sf::Sprite        m_level_sprite;
 
 	// 2 vertices per line
-	sf::Vertex        m_grid_cols[NB_BRICK_COLS * 2];
-	sf::Vertex        m_grid_lines[NB_BRICK_LINES * 2];
+	sf::Vertex        m_grid_cols[LevelManager::NB_BRICK_COLS * 2];
+	sf::Vertex        m_grid_lines[LevelManager::NB_BRICK_LINES * 2];
 	bool              m_show_grid;
 
 	// GUI elements

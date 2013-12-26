@@ -11,12 +11,10 @@
 #define APP_VERSION       "0.2"
 #define APP_URL           "https://github.com/abodelot/wallbreaker"
 
-#define LEVEL_FILE        "resources/levels/levels.txt"
-#define SETTINGS_FILE     "settings.ini"
-#define SCREENSHOT_DIR    "screenshots"
+// Paths
 
-#define NB_BRICK_LINES    29 // number of lines
-#define NB_BRICK_COLS     13 // number of columns
-#define GAME_BORDER_SIZE  8 // size of the frame around the game scene
+#define WB_LEVEL_FILE     "resources/levels/levels.txt"
+#define WB_SETTINGS_FILE  "settings.ini"
+#define WB_SCREENSHOT_DIR "screenshots"
 
 #endif // CONFIG_HPP
