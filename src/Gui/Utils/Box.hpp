@@ -8,7 +8,7 @@ namespace gui
 {
 
 /**
- * Utility class used by widgets for building visual component
+ * Utility class used by widgets for holding visual components
  */
 template <class T>
 class Box: public sf::Drawable
@@ -73,7 +73,7 @@ private:
 
 	T          m_item;
 	bool       m_pressed;
-	sf::Vertex m_background[8]; // 0-4 for body, 4-8 for borders
+	sf::Vertex m_background[8]; // 0-3 for body, 4-7 for borders
 };
 
 }

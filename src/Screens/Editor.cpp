@@ -1,8 +1,10 @@
 #include <iostream>
 #include "Editor.hpp"
+#include "Core/Resources.hpp"
 #include "Gui/OptionsBox.hpp"
 #include "Gui/Button.hpp"
 #include "Gui/CheckBox.hpp"
+#include "Gui/Label.hpp"
 
 
 Editor::Editor():
@@ -15,6 +17,8 @@ Editor::Editor():
 	// Sprites used for render textures
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setPosition(GAME_BORDER_SIZE, GAME_BORDER_SIZE);
+
+	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 
 	// Initialize visual grid (+0.5 for portable pixel-perfect rendition)
 	for (int i = 1; i < NB_BRICK_LINES; ++i)
@@ -44,7 +48,8 @@ Editor::Editor():
 	}
 
 	// Create GUI menu
-	m_menu.setPosition(m_width + GAME_BORDER_SIZE * 2 + 2, GAME_BORDER_SIZE);
+	m_menu.setPosition(m_width + GAME_BORDER_SIZE * 2 + 4, GAME_BORDER_SIZE);
+	m_menu.addLabel(" Level Editor");
 
 	// Populate level list
 	m_opt_levels = new gui::OptionsBox<size_t>;
@@ -55,7 +60,8 @@ Editor::Editor():
 	m_menu.addButton("Reload",    3);
 	m_menu.addButton("New level", 4);
 	m_ck_grid = new gui::CheckBox(m_show_grid);
-	m_menu.add("Show grid:", m_ck_grid, 5);
+	gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
+	form->addRow("Show grid:", m_ck_grid, 5);
 	m_menu.addButton("Back",      6);
 }
 
@@ -170,11 +176,12 @@ void Editor::onFocus()
 void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.clear({0x16, 0x1e, 0x26});
+	target.draw(m_borders_sprite);
 	target.draw(m_level_sprite);
 	target.draw(m_cursor);
 
 	// Draw GUI menu
-	m_menu.draw();
+	m_menu.show();
 }
 
 

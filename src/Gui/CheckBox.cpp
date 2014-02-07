@@ -2,8 +2,8 @@
 
 using namespace gui;
 
-CheckBox::CheckBox(bool checked, int id):
-	Widget(id)
+CheckBox::CheckBox(bool checked):
+	Widget()
 {
 	m_box.setSize(Theme::getBaseLine(), Theme::getBaseLine());
 	float size = Theme::getFont().getGlyphHeight() - Theme::PADDING;
@@ -31,7 +31,7 @@ void CheckBox::check(bool checked)
 
 void CheckBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.transform *= getTransform();
+	transformStates(states);
 	target.draw(m_box, states);
 }
 

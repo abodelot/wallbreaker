@@ -51,6 +51,7 @@ private:
 
 	sf::RenderTexture m_level_texture;
 	sf::Sprite        m_level_sprite;
+	sf::Sprite        m_borders_sprite;
 
 	// 2 vertices per line
 	sf::Vertex        m_grid_cols[NB_BRICK_COLS * 2];

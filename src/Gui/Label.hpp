@@ -29,6 +29,9 @@ public:
 	void setColor(const sf::Color& color);
 	const sf::Color& getColor() const;
 
+	void setCharacterSize(int size);
+	int getCharacterSize() const;
+
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

@@ -15,7 +15,7 @@ namespace gui
 class CheckBox: public Widget
 {
 public:
-	CheckBox(bool checked = false, int id = -1);
+	CheckBox(bool checked = false);
 
 	bool isChecked() const;
 

@@ -66,5 +66,5 @@ void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.clear({0x16, 0x1e, 0x26});
 	target.draw(m_title, states);
 	target.draw(m_about_text, states);
-	m_menu.draw();
+	m_menu.show();
 }

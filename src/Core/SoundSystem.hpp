@@ -11,14 +11,9 @@ class SoundSystem
 {
 public:
 	/**
-	 * Set/Get current background music
-	 */
-	static void setMusic(const std::string& music_name);
-	static const std::string& getMusic();
-
-	/**
 	 * Control music
 	 */
+	static bool openMusicFromFile(const std::string& path);
 	static void playMusic();
 	static void stopMusic();
 	static void pauseMusic();
@@ -32,13 +27,13 @@ public:
 	 * Control music volume
 	 */
 	static void setMusicVolume(int volume);
-	static inline int getMusicVolume() { return m_music_volume; }
+	static int getMusicVolume();
 
 	/**
 	 * Control sound effects volume
 	 */
 	static void setSoundVolume(int volume);
-	static inline int getSoundVolume() { return m_sound_volume; }
+	static int getSoundVolume();
 
 	/**
 	 * Turn music on/off
@@ -60,14 +55,13 @@ public:
 private:
 	static const int MAX_SOUNDS = 20;
 
-	static sf::Sound    m_sounds[MAX_SOUNDS];
-	static int          m_last_sound_played;
-	static sf::Music    m_music;
-	static std::string  m_music_name;
-	static int          m_music_volume;
-	static int          m_sound_volume;
-	static bool         m_enable_music;
-	static bool         m_enable_sound;
+	static sf::Sound   m_sounds[MAX_SOUNDS];
+	static int         m_last_sound_played;
+	static sf::Music   m_music;
+	static int         m_music_volume;
+	static int         m_sound_volume;
+	static bool        m_enable_music;
+	static bool        m_enable_sound;
 };
 
 #endif // SOUNDSYSTEM_HPP

@@ -4,8 +4,8 @@
 
 using namespace gui;
 
-Button::Button(const sf::String& string, int id):
-	Widget(id),
+Button::Button(const sf::String& string):
+	Widget(),
 	m_box(BitmapText(Theme::getFont()))
 {
 	m_box.item().setColor(Theme::TEXT_COLOR);
@@ -31,7 +31,7 @@ const sf::String& Button::getString() const
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.transform *= getTransform();
+	transformStates(states);
 	target.draw(m_box, states);
 }
 

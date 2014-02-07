@@ -9,22 +9,22 @@ HUD::HUD():
 	m_life_count(0),
 	m_life_label(gui::Theme::getFont())
 {
-	m_render_texture.create(96, APP_HEIGHT);
+	m_render_texture.create(ROW_WIDTH, APP_HEIGHT);
 
 	m_life_label.setString("Lifes:");
-	m_life_label.setPosition((ROW_WIDTH - m_life_label.getSize().x) / 2, 30);
+	m_life_label.setPosition((ROW_WIDTH - m_life_label.getSize().x) / 2, 20);
 	m_life_icon.setTexture(Resources::getTexture("hud-life.png"));
 
-	m_level.setPosition(0, 70);
+	m_level.setPosition(0, 60);
 	m_level.setLabel("Level:");
 
-	m_bricks.setPosition(0, 110);
+	m_bricks.setPosition(0, 100);
 	m_bricks.setLabel("Bricks:");
 
-	m_score.setPosition(0, 150);
+	m_score.setPosition(0, 140);
 	m_score.setLabel("Score:");
 
-	m_highscore.setPosition(0, 190);
+	m_highscore.setPosition(0, 180);
 	m_highscore.setLabel("Highscore:");
 }
 
@@ -63,6 +63,7 @@ void HUD::setLiveCount(int n)
 	updateTexture();
 }
 
+
 const sf::Texture& HUD::getTexture() const
 {
 	return m_render_texture.getTexture();
@@ -71,7 +72,7 @@ const sf::Texture& HUD::getTexture() const
 
 void HUD::updateTexture()
 {
-	m_render_texture.draw(sf::Sprite(Resources::getTexture("hud-background.png")));
+	m_render_texture.clear(sf::Color::Transparent);
 	m_render_texture.draw(m_level);
 	m_render_texture.draw(m_bricks);
 	m_render_texture.draw(m_score);
@@ -89,7 +90,6 @@ void HUD::updateTexture()
 	m_render_texture.display();
 }
 
-
 // HUD::Item -------------------------------------------------------------------
 
 HUD::Item::Item():
@@ -104,7 +104,6 @@ HUD::Item::Item():
 void HUD::Item::setPosition(float x, float y)
 {
 	label.setPosition(x, y);
-	value.setPosition(x, y + 14);
 }
 
 
@@ -118,7 +117,7 @@ void HUD::Item::setLabel(const sf::String& str)
 void HUD::Item::setValue(int val)
 {
 	value.setString(std::to_string(val));
-	value.setX((ROW_WIDTH - value.getSize().x) / 2);
+	value.setPosition((ROW_WIDTH - value.getSize().x) / 2, label.getPosition().y + label.getSize().y + 2);
 }
 
 

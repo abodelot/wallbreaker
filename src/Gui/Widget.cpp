@@ -3,10 +3,12 @@
 
 using namespace gui;
 
-Widget::Widget(int id):
+Widget::Widget():
 	m_parent(NULL),
+	m_previous(NULL),
+	m_next(NULL),
 	m_state(StateDefault),
-	m_id(id),
+	m_id(-1),
 	m_selectable(true)
 {
 }
@@ -24,9 +26,22 @@ int Widget::getID() const
 }
 
 
-const sf::Vector2f& Widget::getSize() const
+void Widget::setPosition(const sf::Vector2f& pos)
 {
-	return m_size;
+	m_position = pos;
+}
+
+
+void Widget::setPosition(float x, float y)
+{
+	m_position.x = x;
+	m_position.y = y;
+}
+
+
+const sf::Vector2f& Widget::getPosition() const
+{
+	return m_position;
 }
 
 
@@ -36,10 +51,23 @@ void Widget::setSize(const sf::Vector2f& size)
 }
 
 
+void Widget::setSize(float width, float height)
+{
+	m_size.x = width;
+	m_size.y = height;
+}
+
+
+const sf::Vector2f& Widget::getSize() const
+{
+	return m_size;
+}
+
+
 bool Widget::containsPoint(const sf::Vector2f& point) const
 {
-	return point.x > 0 && point.x < m_size.x &&
-	       point.y > 0 && point.y < m_size.y;
+	return point.x > 0.f && point.x < m_size.x &&
+	       point.y > 0.f && point.y < m_size.y;
 }
 
 
@@ -61,15 +89,18 @@ void Widget::setSelectable(bool selectable)
 }
 
 
-void Widget::triggerCallback()
+void Widget::triggerCallback(const Widget* triggered)
 {
+	// Notify parent that a widget is triggered
+	// If NULL, this is the widget being triggered
 	if (m_parent != NULL)
-		m_parent->triggerCallback(this);
+		m_parent->triggerCallback(triggered == NULL ? this : triggered);
 }
 
-void Widget::setParent(Menu* menu)
+
+void Widget::setParent(Widget* parent)
 {
-	m_parent = menu;
+	m_parent = parent;
 }
 
 
@@ -85,12 +116,23 @@ State Widget::getState() const
 	return m_state;
 }
 
+
+void Widget::transformStates(sf::RenderStates& states) const
+{
+	states.transform *= sf::Transform(
+		1, 0, m_position.x,
+		0, 1, m_position.y,
+		0, 0, 1);
+}
+
+
 // callbacks -------------------------------------------------------------------
 
 void Widget::onStateChanged(State) {}
 void Widget::onMouseMoved(float, float) {}
 void Widget::onMousePressed(float, float) {}
 void Widget::onMouseReleased(float, float) {}
+void Widget::onMouseWheelMoved(int) {}
 void Widget::onKeyPressed(sf::Keyboard::Key) {}
 void Widget::onKeyReleased(sf::Keyboard::Key) {}
 void Widget::onTextEntered(sf::Uint32) {}

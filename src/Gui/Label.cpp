@@ -22,7 +22,7 @@ void Label::setText(const sf::String& string)
 {
 	m_text.setString(string);
 	m_text.setPosition(Theme::PADDING, Theme::PADDING);
-	setSize({m_text.getSize().x + Theme::PADDING * 2, Theme::getBaseLine()});
+	setSize({m_text.getSize().x + Theme::PADDING * 2, m_text.getSize().y + Theme::PADDING * 2});
 }
 
 
@@ -44,9 +44,16 @@ const sf::Color& Label::getColor() const
 }
 
 
+void Label::setCharacterSize(int size)
+{
+	m_text.setScale(size, size);
+	setSize({m_text.getSize().x + Theme::PADDING * 2, m_text.getSize().y + Theme::PADDING * 2});
+}
+
+
 void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.transform *= getTransform();
+	transformStates(states);
 	target.draw(m_text, states);
 }
 

@@ -188,17 +188,17 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	background[2].position.y = target.getSize().y;
 	background[3].position.y = target.getSize().y;
 
-	background[0].color = {0x1a, 0x35, 0x49};
-	background[1].color = {0x1a, 0x35, 0x49};
-	background[2].color = {0x2c, 0x80, 0xb8};
-	background[3].color = {0x2c, 0x80, 0xb8};
+	background[0].color = {0x1a, 0x35, 0x49, 128};
+	background[1].color = {0x1a, 0x35, 0x49, 128};
+	background[2].color = {0x2c, 0x80, 0xb8, 128};
+	background[3].color = {0x2c, 0x80, 0xb8, 128};
 
 	target.draw(background, 4, sf::Quads, states);
 
 	// Cast borders shadow
 	sf::Vertex shadow[4];
 	for (int i = 0; i < 4; ++i)
-		shadow[i].color = sf::Color(0, 0, 0, 96);
+		shadow[i].color = sf::Color(0, 0, 0, 128);
 
 	// Vertical top border
 	shadow[1].position.x = GAME_BORDER_SIZE / 2;

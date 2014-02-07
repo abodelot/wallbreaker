@@ -13,16 +13,15 @@ enum State
 	StateFocused,
 };
 
-class Menu;
+class Layout;
 
 /**
  * Abstract base class for gui widgets
  */
-class Widget: public sf::Drawable, public sf::Transformable
+class Widget: public sf::Drawable
 {
-friend class Menu;
 public:
-	Widget(int id = -1);
+	Widget();
 
 	/**
 	 * Give an ID to the widget
@@ -30,12 +29,18 @@ public:
 	void setID(int id);
 	int getID() const;
 
-	inline float getX() const { return getPosition().x; }
-	inline float getY() const { return getPosition().y; }
+	/**
+	 * Widget's position
+	 */
+	void setPosition(const sf::Vector2f& pos);
+	void setPosition(float x, float y);
+	const sf::Vector2f& getPosition() const;
 
 	/**
-	 * Get widget dimensions
+	 * Widget's dimensions
 	 */
+	void setSize(const sf::Vector2f& size);
+	void setSize(float widget, float height);
 	const sf::Vector2f& getSize() const;
 
 	/**
@@ -53,37 +58,46 @@ public:
 	 */
 	bool isFocused() const;
 
-	// callbacks ---------------------------------------------------------------
+	// Callbacks ---------------------------------------------------------------
 
 	virtual void onStateChanged(State state);
 	virtual void onMouseMoved(float x, float y);
 	virtual void onMousePressed(float x, float y);
 	virtual void onMouseReleased(float x, float y);
+	virtual void onMouseWheelMoved(int delta);
 	virtual void onKeyPressed(sf::Keyboard::Key key);
 	virtual void onKeyReleased(sf::Keyboard::Key key);
 	virtual void onTextEntered(sf::Uint32 unicode);
 
 protected:
-	/**
-	 * Set size occupied by the widget
-	 */
-	void setSize(const sf::Vector2f& size);
+	friend class Layout;
 
 	void setSelectable(bool selectable);
 
 	/**
 	 * Notify parent that the widget has been triggered by user input
 	 */
-	void triggerCallback();
+	virtual void triggerCallback(const Widget* triggered = NULL);
 
 	void setState(State state);
 	State getState() const;
 
-private:
-	void setParent(Menu* menu);
+	void transformStates(sf::RenderStates& states) const;
 
-	Menu*        m_parent;
+	/**
+	 * Set the widget's container (parent)
+	 */
+	void setParent(Widget* parent);
+
+	virtual Layout* toLayout() { return NULL; }
+
+private:
+	Widget*      m_parent;
+	Widget*      m_previous;
+	Widget*      m_next;
+
 	State        m_state;
+	sf::Vector2f m_position;
 	sf::Vector2f m_size;
 	int          m_id;
 	bool         m_selectable;

@@ -15,7 +15,7 @@ namespace gui
 class Button: public Widget
 {
 public:
-	Button(const sf::String& string, int id = -1);
+	Button(const sf::String& string);
 
 	/**
 	 * Set the displayed button label

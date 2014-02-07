@@ -70,11 +70,7 @@ const sf::Color& BitmapText::getColor() const
 
 sf::Vector2f BitmapText::getSize() const
 {
-	sf::Vector2f size(m_bounds.width, m_bounds.height);
-	size.x *= getScale().x;
-	size.y *= getScale().y;
-	return size;
-
+	return sf::Vector2f(m_bounds.width * getScale().x, m_bounds.height * getScale().y);
 }
 
 

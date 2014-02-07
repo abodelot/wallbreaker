@@ -1,20 +1,16 @@
 #ifndef GUI_MENU_HPP
 #define GUI_MENU_HPP
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Layout.hpp"
 
 namespace gui
 {
 
-class Widget;
-class Button;
-
-class Menu
+class Menu: public gui::Layout
 {
 public:
 	Menu(sf::RenderTarget& window);
-	~Menu();
 
 	/**
 	 * Handle event and send it to widgets
@@ -22,25 +18,9 @@ public:
 	 */
 	int onEvent(const sf::Event& event);
 
-	/**
-	 * Add a new button in the menu container
-	 * The menu will take care of widget deallocation
-	 * @return added widget
-	 */
-	Button* addButton(const sf::String& string, int id = -1);
-	Widget* add(Widget* widget, int id = -1);
-	Widget* add(const sf::String& label, Widget* widget, int id = -1);
+	void triggerCallback(const Widget* widget) override;
 
-	/**
-	 * Menu position
-	 */
-	void setPosition(float x, float y);
-	void setPosition(const sf::Vector2f& position);
-	const sf::Vector2f& getPosition() const;
-
-	void draw() const;
-
-	void triggerCallback(const Widget* widget);
+	void show(sf::RenderStates states = sf::RenderStates::Default) const;
 
 private:
 	/**
@@ -50,21 +30,9 @@ private:
 	 * @param relative: if not NULL, compute mouse position relative to this widget
 	 * @return relative mouse position
 	 */
-	sf::Vector2f getMousePosition(int x, int y, const Widget* relative = NULL) const;
-
-	void focusNextWidget();
-
-	void focusPreviousWidget();
-
-	void giveFocus(Widget* widget);
-
-	typedef std::vector<Widget*> WidgetVector;
+	sf::Vector2f convertMousePosition(int x, int y) const;
 
 	sf::RenderTarget& m_window;
-	sf::Vector2f      m_position;
-	WidgetVector      m_widgets;
-	Widget*           m_hover;
-	Widget*           m_focus;
 	const Widget*     m_triggered;
 };
 

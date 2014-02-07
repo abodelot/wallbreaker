@@ -27,6 +27,7 @@ private:
 
 	// Gui elements
 	gui::Menu      m_menu;
+	gui::CheckBox* m_ck_music;
 	gui::CheckBox* m_ck_sound;
 	gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
 };

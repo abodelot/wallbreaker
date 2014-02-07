@@ -5,30 +5,30 @@
 #include "Gui/Button.hpp"
 #include "Gui/Label.hpp"
 
+
 OptionsMenu::OptionsMenu():
 	m_menu(Game::getInstance().getWindow())
 {
 	m_menu.setPosition(40, 40);
+	m_menu.addLabel("Options")->setCharacterSize(2);
 
-	m_menu.add(new gui::Label("Options"))->setScale(2, 2);
-	sf::Vector2f pos = m_menu.add(new gui::Label("Sound:"))->getPosition();
-	m_menu.add(new gui::Label("Resolution:"));
+	// Create checkbox for turning music on/off
+	m_ck_music = new gui::CheckBox(SoundSystem::isMusicEnabled());
 
 	// Create checkbox for turning sound on/off
 	m_ck_sound = new gui::CheckBox(SoundSystem::isSoundEnabled());
-	m_menu.add(m_ck_sound, 1);
-	pos.x += gui::Theme::WIDGET_WIDTH;
-	m_ck_sound->setPosition(pos);
-
 
 	// Create options box for selecting a resolution
 	m_opt_resolution = new gui::OptionsBox<sf::Vector2u>;
 	addResolution({APP_WIDTH,     APP_HEIGHT});
 	addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
 	addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
-	m_menu.add(m_opt_resolution, 2);
 
-	m_menu.addButton("Back", 3);
+	gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
+	form->addRow("Music:", m_ck_music, 1);
+	form->addRow("Sound:", m_ck_sound, 2);
+	form->addRow("Resolution:", m_opt_resolution, 3);
+	form->addRow("", new gui::Button("Back"), 4);
 }
 
 
@@ -36,22 +36,23 @@ void OptionsMenu::onEvent(const sf::Event& event)
 {
 	switch (m_menu.onEvent(event))
 	{
-		case 1: // Sound on/off
-		{
+		case 1: // Music on/off
+			SoundSystem::enableMusic(m_ck_music->isChecked());
+			break;
+		case 2: // Sound on/off
 			SoundSystem::enableSound(m_ck_sound->isChecked());
 			if (m_ck_sound->isChecked())
 			{
 				SoundSystem::playSound("ball.ogg");
 			}
 			break;
-		}
-		case 2: // Resolution
+		case 3: // Resolution
 		{
 			const sf::Vector2u& res = m_opt_resolution->getSelectedValue();
 			Game::getInstance().setResolution(res.x, res.y);
 			break;
 		}
-		case 3: // Back
+		case 4: // Back
 			Game::getInstance().previousScreen();
 			break;
 
@@ -62,7 +63,7 @@ void OptionsMenu::onEvent(const sf::Event& event)
 void OptionsMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.clear({0x16, 0x1e, 0x26});
-	m_menu.draw();
+	m_menu.show();
 }
 
 

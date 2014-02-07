@@ -46,6 +46,8 @@ void Game::init(const std::string& path)
 	// Init GUI theme
 	gui::Theme::loadFont(m_app_dir + "/resources/images/font.png");
 
+	SoundSystem::openMusicFromFile(m_app_dir + "/resources/musics/evolution_sphere.ogg");
+
 	// Load configuration from settings file
 	IniParser config;
 	if (config.load(m_app_dir + SETTINGS_FILE))
@@ -60,11 +62,14 @@ void Game::init(const std::string& path)
 		Settings::highscore = config.get("highscore", 0);
 
 		SoundSystem::enableSound(config.get("sound", true));
+		SoundSystem::enableMusic(config.get("music", true));
 	}
 	else
 	{
 		setResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
 	}
+
+	SoundSystem::playMusic();
 }
 
 
@@ -112,6 +117,7 @@ void Game::quit()
 	config.set("app_width",  m_window.getSize().x);
 	config.set("app_height", m_window.getSize().y);
 	config.set("sound",      SoundSystem::isSoundEnabled());
+	config.set("music",      SoundSystem::isMusicEnabled());
 	config.save(m_app_dir + SETTINGS_FILE);
 }
 

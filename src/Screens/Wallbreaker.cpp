@@ -9,7 +9,7 @@
 #include "Utils/Math.hpp"
 
 #define MAX_PLAYER_LIVES 5
-
+#define X_OFFSET 0
 
 Wallbreaker::Wallbreaker():
 	m_width(NB_BRICK_COLS * Brick::WIDTH),
@@ -29,19 +29,19 @@ Wallbreaker::Wallbreaker():
 	// Sprites used for rendering the game area and the HUD
 	m_level_sprite.setTexture(m_level_texture.getTexture());
 	m_level_sprite.setOrigin(m_width / 2, m_height / 2);
-	m_level_sprite.setPosition(m_width / 2 + GAME_BORDER_SIZE, m_height / 2 + GAME_BORDER_SIZE);
+	m_level_sprite.setPosition(m_width / 2 + GAME_BORDER_SIZE + X_OFFSET, m_height / 2 + GAME_BORDER_SIZE);
 
 	m_hud_sprite.setTexture(m_hud.getTexture());
-	m_hud_sprite.setPosition(m_width + GAME_BORDER_SIZE * 2, 0);
+	m_hud_sprite.setPosition(m_width + GAME_BORDER_SIZE * 2 + X_OFFSET, 0);
 
 	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
-
+	m_borders_sprite.setPosition(X_OFFSET, 0);
 	// Player paddle positioned at the bottom-center
 	m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
 	m_paddle.setManager(this);
 
 	// Build 'pause' menu
-	m_pause_menu.setPosition(GAME_BORDER_SIZE + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
+	m_pause_menu.setPosition(GAME_BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
 	m_pause_menu.addButton("Resume",    1);
 	m_pause_menu.addButton("Options",   2);
 	m_pause_menu.addButton("Main menu", 3);
@@ -209,6 +209,7 @@ void Wallbreaker::update(float frametime)
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.clear({0x16, 0x1e, 0x26});
 	target.draw(m_borders_sprite, states);
 	target.draw(m_level_sprite, states);
 	target.draw(m_hud_sprite, states);
@@ -221,11 +222,11 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(m_info_text);
 		if (m_status == PAUSED)
 		{
-			m_pause_menu.draw();
+			m_pause_menu.show();
 		}
 		else if (m_status == GAME_OVER)
 		{
-			m_game_over_menu.draw();
+			m_game_over_menu.show();
 		}
 	}
 }
@@ -484,7 +485,7 @@ void Wallbreaker::setStatus(Status status)
 	}
 
 	m_info_text.setScale(2, 2);
-	m_info_text.setPosition(GAME_BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
+	m_info_text.setPosition(X_OFFSET + GAME_BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
 }
 
 

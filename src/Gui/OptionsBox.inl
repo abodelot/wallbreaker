@@ -95,7 +95,7 @@ void OptionsBox<T>::selectPrevious()
 template <class T>
 void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.transform *= getTransform();
+	transformStates(states);
 	target.draw(m_box, states);
 	target.draw(m_arrow_left, states);
 	target.draw(m_arrow_right, states);

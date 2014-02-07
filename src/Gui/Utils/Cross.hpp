@@ -7,7 +7,7 @@ namespace gui
 {
 
 /**
- * A X-shapped cross made of 4 points
+ * A X-shapped crosss
  */
 class Cross: public sf::Drawable
 {

@@ -58,14 +58,13 @@ void Box<T>::setSize(float width, float height)
 	m_background[7].position = sf::Vector2f(border,         height - border);
 
 	adjustItem();
-
 }
 
 
 template <class T>
 sf::Vector2f Box<T>::getSize() const
 {
-	// bottom right corner - top left corner
+	// Bottom right corner - top left corner
 	return m_background[2].position - m_background[0].position;
 }
 
@@ -78,7 +77,7 @@ void Box<T>::adjustItem()
 	m_item.setPosition(m_background[0].position.x + (size.x - m_item.getSize().x) / 2,
 	                   m_background[0].position.y + (size.y - m_item.getSize().y) / 2);
 
-	// If item adjusted while pressed, set the offset back
+	// If item is adjusted while pressed, re-apply the 1px vertical offset
 	if (m_pressed)
 		m_item.move(0, 1);
 }

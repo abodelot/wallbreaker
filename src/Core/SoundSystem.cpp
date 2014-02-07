@@ -1,19 +1,12 @@
-#include <iostream>
-
 #include "SoundSystem.hpp"
 #include "Resources.hpp"
-
-#define DEFAULT_MUSIC  "space.mod"
-#define DEFAULT_VOLUME 40
-
 
 
 sf::Sound        SoundSystem::m_sounds[MAX_SOUNDS];
 int              SoundSystem::m_last_sound_played = 0;
 sf::Music        SoundSystem::m_music;
-std::string      SoundSystem::m_music_name   = DEFAULT_MUSIC;
-int              SoundSystem::m_music_volume = DEFAULT_VOLUME;
-int              SoundSystem::m_sound_volume = DEFAULT_VOLUME;
+int              SoundSystem::m_music_volume = 100;
+int              SoundSystem::m_sound_volume = 100;
 bool             SoundSystem::m_enable_music = true;
 bool             SoundSystem::m_enable_sound = true;
 
@@ -27,21 +20,12 @@ static inline void clamp(T& value, T min, T max)
 }
 
 
-void SoundSystem::setMusic(const std::string& music_name)
+bool SoundSystem::openMusicFromFile(const std::string& path)
 {
-	if (m_music_name != music_name)
-	{
-		stopMusic();
-		m_music.openFromFile(music_name);
-		m_music.setVolume(m_music_volume);
-		m_music_name = music_name;
-	}
-}
-
-
-const std::string& SoundSystem::getMusic()
-{
-	return m_music_name;
+	stopMusic();
+	m_music.openFromFile(path);
+	m_music.setLoop(true);
+	m_music.setVolume(m_music_volume);
 }
 
 
@@ -91,10 +75,13 @@ void SoundSystem::setMusicVolume(int volume)
 {
 	clamp(volume, 0, 100);
 	m_music_volume = volume;
-	if (!m_music_name.empty())
-	{
-		m_music.setVolume(volume);
-	}
+	m_music.setVolume(volume);
+}
+
+
+int SoundSystem::getMusicVolume()
+{
+	return m_music_volume;
 }
 
 
@@ -107,6 +94,13 @@ void SoundSystem::setSoundVolume(int volume)
 		m_sounds[i].setVolume(volume);
 	}
 }
+
+
+int SoundSystem::getSoundVolume()
+{
+	return m_sound_volume;
+}
+
 
 void SoundSystem::enableMusic(bool enabled)
 {

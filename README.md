@@ -27,7 +27,7 @@ How to use the editor?
 How to compile from source?
 ---------------------------
 
-1. Install SFML (http://www.sfml-dev.org)
+1. Install SFML (www.sfml-dev.org)
 2. Grab the source code at https://github.com/abodelot/wallbreaker
 3. Make sure your compiler is C++11 compliant
 
@@ -35,5 +35,5 @@ How to compile from source?
 Credits
 -------
 
-Sounds by Cabeeno Rossley: http://www.freesound.org/people/Cabeeno%20Rossley/
-
+Sounds by Cabeeno Rossley: www.freesound.org/people/Cabeeno%20Rossley/
+Music by Joshua Hardin: www.joshuahardin.com
