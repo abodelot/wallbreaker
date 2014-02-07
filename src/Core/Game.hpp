@@ -55,11 +55,6 @@ public:
 	void setResolution(size_t width, size_t height);
 
 	/**
-	 * Get application root directory
-	 */
-	const std::string& getApplicationDir() const;
-
-	/**
 	 * Get application render window
 	 */
 	sf::RenderWindow& getWindow();

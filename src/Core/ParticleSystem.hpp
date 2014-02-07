@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <list>
-#include "Game.hpp"
 
 
 class ParticleSystem: public sf::Drawable, sf::NonCopyable

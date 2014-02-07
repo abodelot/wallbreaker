@@ -55,8 +55,8 @@
 		<Unit filename="src/Core/Game.hpp" />
 		<Unit filename="src/Core/HUD.cpp" />
 		<Unit filename="src/Core/HUD.hpp" />
-		<Unit filename="src/Core/Level.cpp" />
-		<Unit filename="src/Core/Level.hpp" />
+		<Unit filename="src/Core/LevelManager.cpp" />
+		<Unit filename="src/Core/LevelManager.hpp" />
 		<Unit filename="src/Core/Main.cpp" />
 		<Unit filename="src/Core/ParticleSystem.cpp" />
 		<Unit filename="src/Core/ParticleSystem.hpp" />
@@ -106,8 +106,6 @@
 		<Unit filename="src/Gui/Widget.hpp" />
 		<Unit filename="src/Screens/Editor.cpp" />
 		<Unit filename="src/Screens/Editor.hpp" />
-		<Unit filename="src/Screens/LevelSelection.cpp" />
-		<Unit filename="src/Screens/LevelSelection.hpp" />
 		<Unit filename="src/Screens/MainMenu.cpp" />
 		<Unit filename="src/Screens/MainMenu.hpp" />
 		<Unit filename="src/Screens/OptionsMenu.cpp" />

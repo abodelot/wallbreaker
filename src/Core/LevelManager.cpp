@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Level.hpp"
+#include "LevelManager.hpp"
 
 /**
  * Number of bytes per level in the levels file
@@ -8,7 +8,14 @@
 #define LEVEL_SIZE() ((NB_BRICK_COLS + 1) * NB_BRICK_LINES)
 
 
-Level::Level():
+LevelManager& LevelManager::getInstance()
+{
+	static LevelManager self;
+	return self;
+}
+
+
+LevelManager::LevelManager():
 	m_current_level(0),
 	m_level_count(0)
 {
@@ -16,37 +23,35 @@ Level::Level():
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
 		for (int j = 0; j < NB_BRICK_COLS; ++j)
 			m_bricks[i][j].setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
-
-
-	// Open the file containing the levels
-	std::string filename = Game::getInstance().getApplicationDir() + LEVEL_FILE;
-	m_level_file.open(filename.c_str(), std::ios::in | std::ios::out | std::ios::binary);
-	if (!m_level_file)
-	{
-		std::cerr << "error while opening level file " << filename << std::endl;
-	}
-	else
-	{
-		// Number of levels = file size / size of one level
-		m_level_file.seekg(0, std::ifstream::end);
-		m_level_count = m_level_file.tellg() / LEVEL_SIZE();
-#ifdef WALLBREAKER_DEBUG
-		printf("%s contains %u levels\n", LEVEL_FILE, m_level_count);
-#endif
-		// Restore cursor position
-		m_level_file.seekg(0);
-	}
 }
 
 
-Level::~Level()
+LevelManager::~LevelManager()
 {
 	if (m_level_file.is_open())
 		m_level_file.close();
 }
 
 
-int Level::loadAt(size_t index)
+bool LevelManager::openFromFile(const std::string& filename)
+{
+	m_level_file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
+	if (m_level_file)
+	{
+		// Number of levels = file size / size of one level
+		m_level_file.seekg(0, std::ifstream::end);
+		m_level_count = m_level_file.tellg() / LEVEL_SIZE();
+
+		// Restore cursor position
+		m_level_file.seekg(0);
+		return true;
+	}
+	std::cerr << "error while opening level file " << filename << std::endl;
+	return false;
+}
+
+
+int LevelManager::loadAt(size_t index)
 {
 	if (index > 0 && index <= m_level_count)
 	{
@@ -59,25 +64,25 @@ int Level::loadAt(size_t index)
 }
 
 
-int Level::loadPrevious()
+int LevelManager::loadPrevious()
 {
 	return loadAt(m_current_level - 1);
 }
 
 
-int Level::reload()
+int LevelManager::reload()
 {
 	return loadAt(m_current_level);
 }
 
 
-int Level::loadNext()
+int LevelManager::loadNext()
 {
 	return load();
 }
 
 
-void Level::save()
+void LevelManager::save()
 {
 	// Set stream cursor before current level
 	m_level_file.seekp(LEVEL_SIZE() * (m_current_level - 1));
@@ -93,7 +98,7 @@ void Level::save()
 }
 
 
-size_t Level::append()
+size_t LevelManager::append()
 {
 	// Create an empty level
 	for (int i = 0; i < NB_BRICK_LINES; ++i)
@@ -107,31 +112,31 @@ size_t Level::append()
 }
 
 
-size_t Level::getCurrentLevel() const
+size_t LevelManager::getCurrentLevel() const
 {
 	return m_current_level;
 }
 
 
-Brick& Level::getBrick(int i, int j)
+Brick& LevelManager::getBrick(int i, int j)
 {
 	return m_bricks[i][j];
 }
 
 
-size_t Level::getLevelCount() const
+size_t LevelManager::getLevelCount() const
 {
 	return m_level_count;
 }
 
 
-size_t Level::getBrickCount() const
+size_t LevelManager::getBrickCount() const
 {
 	return m_brick_count;
 }
 
 
-int Level::load()
+int LevelManager::load()
 {
 	m_brick_count = 0;
 
@@ -172,14 +177,14 @@ int Level::load()
 	}
 	++m_current_level;
 #ifdef WALLBREAKER_DEBUG
-	printf("level %d loaded (contains %u bricks)\n", m_current_level, m_brick_count);
+	printf("level %d/%d loaded (contains %u bricks)\n", m_current_level, m_level_count, m_brick_count);
 #endif
 
 	return m_brick_count;
 }
 
 
-void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Draw background gradient
 	sf::Vertex background[4];
@@ -201,17 +206,17 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		shadow[i].color = sf::Color(0, 0, 0, 128);
 
 	// Vertical top border
-	shadow[1].position.x = GAME_BORDER_SIZE / 2;
-	shadow[2].position.x = GAME_BORDER_SIZE / 2;
+	shadow[1].position.x = BORDER_SIZE / 2;
+	shadow[2].position.x = BORDER_SIZE / 2;
 	shadow[2].position.y = target.getSize().y;
 	shadow[3].position.y = target.getSize().y;
 	target.draw(shadow, 4, sf::Quads, states);
 
 	// Horizontal left border
-	shadow[0].position.x = GAME_BORDER_SIZE / 2;
+	shadow[0].position.x = BORDER_SIZE / 2;
 	shadow[1].position.x = target.getSize().x;
 	shadow[2].position.x = target.getSize().x;
-	shadow[2].position.y = GAME_BORDER_SIZE / 2;
+	shadow[2].position.y = BORDER_SIZE / 2;
 	shadow[3].position.x = shadow[0].position.x;
 	shadow[3].position.y = shadow[2].position.y;
 	target.draw(shadow, 4, sf::Quads, states);

@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 #include "Core/Config.hpp"
 #include "Core/ParticleSystem.hpp"
-#include "Core/Level.hpp"
+#include "Core/LevelManager.hpp"
 #include "Core/HUD.hpp"
 #include "Entities/Paddle.hpp"
 #include "Entities/Ball.hpp"
@@ -55,7 +55,7 @@ private:
 
 	const int         m_width;
 	const int         m_height;
-	Level             m_level;
+	LevelManager&     m_level;
 	int               m_remaining_bricks;
 	ParticleSystem&   m_particles;
 	BitmapText        m_info_text;
