@@ -44,6 +44,7 @@ private:
 	static const int  m_width  = LevelManager::NB_BRICK_COLS  * Brick::WIDTH;
 	static const int  m_height = LevelManager::NB_BRICK_LINES * Brick::HEIGHT;
 
+	sf::Sprite        m_background;
 	LevelManager&     m_level;
 	Brick             m_cursor;
 	sf::Vertex        m_cursor_prelight[4];

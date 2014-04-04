@@ -163,6 +163,19 @@ void Layout::recomputeSize()
 }
 
 
+void Layout::onStateChanged(State state)
+{
+	if (state == StateDefault)
+	{
+		if (m_focus != NULL)
+		{
+			m_focus->setState(StateDefault);
+			m_focus = NULL;
+		}
+	}
+}
+
+
 void Layout::onMouseMoved(float x, float y)
 {
 	for (Widget* widget = m_first; widget != NULL; widget = widget->m_next)
@@ -195,6 +208,7 @@ void Layout::onMouseMoved(float x, float y)
 	// No widget hovered, remove hovered state
 	if (m_hover != NULL)
 	{
+		m_hover->onMouseMoved(x, y);
 		m_hover->setState(m_focus == m_hover ? StateFocused : StateDefault);
 		m_hover = NULL;
 	}
@@ -213,9 +227,9 @@ void Layout::onMousePressed(float x, float y)
 		sf::Vector2f mouse = sf::Vector2f(x, y) - m_hover->getPosition();
 		m_hover->onMousePressed(mouse.x, mouse.y);
 	}
+	// User didn't click on a widget, remove focus state
 	else if (m_focus != NULL)
 	{
-		// User didn't click on a widget, focus is lost
 		m_focus->setState(StateDefault);
 		m_focus = NULL;
 	}
@@ -295,14 +309,20 @@ void Layout::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 bool Layout::giveFocus(Widget* widget)
 {
-	if (widget != NULL && widget->isSelectable())
+	if (widget != NULL)
 	{
 		if (m_focus != NULL)
+		{
 			m_focus->setState(StateDefault);
+			m_focus = NULL;
+		}
 
-		m_focus = widget;
-		widget->setState(StateFocused);
-		return true;
+		if (widget->isSelectable())
+		{
+			m_focus = widget;
+			widget->setState(StateFocused);
+			return true;
+		}
 	}
 	return false;
 }
@@ -343,6 +363,7 @@ bool Layout::focusPreviousWidget()
 	m_focus = NULL;
 	return false;
 }
+
 
 bool Layout::focusNextWidget()
 {

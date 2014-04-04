@@ -19,7 +19,7 @@ How to use the editor?
 ----------------------
 
 - Mouse wheel up/down: change current brick type
-- Left click: put brick
+- Left click: add brick
 - Right click: remove brick
 - G: show/hide the grid
 
@@ -35,5 +35,6 @@ How to compile from source?
 Credits
 -------
 
-Sounds by Cabeeno Rossley: www.freesound.org/people/Cabeeno%20Rossley/
-Music by Joshua Hardin: www.joshuahardin.com
+- Sounds by Cabeeno Rossley: www.freesound.org/people/Cabeeno%20Rossley/
+- Music by Joshua Hardin: www.joshuahardin.com
+

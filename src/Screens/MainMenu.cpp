@@ -7,6 +7,7 @@
 #define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - " APP_URL)
 
 MainMenu::MainMenu():
+	m_background(Resources::getTexture("background.png")),
 	m_about_text(gui::Theme::getFont()),
 	m_menu(Game::getInstance().getWindow())
 {
@@ -15,6 +16,7 @@ MainMenu::MainMenu():
 
 	m_about_text.setString(ABOUT_TEXT);
 	m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
+	m_about_text.setColor(gui::Theme::BORDER_COLOR);
 
 	m_menu.setPosition(117, 100);
 	m_menu.addButton("New game", 1);
@@ -63,7 +65,7 @@ void MainMenu::update(float frametime)
 
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.clear({0x16, 0x1e, 0x26});
+	target.draw(m_background, states);
 	target.draw(m_title, states);
 	target.draw(m_about_text, states);
 	m_menu.show();

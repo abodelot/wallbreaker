@@ -3,7 +3,7 @@
 #include "Core/Resources.hpp"
 #include "Gui/Theme.hpp"
 
-#define ROW_WIDTH 96
+#define ROW_WIDTH 64
 
 HUD::HUD():
 	m_life_count(0),
@@ -11,21 +11,21 @@ HUD::HUD():
 {
 	m_render_texture.create(ROW_WIDTH, APP_HEIGHT);
 
-	m_life_label.setString("Lifes:");
+	m_life_label.setString("Lifes");
 	m_life_label.setPosition((ROW_WIDTH - m_life_label.getSize().x) / 2, 20);
 	m_life_icon.setTexture(Resources::getTexture("hud-life.png"));
 
 	m_level.setPosition(0, 60);
-	m_level.setLabel("Level:");
+	m_level.setLabel("Level");
 
 	m_bricks.setPosition(0, 100);
-	m_bricks.setLabel("Bricks:");
+	m_bricks.setLabel("Bricks");
 
 	m_score.setPosition(0, 140);
-	m_score.setLabel("Score:");
+	m_score.setLabel("Score");
 
 	m_highscore.setPosition(0, 180);
-	m_highscore.setLabel("Highscore:");
+	m_highscore.setLabel("High\nscore");
 }
 
 

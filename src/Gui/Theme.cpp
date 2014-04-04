@@ -2,10 +2,10 @@
 
 using namespace gui;
 
-sf::Color Theme::BG_COLOR         = sf::Color::Blue;
-sf::Color Theme::BG_COLOR_HOVER   = sf::Color(64, 128, 255);
-sf::Color Theme::BG_COLOR_FOCUS   = sf::Color(0, 0, 128);
-sf::Color Theme::BORDER_COLOR     = sf::Color::Cyan;
+sf::Color Theme::BG_COLOR         = sf::Color(0x33, 0x33, 0x80);
+sf::Color Theme::BG_COLOR_HOVER   = sf::Color(0x57, 0x30, 0x62);
+sf::Color Theme::BG_COLOR_FOCUS   = sf::Color(0x1e, 0x1e, 0x48);
+sf::Color Theme::BORDER_COLOR     = sf::Color(0xab, 0x5f, 0x41);
 sf::Color Theme::TEXT_COLOR       = sf::Color::White;
 
 float     Theme::BORDER_SIZE      = 1.f;

@@ -25,10 +25,11 @@ private:
 	 */
 	void addResolution(const sf::Vector2u& res);
 
+	sf::Sprite m_background;
 	// Gui elements
-	gui::Menu      m_menu;
-	gui::CheckBox* m_ck_music;
-	gui::CheckBox* m_ck_sound;
+	gui::Menu                      m_menu;
+	gui::CheckBox*                 m_ck_music;
+	gui::CheckBox*                 m_ck_sound;
 	gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
 };
 

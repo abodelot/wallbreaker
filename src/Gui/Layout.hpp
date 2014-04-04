@@ -42,13 +42,14 @@ protected:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	// Callbacks ---------------------------------------------------------------
-	void onMouseMoved(float x, float y);
-	void onMousePressed(float x, float y);
-	void onMouseReleased(float x, float y);
-	void onMouseWheelMoved(int delta);
-	void onKeyPressed(sf::Keyboard::Key key);
-	void onKeyReleased(sf::Keyboard::Key key);
-	void onTextEntered(sf::Uint32 unicode);
+	void onStateChanged(State state) override;
+	void onMouseMoved(float x, float y) override;
+	void onMousePressed(float x, float y) override;
+	void onMouseReleased(float x, float y) override;
+	void onMouseWheelMoved(int delta) override;
+	void onKeyPressed(sf::Keyboard::Key key) override;
+	void onKeyReleased(sf::Keyboard::Key key) override;
+	void onTextEntered(sf::Uint32 unicode) override;
 
 	Layout* toLayout() override { return this; }
 	bool focusNextWidget();

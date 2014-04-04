@@ -20,6 +20,7 @@ public:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+	sf::Sprite m_background;
 	sf::Sprite m_title;
 	BitmapText m_about_text;
 	gui::Menu  m_menu;

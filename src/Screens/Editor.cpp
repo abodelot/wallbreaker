@@ -9,6 +9,7 @@
 
 
 Editor::Editor():
+	m_background(Resources::getTexture("background.png")),
 	m_level(LevelManager::getInstance()),
 	m_show_grid(true),
 	m_menu(Game::getInstance().getWindow())
@@ -180,7 +181,7 @@ void Editor::onFocus()
 
 void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.clear({0x16, 0x1e, 0x26});
+	target.draw(m_background);
 	target.draw(m_borders_sprite);
 	target.draw(m_level_sprite);
 	target.draw(m_cursor);

@@ -2,11 +2,13 @@
 #include "Core/Config.hpp"
 #include "Core/Game.hpp"
 #include "Core/SoundSystem.hpp"
+#include "Core/Resources.hpp"
 #include "Gui/Button.hpp"
 #include "Gui/Label.hpp"
 
 
 OptionsMenu::OptionsMenu():
+	m_background(Resources::getTexture("background.png")),
 	m_menu(Game::getInstance().getWindow())
 {
 	m_menu.setPosition(40, 40);
@@ -24,6 +26,7 @@ OptionsMenu::OptionsMenu():
 	addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
 	addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
 
+	// Add widgets in form
 	gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
 	form->addRow("Music:", m_ck_music, 1);
 	form->addRow("Sound:", m_ck_sound, 2);
@@ -62,7 +65,7 @@ void OptionsMenu::onEvent(const sf::Event& event)
 
 void OptionsMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.clear({0x16, 0x1e, 0x26});
+	target.draw(m_background, states);
 	m_menu.show();
 }
 

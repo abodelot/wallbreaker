@@ -87,12 +87,12 @@ protected:
 	/**
 	 * Set the widget's container (parent)
 	 */
-	void setParent(Widget* parent);
+	void setParent(Layout* parent);
 
 	virtual Layout* toLayout() { return NULL; }
 
 private:
-	Widget*      m_parent;
+	Layout*      m_parent;
 	Widget*      m_previous;
 	Widget*      m_next;
 

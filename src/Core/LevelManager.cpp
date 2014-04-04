@@ -186,24 +186,11 @@ int LevelManager::load()
 
 void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	// Draw background gradient
-	sf::Vertex background[4];
-	background[1].position.x = target.getSize().x;
-	background[2].position.x = target.getSize().x;
-	background[2].position.y = target.getSize().y;
-	background[3].position.y = target.getSize().y;
-
-	background[0].color = {0x1a, 0x35, 0x49, 128};
-	background[1].color = {0x1a, 0x35, 0x49, 128};
-	background[2].color = {0x2c, 0x80, 0xb8, 128};
-	background[3].color = {0x2c, 0x80, 0xb8, 128};
-
-	target.draw(background, 4, sf::Quads, states);
-
+	target.clear(sf::Color::Transparent);
 	// Cast borders shadow
 	sf::Vertex shadow[4];
 	for (int i = 0; i < 4; ++i)
-		shadow[i].color = sf::Color(0, 0, 0, 128);
+		shadow[i].color = sf::Color::Black;
 
 	// Vertical top border
 	shadow[1].position.x = BORDER_SIZE / 2;

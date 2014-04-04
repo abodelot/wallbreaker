@@ -98,7 +98,7 @@ void Widget::triggerCallback(const Widget* triggered)
 }
 
 
-void Widget::setParent(Widget* parent)
+void Widget::setParent(Layout* parent)
 {
 	m_parent = parent;
 }

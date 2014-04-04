@@ -7,10 +7,11 @@
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
 #include "Gui/Theme.hpp"
+#include "Gui/Label.hpp"
 #include "Utils/Math.hpp"
 
 #define MAX_PLAYER_LIVES 5
-#define X_OFFSET 0
+#define X_OFFSET 32
 
 Wallbreaker::Wallbreaker():
 	m_width(LevelManager::NB_BRICK_COLS * Brick::WIDTH),
@@ -36,6 +37,7 @@ Wallbreaker::Wallbreaker():
 	m_hud_sprite.setTexture(m_hud.getTexture());
 	m_hud_sprite.setPosition(m_width + LevelManager::BORDER_SIZE * 2 + X_OFFSET, 0);
 
+	m_background_sprite.setTexture(Resources::getTexture("background.png"));
 	m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 	m_borders_sprite.setPosition(X_OFFSET, 0);
 	// Player paddle positioned at the bottom-center
@@ -205,20 +207,21 @@ void Wallbreaker::update(float frametime)
 		}
 		m_particles.update(frametime);
 	}
-	updateTexture();
+	updateLevelTexture();
 }
 
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.clear({0x16, 0x1e, 0x26});
+	target.draw(m_background_sprite, states);
 	target.draw(m_borders_sprite, states);
 	target.draw(m_level_sprite, states);
 	target.draw(m_hud_sprite, states);
 
 	if (m_status != PLAYING)
 	{
-		sf::RectangleShape overlay({APP_WIDTH, APP_HEIGHT});
+		sf::RectangleShape overlay({m_level_texture.getSize().x, m_level_texture.getSize().y});
+		overlay.setPosition(m_level_sprite.getPosition() - m_level_sprite.getOrigin());
 		overlay.setFillColor({0, 0, 0, 128});
 		target.draw(overlay);
 		target.draw(m_info_text);
@@ -258,7 +261,7 @@ void Wallbreaker::resetGame(size_t level)
 }
 
 
-void Wallbreaker::updateTexture()
+void Wallbreaker::updateLevelTexture()
 {
 	// Draw bricks
 	m_level_texture.draw(m_level);

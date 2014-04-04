@@ -21,6 +21,7 @@ Label::Label(const sf::String& string):
 void Label::setText(const sf::String& string)
 {
 	m_text.setString(string);
+	m_text.setColor(Theme::TEXT_COLOR);
 	m_text.setPosition(Theme::PADDING, Theme::PADDING);
 	setSize({m_text.getSize().x + Theme::PADDING * 2, m_text.getSize().y + Theme::PADDING * 2});
 }
