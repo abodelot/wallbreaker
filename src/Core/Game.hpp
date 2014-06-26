@@ -3,7 +3,6 @@
 
 #include <string>
 #include <map>
-#include <stack>
 #include <SFML/Graphics.hpp>
 
 class Screen;
@@ -42,12 +41,12 @@ public:
 	/**
 	 * Set the next screen to be displayed
 	 */
-	void nextScreen(const std::string& id);
+	void setCurrentScreen(const std::string& id);
 
 	/**
-	 * Go back to the previous displayed screen
+	 * Restore a previous screen as the new current screen
 	 */
-	void previousScreen();
+	void restorePreviousScreen();
 
 	/**
 	 * Set application window dimension
@@ -76,7 +75,6 @@ private:
 
 	// Screen management
 	std::map<std::string, Screen*> m_screens;
-	std::stack<Screen*>            m_screens_history;
 	Screen*                        m_current_screen;
 };
 

@@ -4,7 +4,7 @@
 #include "Core/Config.hpp"
 #include "Gui/Theme.hpp"
 
-#define ABOUT_TEXT (APP_TITLE " v" APP_VERSION " - " APP_URL)
+#define ABOUT_TEXT (APP_TITLE " " APP_VERSION " - " APP_URL)
 
 MainMenu::MainMenu():
 	m_background(Resources::getTexture("background.png")),
@@ -31,13 +31,13 @@ void MainMenu::onEvent(const sf::Event& event)
 	switch (m_menu.onEvent(event))
 	{
 		case 1:
-			Game::getInstance().nextScreen("Wallbreaker");
+			Game::getInstance().setCurrentScreen("Wallbreaker");
 			break;
 		case 2:
-			Game::getInstance().nextScreen("Editor");
+			Game::getInstance().setCurrentScreen("Editor");
 			break;
 		case 3:
-			Game::getInstance().nextScreen("OptionsMenu");
+			Game::getInstance().setCurrentScreen("OptionsMenu");
 			break;
 		case 4:
 			Game::getInstance().quit();

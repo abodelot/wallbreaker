@@ -132,36 +132,36 @@ void Game::addScreen(const std::string& id, Screen* screen)
 }
 
 
-void Game::nextScreen(const std::string& id)
+void Game::setCurrentScreen(const std::string& id)
 {
 	auto it = m_screens.find(id);
 	if (it != m_screens.end())
 	{
-		if (m_current_screen != NULL)
-			m_screens_history.push(m_current_screen);
+		Screen* previous = m_current_screen;
 		m_current_screen = it->second;
+		m_current_screen->setPrevious(previous);
 		m_current_screen->onFocus();
 	}
 	else
 	{
-		std::cerr << "[Game] Screen " << id << " is not defined";
+		std::cerr << "[Game] Screen '" << id << "' is not registered" << std::endl;
 	}
 }
 
 
-void Game::previousScreen()
+void Game::restorePreviousScreen()
 {
-	if (!m_screens_history.empty())
+	if (m_current_screen && m_current_screen->getPrevious())
 	{
-		m_current_screen = m_screens_history.top();
+		m_current_screen = m_current_screen->getPrevious();
 		m_current_screen->onFocus();
-		m_screens_history.pop();
 	}
 	else
 	{
 		std::cerr << "[Game] No previous screen available" << std::endl;
 	}
 }
+
 
 void Game::setResolution(size_t width, size_t height)
 {

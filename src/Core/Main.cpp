@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	game.addScreen("OptionsMenu", new OptionsMenu);
 	game.addScreen("Wallbreaker", new Wallbreaker);
 
-	game.nextScreen("MainMenu");
+	game.setCurrentScreen("MainMenu");
 	game.run();
 	return 0;
 }

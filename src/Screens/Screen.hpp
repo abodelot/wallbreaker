@@ -9,13 +9,28 @@
 class Screen: public sf::Drawable, sf::NonCopyable
 {
 public:
+	Screen();
+
 	virtual ~Screen() {}
 
-	virtual void onEvent(const sf::Event& event) {}
+	/**
+	 * Feed an event to the screen
+	 */
+	virtual void onEvent(const sf::Event&) {}
 
+	/**
+	 * Notify the screen it is the current one
+	 */
 	virtual void onFocus() {}
 
 	virtual void update(float frametime) {}
+
+	void setPrevious(Screen* screen);
+
+	Screen* getPrevious() const;
+
+private:
+	Screen* m_previous;
 };
 
 #endif // SCREEN_HPP

@@ -46,14 +46,14 @@ Wallbreaker::Wallbreaker():
 
 	// Build 'pause' menu
 	m_pause_menu.setPosition(LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
-	m_pause_menu.addButton("Resume",    1);
-	m_pause_menu.addButton("Options",   2);
-	m_pause_menu.addButton("Main menu", 3);
+	m_pause_menu.addButton("Resume",  1);
+	m_pause_menu.addButton("Options", 2);
+	m_pause_menu.addButton("Quit",    3);
 
 	// Build 'game over' menu
 	m_game_over_menu.setPosition(m_pause_menu.getPosition());
-	m_game_over_menu.addButton("Continue",  1);
-	m_game_over_menu.addButton("Main menu", 2);
+	m_game_over_menu.addButton("Try again", 1);
+	m_game_over_menu.addButton("Quit",      2);
 
 	resetGame();
 }
@@ -146,11 +146,11 @@ void Wallbreaker::onEvent(const sf::Event& event)
 					setStatus(PLAYING);
 					break;
 				case 2: // Go to options menu
-					Game::getInstance().nextScreen("OptionsMenu");
+					Game::getInstance().setCurrentScreen("OptionsMenu");
 					break;
 				case 3: // Clear game and back to main menu
 					resetGame();
-					Game::getInstance().previousScreen();
+					Game::getInstance().restorePreviousScreen();
 					break;
 				default:
 					// Resume
@@ -173,7 +173,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
 					break;
 				case 2: // Clear game and back to main menu
 					resetGame();
-					Game::getInstance().previousScreen();
+					Game::getInstance().restorePreviousScreen();
 					break;
 			}
 			break;

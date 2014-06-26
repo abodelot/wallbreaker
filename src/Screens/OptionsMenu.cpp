@@ -56,7 +56,7 @@ void OptionsMenu::onEvent(const sf::Event& event)
 			break;
 		}
 		case 4: // Back
-			Game::getInstance().previousScreen();
+			Game::getInstance().restorePreviousScreen();
 			break;
 
 	}

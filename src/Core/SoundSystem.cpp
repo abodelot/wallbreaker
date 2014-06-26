@@ -23,9 +23,13 @@ static inline void clamp(T& value, T min, T max)
 bool SoundSystem::openMusicFromFile(const std::string& path)
 {
 	stopMusic();
-	m_music.openFromFile(path);
-	m_music.setLoop(true);
-	m_music.setVolume(m_music_volume);
+	if (m_music.openFromFile(path))
+	{
+		m_music.setLoop(true);
+		m_music.setVolume(m_music_volume);
+		return true;
+	}
+	return false;
 }
 
 
