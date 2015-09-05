@@ -1,11 +1,11 @@
 # Executable
-bin/wallbreaker
+wallbreaker
 
-# Screenshots
-bin/screenshots/*
+# Screenshots directory
+screenshots/
 
 # Settings file
-bin/settings.ini
+settings.ini
 
 # Code::Blocks non-mandatory files
 wallbreaker.layout
