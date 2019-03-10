@@ -7,25 +7,25 @@ namespace gui
 {
 
 /**
- * A X-shapped crosss
+ * An X-shapped crosss
  */
 class Cross: public sf::Drawable
 {
 public:
-	Cross();
+    Cross();
 
-	void setPosition(float x, float y);
-	void move(float dx, float dy);
+    void setPosition(float x, float y);
+    void move(float dx, float dy);
 
-	void setSize(float size);
-	sf::Vector2f getSize() const;
-	void setColor(const sf::Color& color);
+    void setSize(float size);
+    sf::Vector2f getSize() const;
+    void setColor(const sf::Color& color);
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void updateGeometry(float x, float y, float size);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void updateGeometry(float x, float y, float size);
 
-	sf::Vertex m_vertices[8];
+    sf::Vertex m_vertices[8];
 };
 
 }

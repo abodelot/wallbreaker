@@ -11,106 +11,105 @@
 
 
 Paddle::Paddle():
-	m_sticky(false)
+    m_sticky(false)
 {
-	setTexture(Resources::getTexture("paddles.png"));
-	setType(MEDIUM);
+    setTexture(Resources::getTexture("paddles.png"));
+    setType(MEDIUM);
 }
 
 
-void Paddle::onUpdate(float frametime)
+void Paddle::onUpdate(float)
 {
-	// Paddle follows the mouse cursor
-	const sf::RenderWindow& window = Game::getInstance().getWindow();
-	int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
-	setPosition(x - getWidth() / 2, getPosition().y);
+    // Paddle follows the mouse cursor
+    const sf::RenderWindow& window = Game::getInstance().getWindow();
+    int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    setPosition(x - getWidth() / 2, getPosition().y);
 }
 
 
 void Paddle::grow()
 {
-	if (m_type == SMALL)
-		setType(MEDIUM);
-	else
-		setType(LARGE);
+    if (m_type == SMALL)
+        setType(MEDIUM);
+    else
+        setType(LARGE);
 }
 
 
 void Paddle::shrink()
 {
-	if (m_type == LARGE)
-		setType(MEDIUM);
-	else
-		setType(SMALL);
+    if (m_type == LARGE)
+        setType(MEDIUM);
+    else
+        setType(SMALL);
 }
 
 
 void Paddle::reset()
 {
-	setType(MEDIUM);
-	m_sticky = false;
+    setType(MEDIUM);
+    m_sticky = false;
 }
 
 
 void Paddle::activeSticky()
 {
-	m_sticky = true;
-	if (m_type == LASER)
-		setType(MEDIUM);
+    m_sticky = true;
+    if (m_type == LASER)
+        setType(MEDIUM);
 }
 
 
 bool Paddle::isSticky() const
 {
-	return m_sticky;
+    return m_sticky;
 }
 
 
 void Paddle::activeLaser()
 {
-	setType(LASER);
-	if (m_sticky)
-	{
-		m_sticky = false;
-		getManager()->applyOnEachBall(&Ball::unstick);
-	}
+    setType(LASER);
+    if (m_sticky)
+    {
+        m_sticky = false;
+        getManager()->applyOnEachBall(&Ball::unstick);
+    }
 }
 
 
 bool Paddle::hasLaser() const
 {
-	return m_type == LASER;
+    return m_type == LASER;
 }
 
 
 LaserBeam* Paddle::shoot() const
 {
-	LaserBeam* laserbeam = new LaserBeam();
-	laserbeam->setPosition(getX() + (getWidth() - laserbeam->getWidth()) / 2, getY());
-	SoundSystem::playSound("laser.ogg", math::rand(1.f, 2.f));
-	return laserbeam;
+    LaserBeam* laserbeam = new LaserBeam();
+    laserbeam->setPosition(getX() + (getWidth() - laserbeam->getWidth()) / 2, getY());
+    SoundSystem::playSound("laser.ogg", math::rand(1.f, 2.f));
+    return laserbeam;
 }
 
 
 void Paddle::setType(Type type)
 {
-	sf::IntRect subrect;
-	switch (type)
-	{
-		case SMALL:
-			subrect = sf::IntRect(0, 0, 24, 16);
-			break;
-		case MEDIUM:
-			subrect = sf::IntRect(0, 16, 32, 16);
-			break;
-		case LARGE:
-			subrect = sf::IntRect(0, 32, 48, 16);
-			break;
-		case LASER:
-			subrect = sf::IntRect(0, 48, 32, 16);
-			break;
-	}
-	setTextureRect(subrect);
-	m_type = type;
+    sf::IntRect subrect;
+    switch (type)
+    {
+        case SMALL:
+            subrect = sf::IntRect(0, 0, 24, 16);
+            break;
+        case MEDIUM:
+            subrect = sf::IntRect(0, 16, 32, 16);
+            break;
+        case LARGE:
+            subrect = sf::IntRect(0, 32, 48, 16);
+            break;
+        case LASER:
+            subrect = sf::IntRect(0, 48, 32, 16);
+            break;
+    }
+    setTextureRect(subrect);
+    m_type = type;
 }
-

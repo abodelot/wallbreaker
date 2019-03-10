@@ -15,23 +15,23 @@ namespace gui
 class CheckBox: public Widget
 {
 public:
-	CheckBox(bool checked = false);
+    CheckBox(bool checked = false);
 
-	bool isChecked() const;
+    bool isChecked() const;
 
-	void check(bool checked);
+    void check(bool checked);
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onStateChanged(State state);
-	void onMouseReleased(float x, float y);
-	void onKeyPressed(sf::Keyboard::Key key);
+    void onStateChanged(State state) override;
+    void onMouseReleased(const sf::Vector2f& pos) override;
+    void onKeyPressed(sf::Keyboard::Key key) override;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	Box<Cross> m_box;
-	bool       m_checked;
+    Box<Cross> m_box;
+    bool       m_checked;
 };
 
 }

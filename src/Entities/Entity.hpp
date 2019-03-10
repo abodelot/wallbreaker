@@ -14,50 +14,50 @@ class Wallbreaker;
 class Entity: public sf::Sprite
 {
 public:
-	Entity();
-	virtual ~Entity();
+    Entity();
+    virtual ~Entity();
 
-	void setManager(Wallbreaker* parent);
-	Wallbreaker* getManager();
+    void setManager(Wallbreaker* parent);
+    Wallbreaker* getManager();
 
-	bool isAlive() const;
+    bool isAlive() const;
 
-	void kill();
+    void kill();
 
-	bool collidesWith(const Entity& other) const;
+    bool collidesWith(const Entity& other) const;
 
-	// casts -------------------------------------------------------------------
+    // casts -------------------------------------------------------------------
 
-	virtual Ball* toBall();
+    virtual Ball* toBall();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	virtual void onInit() {};
-	virtual void onUpdate(float frametime) = 0;
+    virtual void onInit() {};
+    virtual void onUpdate(float frametime) = 0;
 
-	virtual void onBrickHit(Brick& brick, const sf::Vector2f& previous_pos) {};
-	virtual void onPaddleHit(Paddle& paddle) {}
+    virtual void onBrickHit(Brick&, const sf::Vector2f&) {};
+    virtual void onPaddleHit(Paddle&) {}
 
-	virtual void onCeilHit() {}
-	virtual void onWallHit() {}
+    virtual void onCeilHit() {}
+    virtual void onWallHit() {}
 
-	// position helpers --------------------------------------------------------
+    // position helpers --------------------------------------------------------
 
-	inline float getX() const { return getPosition().x; }
-	inline float getY() const { return getPosition().y; }
-	inline void setX(float x) { setPosition(x, getPosition().y); }
-	inline void setY(float y) { setPosition(getPosition().x, y); }
-	sf::Vector2f getCenter() const;
+    inline float getX() const { return getPosition().x; }
+    inline float getY() const { return getPosition().y; }
+    inline void setX(float x) { setPosition(x, getPosition().y); }
+    inline void setY(float y) { setPosition(getPosition().x, y); }
+    sf::Vector2f getCenter() const;
 
-	// size helpers ------------------------------------------------------------
+    // size helpers ------------------------------------------------------------
 
-	float getWidth() const;
-	float getHeight() const;
-	sf::IntRect getCollisionRect() const;
+    float getWidth() const;
+    float getHeight() const;
+    sf::IntRect getCollisionRect() const;
 
 private:
-	Wallbreaker* m_parent;
-	bool         m_alive;
+    Wallbreaker* m_parent;
+    bool         m_alive;
 };
 
 #endif // ENTITY_HPP
