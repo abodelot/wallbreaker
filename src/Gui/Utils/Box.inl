@@ -8,8 +8,9 @@ template <class T>
 Box<T>::Box():
     m_pressed(false)
 {
-    setBodyColor(Theme::BG_COLOR);
-    setBorderColor(Theme::BORDER_COLOR);
+    setBodyColor(Theme::backgroundColor);
+    setTopLeftBorderColor(Theme::topBorderColor);
+    setBottomRightBorderColor(Theme::bottomBorderColor);
 }
 
 
@@ -18,8 +19,9 @@ Box<T>::Box(const T& item):
     m_item(item),
     m_pressed(false)
 {
-    setBodyColor(Theme::BG_COLOR);
-    setBorderColor(Theme::BORDER_COLOR);
+    setBodyColor(Theme::backgroundColor);
+    setTopLeftBorderColor(Theme::topBorderColor);
+    setBottomRightBorderColor(Theme::bottomBorderColor);
 }
 
 // Geometry --------------------------------------------------------------------
@@ -34,8 +36,13 @@ const sf::Vector2f& Box<T>::getPosition() const
 template <class T>
 void Box<T>::move(float dx, float dy)
 {
-    for (size_t i = 0; i < 8; ++i)
-        m_background[i].position += sf::Vector2f(dx, dy);
+    const sf::Vector2f delta(dx, dy);
+    for (size_t i = 0; i < 4; ++i)
+    {
+        m_background[i].position += delta;
+        m_topLeftBorder[i].position += delta;
+        m_bottomRightBorder[i].position += delta;
+    }
 
     m_item.move(dx, dy);
 }
@@ -45,19 +52,25 @@ template <class T>
 void Box<T>::setSize(float width, float height)
 {
     // Borders
-    m_background[0].position = sf::Vector2f(0,     0);
-    m_background[1].position = sf::Vector2f(width, 0);
-    m_background[2].position = sf::Vector2f(width, height);
-    m_background[3].position = sf::Vector2f(0,     height);
+    m_topLeftBorder[0].position = {0, 0};
+    m_topLeftBorder[1].position = {width, 0};
+    m_topLeftBorder[2].position = {width, height};
+    m_topLeftBorder[3].position = {0, height};
+
+    m_bottomRightBorder[0].position = {Theme::borderSize, Theme::borderSize};
+    m_bottomRightBorder[1].position = {width, Theme::borderSize};
+    m_bottomRightBorder[2].position = {width, height};
+    m_bottomRightBorder[3].position = {Theme::borderSize, height};
 
     // Body
-    float border = Theme::BORDER_SIZE;
-    m_background[4].position = sf::Vector2f(border,         border);
-    m_background[5].position = sf::Vector2f(width - border, border);
-    m_background[6].position = sf::Vector2f(width - border, height - border);
-    m_background[7].position = sf::Vector2f(border,         height - border);
+    const float innerWidth = width - Theme::borderSize;
+    const float innerHeight = height - Theme::borderSize;
+    m_background[0].position = {Theme::borderSize, Theme::borderSize};
+    m_background[1].position = {innerWidth, Theme::borderSize};
+    m_background[2].position = {innerWidth, innerHeight};
+    m_background[3].position = {Theme::borderSize, innerHeight};
 
-    adjustItem();
+    centerItem();
 }
 
 
@@ -65,17 +78,19 @@ template <class T>
 sf::Vector2f Box<T>::getSize() const
 {
     // Bottom right corner - top left corner
-    return m_background[2].position - m_background[0].position;
+    return m_topLeftBorder[2].position - m_topLeftBorder[0].position;
 }
 
 
 template <class T>
-void Box<T>::adjustItem()
+void Box<T>::centerItem()
 {
     sf::Vector2f size = getSize();
     // Center item
-    m_item.setPosition(m_background[0].position.x + (size.x - m_item.getSize().x) / 2,
-                       m_background[0].position.y + (size.y - m_item.getSize().y) / 2);
+    m_item.setPosition(
+        m_topLeftBorder[0].position.x + (size.x - m_item.getSize().x) / 2,
+        m_topLeftBorder[0].position.y + (size.y - m_item.getSize().y) / 2
+    );
 
     // If item is adjusted while pressed, re-apply the 1px vertical offset
     if (m_pressed)
@@ -86,10 +101,10 @@ void Box<T>::adjustItem()
 template <class T>
 bool Box<T>::containsPoint(const sf::Vector2f& pos) const
 {
-    return pos.x >= m_background[0].position.x  // Left
-        && pos.x <= m_background[2].position.x  // Right
-        && pos.y >= m_background[0].position.y  // Top
-        && pos.y <= m_background[2].position.y; // Bottom
+    return pos.x >= m_topLeftBorder[0].position.x  // Left
+        && pos.x <= m_topLeftBorder[2].position.x  // Right
+        && pos.y >= m_topLeftBorder[0].position.y  // Top
+        && pos.y <= m_topLeftBorder[2].position.y; // Bottom
 }
 
 // Visual properties -----------------------------------------------------------
@@ -99,7 +114,7 @@ void Box<T>::prelight()
 {
     if (!m_pressed)
     {
-        setBodyColor(Theme::BG_COLOR_HOVER);
+        setBodyColor(Theme::hoverColor);
     }
 }
 
@@ -111,7 +126,7 @@ void Box<T>::press()
     {
         m_item.move(0, 1);
         m_pressed = true;
-        setBodyColor(Theme::BG_COLOR_FOCUS);
+        setBodyColor(Theme::focusColor);
     }
 }
 
@@ -137,11 +152,11 @@ void Box<T>::applyState(State state)
             break;
         case StateFocused:
             release();
-            setBodyColor(Theme::BG_COLOR_FOCUS);
+            setBodyColor(Theme::focusColor);
             break;
         case StateDefault:
             release();
-            setBodyColor(Theme::BG_COLOR);
+            setBodyColor(Theme::backgroundColor);
             break;
         default:
             break;
@@ -152,7 +167,9 @@ void Box<T>::applyState(State state)
 template <class T>
 void Box<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(m_background, 8, sf::Quads, states);
+    target.draw(m_topLeftBorder, 4, sf::Quads, states);
+    target.draw(m_bottomRightBorder, 4, sf::Quads, states);
+    target.draw(m_background, 4, sf::Quads, states);
     target.draw(m_item, states);
 }
 
@@ -160,16 +177,30 @@ void Box<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 template <class T>
 void Box<T>::setBodyColor(const sf::Color& color)
 {
-    for (size_t i = 4; i < 8; ++i)
+    for (size_t i = 0; i < 4; ++i)
+    {
         m_background[i].color = color;
+    }
 }
 
 
 template <class T>
-void Box<T>::setBorderColor(const sf::Color& color)
+void Box<T>::setTopLeftBorderColor(const sf::Color& color)
 {
     for (size_t i = 0; i < 4; ++i)
-        m_background[i].color = color;
+    {
+        m_topLeftBorder[i].color = color;
+    }
+}
+
+
+template <class T>
+void Box<T>::setBottomRightBorderColor(const sf::Color& color)
+{
+    for (size_t i = 0; i < 4; ++i)
+    {
+        m_bottomRightBorder[i].color = color;
+    }
 }
 
 }

@@ -48,8 +48,7 @@ void Game::init(const std::string& path)
     std::cout << "* loading levels from " << APP_LEVEL_FILE << std::endl;
     LevelManager::getInstance().openFromFile(m_app_dir + APP_LEVEL_FILE);
 
-    // Init GUI module
-    gui::Theme::loadFont(m_app_dir + "/resources/images/font.png");
+    initGuiTheme();
 
     SoundSystem::openMusicFromFile(m_app_dir + "/resources/musics/evolution_sphere.ogg");
 
@@ -107,6 +106,21 @@ void Game::run()
         m_window.draw(*m_current_screen);
         m_window.display();
     }
+}
+
+
+void Game::initGuiTheme()
+{
+    // Load assets for GUI
+    gui::Theme::font.loadFromFile(m_app_dir + "/resources/images/font.png");
+    gui::Theme::clickSound.setBuffer(Resources::getSoundBuffer("click.ogg"));
+
+    gui::Theme::textColor = gui::hexToColor("#d9d9f5");
+    gui::Theme::backgroundColor = gui::hexToColor("#573062");
+    gui::Theme::hoverColor = gui::modulateColor(gui::Theme::backgroundColor, 1.3);
+    gui::Theme::focusColor = gui::modulateColor(gui::Theme::backgroundColor, 0.7);
+    gui::Theme::topBorderColor = gui::hexToColor("#bd37a0");
+    gui::Theme::bottomBorderColor = gui::modulateColor(gui::Theme::topBorderColor, 0.7);
 }
 
 

@@ -68,6 +68,8 @@ private:
     Game(const Game&);
     ~Game();
 
+    void initGuiTheme();
+
     sf::RenderWindow m_window;
     bool             m_running;
     std::string      m_app_dir;

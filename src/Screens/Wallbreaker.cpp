@@ -1,6 +1,8 @@
 #include "Wallbreaker.hpp"
 #include "Core/Game.hpp"
 #include "Core/Effect.hpp"
+#include "Core/LevelManager.hpp"
+#include "Core/ParticleSystem.hpp"
 #include "Core/Resources.hpp"
 #include "Core/Settings.hpp"
 #include "Core/SoundSystem.hpp"
@@ -17,43 +19,48 @@ Wallbreaker::Wallbreaker():
     m_width(LevelManager::NB_BRICK_COLS * Brick::WIDTH),
     m_height(LevelManager::NB_BRICK_LINES * Brick::HEIGHT),
     m_level(LevelManager::getInstance()),
-    m_remaining_bricks(0),
+    m_remainingBricks(0),
     m_particles(ParticleSystem::getInstance()),
-    m_info_text(gui::Theme::getFont()),
+    m_infoText(gui::Theme::font),
     m_score(0),
     m_status(READY),
-    m_player_lives(0),
-    m_pause_menu(Game::getInstance().getWindow()),
-    m_game_over_menu(Game::getInstance().getWindow())
+    m_playerLives(0),
+    m_pauseMenu(Game::getInstance().getWindow()),
+    m_gameOverMenu(Game::getInstance().getWindow())
 {
     // Initialize render texture
-    m_level_texture.create(m_width, m_height);
+    m_levelTexture.create(m_width, m_height);
 
     // Sprites used for rendering the game area and the HUD
-    m_level_sprite.setTexture(m_level_texture.getTexture());
-    m_level_sprite.setOrigin(m_width / 2, m_height / 2);
-    m_level_sprite.setPosition(m_width / 2 + LevelManager::BORDER_SIZE + X_OFFSET, m_height / 2 + LevelManager::BORDER_SIZE);
+    m_levelSprite.setTexture(m_levelTexture.getTexture());
+    m_levelSprite.setOrigin(m_width / 2, m_height / 2);
+    m_levelSprite.setPosition(
+        m_width / 2 + LevelManager::BORDER_SIZE + X_OFFSET,
+        m_height / 2 + LevelManager::BORDER_SIZE
+    );
 
-    m_hud_sprite.setTexture(m_hud.getTexture());
-    m_hud_sprite.setPosition(m_width + LevelManager::BORDER_SIZE * 2 + X_OFFSET, 0);
+    m_hudSprite.setTexture(m_hud.getTexture());
+    m_hudSprite.setPosition(m_width + LevelManager::BORDER_SIZE * 2 + X_OFFSET, 0);
 
-    m_background_sprite.setTexture(Resources::getTexture("background.png"));
-    m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
-    m_borders_sprite.setPosition(X_OFFSET, 0);
+    m_backgroundSprite.setTexture(Resources::getTexture("background.png"));
+    m_bordersSprite.setTexture(Resources::getTexture("borders.png"));
+    m_bordersSprite.setPosition(X_OFFSET, 0);
     // Player paddle positioned at the bottom-center
     m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
     m_paddle.setManager(this);
 
     // Build 'pause' menu
-    m_pause_menu.setPosition(LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::WIDGET_WIDTH) / 2, 120);
-    m_pause_menu.addButton("Resume",  1);
-    m_pause_menu.addButton("Options", 2);
-    m_pause_menu.addButton("Quit",    3);
+    m_pauseMenu.setPosition(
+        LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::widgetWidth) / 2, 120
+    );
+    m_pauseMenu.addButton("Resume",  1);
+    m_pauseMenu.addButton("Options", 2);
+    m_pauseMenu.addButton("Quit",    3);
 
     // Build 'game over' menu
-    m_game_over_menu.setPosition(m_pause_menu.getPosition());
-    m_game_over_menu.addButton("Try again", 1);
-    m_game_over_menu.addButton("Quit",      2);
+    m_gameOverMenu.setPosition(m_pauseMenu.getPosition());
+    m_gameOverMenu.addButton("Try again", 1);
+    m_gameOverMenu.addButton("Quit",      2);
 
     resetGame();
 }
@@ -89,8 +96,8 @@ void Wallbreaker::onEvent(const sf::Event& event)
                             break;
 #ifdef WALLBREAKER_DEBUG
                         case sf::Keyboard::R: // Reload level
-                            m_remaining_bricks = m_level.reload();
-                            m_hud.setBrickCount(m_remaining_bricks);
+                            m_remainingBricks = m_level.reload();
+                            m_hud.setBrickCount(m_remainingBricks);
                             break;
                         case sf::Keyboard::N: // Go to next level
                             loadNextLevel();
@@ -147,7 +154,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
             break;
 
         case PAUSED:
-            switch (m_pause_menu.onEvent(event))
+            switch (m_pauseMenu.onEvent(event))
             {
                 case 1: // Resume
                     setStatus(PLAYING);
@@ -170,11 +177,20 @@ void Wallbreaker::onEvent(const sf::Event& event)
         case READY:
             if (event.type == sf::Event::MouseButtonPressed ||
                 (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space))
+            {
                 setStatus(PLAYING);
+            }
+            else if (event.type == sf::Event::MouseMoved)
+            {
+                // Paddle follows the mouse cursor
+                m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords({
+                    event.mouseMove.x, event.mouseMove.y
+                }));
+            }
             break;
 
         case GAME_OVER:
-            switch (m_game_over_menu.onEvent(event))
+            switch (m_gameOverMenu.onEvent(event))
             {
                 case 1: // Continue (reload current level)
                     resetGame(m_level.getCurrentLevel());
@@ -212,7 +228,7 @@ void Wallbreaker::update(float frametime)
             // Keep the ball centered on the player pad
             ball->setPosition(
                 m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
-                m_height - m_paddle.getHeight() - ball->getHeight()
+                m_paddle.getY() - ball->getHeight()
             );
         }
         m_particles.update(frametime);
@@ -223,25 +239,25 @@ void Wallbreaker::update(float frametime)
 
 void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(m_background_sprite, states);
-    target.draw(m_borders_sprite, states);
-    target.draw(m_level_sprite, states);
-    target.draw(m_hud_sprite, states);
+    target.draw(m_backgroundSprite, states);
+    target.draw(m_bordersSprite, states);
+    target.draw(m_levelSprite, states);
+    target.draw(m_hudSprite, states);
 
     if (m_status != PLAYING)
     {
-        sf::RectangleShape overlay(sf::Vector2f(m_level_texture.getSize()));
-        overlay.setPosition(m_level_sprite.getPosition() - m_level_sprite.getOrigin());
+        sf::RectangleShape overlay(sf::Vector2f(m_levelTexture.getSize()));
+        overlay.setPosition(m_levelSprite.getPosition() - m_levelSprite.getOrigin());
         overlay.setFillColor({0, 0, 0, 128});
         target.draw(overlay);
-        target.draw(m_info_text);
+        target.draw(m_infoText);
         if (m_status == PAUSED)
         {
-            m_pause_menu.show();
+            m_pauseMenu.show();
         }
         else if (m_status == GAME_OVER)
         {
-            m_game_over_menu.show();
+            m_gameOverMenu.show();
         }
     }
 }
@@ -257,15 +273,15 @@ void Wallbreaker::resetGame(size_t level)
     m_hud.setHighscore(Settings::highscore);
 
     // Reset lives
-    m_player_lives = MAX_PLAYER_LIVES;
+    m_playerLives = MAX_PLAYER_LIVES;
     m_hud.setLiveCount(MAX_PLAYER_LIVES);
 
     // Load level
-    m_remaining_bricks = m_level.loadAt(level);
-    m_hud.setBrickCount(m_remaining_bricks);
+    m_remainingBricks = m_level.loadAt(level);
+    m_hud.setBrickCount(m_remainingBricks);
     m_hud.setLevel(m_level.getCurrentLevel());
-    m_level_sprite.setScale(0, 0);
-    Effect::zoom(m_level_sprite, 1);
+    m_levelSprite.setScale(0, 0);
+    Effect::zoom(m_levelSprite, 1);
 
     setStatus(READY);
 }
@@ -274,34 +290,34 @@ void Wallbreaker::resetGame(size_t level)
 void Wallbreaker::updateLevelTexture()
 {
     // Draw bricks
-    m_level_texture.draw(m_level);
+    m_levelTexture.draw(m_level);
 
     // Draw particles
-    m_level_texture.draw(m_particles);
+    m_levelTexture.draw(m_particles);
 
     // Draw entities
-    m_level_texture.draw(m_paddle);
-    for (EntityList::const_iterator it = m_entities.begin(); it != m_entities.end(); ++it)
+    m_levelTexture.draw(m_paddle);
+    for (Entity*& entity: m_entities)
     {
-        m_level_texture.draw(**it);
+        m_levelTexture.draw(*entity);
     }
 
-    m_level_texture.display();
+    m_levelTexture.display();
 }
 
 
 void Wallbreaker::addPlayerLife()
 {
-    if (m_player_lives < MAX_PLAYER_LIVES)
-        m_hud.setLiveCount(++m_player_lives);
+    if (m_playerLives < MAX_PLAYER_LIVES)
+        m_hud.setLiveCount(++m_playerLives);
 }
 
 
 void Wallbreaker::applyOnEachBall(Ball::ActionPointer action)
 {
-    for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
+    for (Entity*& entity: m_entities)
     {
-        Ball* ball = (**it).toBall();
+        Ball* ball = entity->toBall();
         if (ball != NULL)
         {
             (ball->*action)();
@@ -320,9 +336,9 @@ void Wallbreaker::addEntity(Entity* entity)
 
 void Wallbreaker::clearEntities()
 {
-    for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
+    for (Entity*& entity: m_entities)
     {
-        delete *it;
+        delete entity;
     }
     m_entities.clear();
 }
@@ -383,7 +399,7 @@ void Wallbreaker::updateEntities(float frametime)
                  || checkBrick(entity, bottom, left, old_pos)
                  || checkBrick(entity, bottom, right, old_pos))
                 {
-                    if (m_remaining_bricks == 0)
+                    if (m_remainingBricks == 0)
                     {
                         if (m_level.getCurrentLevel() == m_level.getLevelCount())
                         {
@@ -407,9 +423,9 @@ void Wallbreaker::updateEntities(float frametime)
             it = m_entities.erase(it);
             if (Ball::getCount() == 0)
             {
-                m_hud.setLiveCount(--m_player_lives);
+                m_hud.setLiveCount(--m_playerLives);
                 SoundSystem::playSound("life-lost.ogg");
-                setStatus(m_player_lives == 0 ? GAME_OVER : READY);
+                setStatus(m_playerLives == 0 ? GAME_OVER : READY);
                 break;
             }
         }
@@ -436,8 +452,8 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
                     addEntity(powerup);
                 }
                 // Update remaining bricks counter
-                --m_remaining_bricks;
-                m_hud.setBrickCount(m_remaining_bricks);
+                --m_remainingBricks;
+                m_hud.setBrickCount(m_remainingBricks);
                 // Upgrade score
                 ++m_score;
                 m_hud.setScore(m_score);
@@ -457,13 +473,13 @@ bool Wallbreaker::checkBrick(Entity& entity, int i, int j, const sf::Vector2f& o
 void Wallbreaker::loadNextLevel()
 {
     Effect::stopAll();
-    m_remaining_bricks = m_level.loadNext();
+    m_remainingBricks = m_level.loadNext();
     m_hud.setLevel(m_level.getCurrentLevel());
-    m_hud.setBrickCount(m_remaining_bricks);
+    m_hud.setBrickCount(m_remainingBricks);
     SoundSystem::playSound("level-complete.ogg");
 
-    m_level_sprite.setScale(0, 0);
-    Effect::zoom(m_level_sprite, 1);
+    m_levelSprite.setScale(0, 0);
+    Effect::zoom(m_levelSprite, 1);
 }
 
 
@@ -479,17 +495,17 @@ void Wallbreaker::setStatus(Status status)
         // Clear all and spawn a new ball
         clearEntities();
         createBall();
-        m_info_text.setString("Ready?");
+        m_infoText.setString("Ready?");
         Game::getInstance().getWindow().setMouseCursorVisible(false);
         break;
 
     case GAME_OVER:
-        m_info_text.setString(m_player_lives > 0 ? "Game complete!" : "Game Over");
+        m_infoText.setString(m_playerLives > 0 ? "Game complete!" : "Game Over");
         Game::getInstance().getWindow().setMouseCursorVisible(true);
         break;
 
     case PAUSED:
-        m_info_text.setString("Paused");
+        m_infoText.setString("Paused");
         Game::getInstance().getWindow().setMouseCursorVisible(true);
         break;
 
@@ -498,8 +514,10 @@ void Wallbreaker::setStatus(Status status)
         break;
     }
     // Center text
-    m_info_text.setScale(2, 2);
-    m_info_text.setPosition(X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_info_text.getSize().x) / 2, 80);
+    m_infoText.setScale(2, 2);
+    m_infoText.setPosition(
+        X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_infoText.getSize().x) / 2, 80
+    );
 }
 
 

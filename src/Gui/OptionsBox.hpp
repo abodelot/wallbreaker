@@ -78,12 +78,12 @@ private:
 
     typedef std::vector<Item> ItemVector;
     ItemVector         m_items;
-    size_t             m_current_index;
+    size_t             m_currentIndex;
 
     // Visual components
     Box<BitmapText>    m_box;
-    Box<Arrow>         m_arrow_left;
-    Box<Arrow>         m_arrow_right;
+    Box<Arrow>         m_arrowLeft;
+    Box<Arrow>         m_arrowRight;
 };
 
 }

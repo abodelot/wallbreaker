@@ -8,23 +8,23 @@
 
 MainMenu::MainMenu():
     m_background(Resources::getTexture("background.png")),
-    m_about_text(gui::Theme::getFont()),
+    m_aboutText(gui::Theme::font),
     m_menu(Game::getInstance().getWindow())
 {
     m_title.setTexture(Resources::getTexture("title.png"));
-    m_title.setPosition(40, 16);
+    // Center title horizontally
+    m_title.setPosition((APP_WIDTH - m_title.getLocalBounds().width) / 2, 16);
 
-    m_about_text.setString(ABOUT_TEXT);
-    m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
-    m_about_text.setColor(gui::Theme::BORDER_COLOR);
+    m_aboutText.setString(ABOUT_TEXT);
+    m_aboutText.setPosition(0, APP_HEIGHT - m_aboutText.getSize().y);
+    m_aboutText.setColor(gui::Theme::textColor);
 
     m_menu.addButton("New game", 1);
     m_menu.addButton("Editor",   2);
     m_menu.addButton("Options",  3);
     m_menu.addButton("Quit",     4);
     // Center menu horizontally
-    int x = (APP_WIDTH - m_menu.getSize().x) / 2;
-    m_menu.setPosition(x, 100);
+    m_menu.setPosition((APP_WIDTH - m_menu.getSize().x) / 2, 100);
 }
 
 
@@ -57,11 +57,11 @@ void MainMenu::onFocus()
 void MainMenu::update(float frametime)
 {
     // About text is scrolled horizontally
-    m_about_text.move(-50 * frametime, 0);
-    float width = m_about_text.getSize().x;
-    if (m_about_text.getPosition().x + width < 0)
+    m_aboutText.move(-50 * frametime, 0);
+    float width = m_aboutText.getSize().x;
+    if (m_aboutText.getPosition().x + width < 0)
     {
-        m_about_text.setPosition(APP_WIDTH, m_about_text.getPosition().y);
+        m_aboutText.setPosition(APP_WIDTH, m_aboutText.getPosition().y);
     }
 }
 
@@ -70,6 +70,6 @@ void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(m_background, states);
     target.draw(m_title, states);
-    target.draw(m_about_text, states);
+    target.draw(m_aboutText, states);
     m_menu.show();
 }

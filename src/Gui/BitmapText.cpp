@@ -2,7 +2,6 @@
 #include <iostream>
 
 
-
 BitmapText::BitmapText(const BitmapFont& font):
     m_font(&font),
     m_vertices(sf::Quads),
@@ -125,11 +124,17 @@ void BitmapText::updateGeometry()
         // Handle special characters
         switch (current)
         {
-            case L'\t': x += m_font->getGlyphWidth() * 4;    continue;
-            case L'\n': y += m_font->getGlyphHeight(); x = 0; continue;
-            case L'\v': y += m_font->getGlyphWidth() * 4;    continue;
+            case L'\t':
+                x += m_font->getGlyphWidth() * 4;
+                continue;
+            case L'\n':
+                y += m_font->getGlyphHeight();
+                x = 0;
+                continue;
+            case L'\v':
+                y += m_font->getGlyphWidth() * 4;
+                continue;
         }
-
 
         // Extract the current glyph's description
         const sf::IntRect& glyph = m_font->getGlyphRect(current);

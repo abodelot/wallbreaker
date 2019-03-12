@@ -1,4 +1,4 @@
-#ifndef GUI_FRAME_HPP
+#ifndef GUI_LAYOUT_HPP
 #define GUI_LAYOUT_HPP
 
 #include "Widget.hpp"
@@ -39,7 +39,7 @@ public:
     Button* addButton(const sf::String& string, int id = -1);
 
     // Shortcut for add(new Label)
-    Label*  addLabel(const sf::String& string);
+    Label* addLabel(const sf::String& string);
 
     // Add a label and a widget in a new horizontal row
     Widget* addRow(const sf::String& str, Widget* widget, int id = -1);

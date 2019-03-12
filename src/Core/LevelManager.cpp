@@ -186,7 +186,7 @@ int LevelManager::load()
 
 void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.clear(sf::Color::Transparent);
+    target.clear(sf::Color(255, 255, 255, 0));
     // Cast borders shadow
     sf::Vertex shadow[4];
     for (int i = 0; i < 4; ++i)

@@ -25,6 +25,7 @@ OptionsMenu::OptionsMenu():
     addResolution({APP_WIDTH,     APP_HEIGHT});
     addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
     addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
+    addResolution({APP_WIDTH * 4, APP_HEIGHT * 4});
 
     // Add widgets in form
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);

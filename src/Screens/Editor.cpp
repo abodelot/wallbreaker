@@ -118,9 +118,13 @@ void Editor::onEvent(const sf::Event& event)
 
         case sf::Event::MouseWheelMoved:
             if (event.mouseWheel.delta > 0)
+            {
                 m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE ? m_cursor.getType() + 1 : Brick::START);
+            }
             else
+            {
                 m_cursor.setType(m_cursor.getType() > Brick::START ? m_cursor.getType() - 1 : Brick::UNBREAKABLE);
+            }
             break;
 
         case sf::Event::KeyPressed:

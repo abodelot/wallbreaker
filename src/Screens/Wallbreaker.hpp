@@ -3,13 +3,14 @@
 
 #include "Screen.hpp"
 #include "Core/Config.hpp"
-#include "Core/ParticleSystem.hpp"
-#include "Core/LevelManager.hpp"
 #include "Core/HUD.hpp"
 #include "Entities/Paddle.hpp"
 #include "Entities/Ball.hpp"
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
+
+class LevelManager;
+class ParticleSystem;
 
 /**
  * Game screen
@@ -49,22 +50,22 @@ private:
 
     void updateEntities(float frametime);
 
-    bool checkBrick(Entity& entity, int i, int j, const sf::Vector2f& old_pos);
+    bool checkBrick(Entity& entity, int i, int j, const sf::Vector2f& oldPos);
 
     void setStatus(Status status);
 
     const int         m_width;
     const int         m_height;
     LevelManager&     m_level;
-    int               m_remaining_bricks;
+    int               m_remainingBricks;
     ParticleSystem&   m_particles;
-    BitmapText        m_info_text;
-    sf::Sprite        m_hud_sprite;
+    BitmapText        m_infoText;
+    sf::Sprite        m_hudSprite;
     HUD               m_hud;
-    sf::Sprite        m_borders_sprite;
-    sf::Sprite        m_background_sprite;
-    sf::Sprite        m_level_sprite;
-    sf::RenderTexture m_level_texture;
+    sf::Sprite        m_bordersSprite;
+    sf::Sprite        m_backgroundSprite;
+    sf::Sprite        m_levelSprite;
+    sf::RenderTexture m_levelTexture;
 
     int               m_score;
 
@@ -72,11 +73,11 @@ private:
     EntityList m_entities;
     Paddle     m_paddle;
     Status     m_status;
-    int        m_player_lives;
+    int        m_playerLives;
 
     // GUI elements for menus
-    gui::Menu m_pause_menu;
-    gui::Menu m_game_over_menu;
+    gui::Menu m_pauseMenu;
+    gui::Menu m_gameOverMenu;
 };
 
 #endif // WALLBREAKER_HPP

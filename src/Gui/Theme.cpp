@@ -1,37 +1,49 @@
 #include "Theme.hpp"
 
-using namespace gui;
-
-sf::Color Theme::BG_COLOR       = sf::Color(0x33, 0x33, 0x80);
-sf::Color Theme::BG_COLOR_HOVER = sf::Color(0x57, 0x30, 0x62);
-sf::Color Theme::BG_COLOR_FOCUS = sf::Color(0x1e, 0x1e, 0x48);
-sf::Color Theme::BORDER_COLOR   = sf::Color(0xab, 0x5f, 0x41);
-sf::Color Theme::TEXT_COLOR     = sf::Color::White;
-
-float Theme::BORDER_SIZE  = 1.f;
-float Theme::WIDGET_WIDTH = 86.f;
-float Theme::PADDING      = 2.f;
-float Theme::MARGIN       = 7.f;
-
-sf::Keyboard::Key Theme::NEXT_WIDGET_KEY = sf::Keyboard::Down;
-sf::Keyboard::Key Theme::PREV_WIDGET_KEY = sf::Keyboard::Up;
-
-BitmapFont Theme::m_font;
+namespace gui {
 
 
-bool Theme::loadFont(const std::string& name)
+sf::Color Theme::textColor(sf::Color::White);
+sf::Color Theme::backgroundColor(sf::Color::Blue);
+sf::Color Theme::hoverColor(sf::Color(0x57, 0x30, 0x62));
+sf::Color Theme::focusColor = sf::Color(0x57, 0x30, 0x62);
+
+sf::Color Theme::topBorderColor(sf::Color::Black);
+sf::Color Theme::bottomBorderColor(sf::Color::Black);
+
+float Theme::borderSize(1.f);
+float Theme::widgetWidth(86.f);
+float Theme::padding(3.f);
+float Theme::margin(7.f);
+
+sf::Sound Theme::clickSound;
+
+BitmapFont Theme::font;
+
+float Theme::getBaseHeight()
 {
-    return m_font.loadFromFile(name);
+    return font.getGlyphHeight() + padding * 2;
+}
+
+sf::Color hexToColor(const std::string& hexcolor)
+{
+    sf::Color color;
+    if (hexcolor.size() == 7 && hexcolor[0] == '#')
+    {
+        color.r = strtoul(hexcolor.substr(1, 2).c_str(), NULL, 16);
+        color.g = strtoul(hexcolor.substr(3, 2).c_str(), NULL, 16);
+        color.b = strtoul(hexcolor.substr(5, 2).c_str(), NULL, 16);
+    }
+    return color;
 }
 
 
-const BitmapFont& Theme::getFont()
+sf::Color modulateColor(const sf::Color& source, float factor)
 {
-    return m_font;
+    sf::Color color(source);
+    color.r = std::min<int>(source.r * factor, 255);
+    color.g = std::min<int>(source.g * factor, 255);
+    color.b = std::min<int>(source.b * factor, 255);
+    return color;
 }
-
-
-float Theme::getBaseLine()
-{
-    return m_font.getGlyphHeight() + PADDING * 2;
 }

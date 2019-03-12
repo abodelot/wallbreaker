@@ -13,7 +13,7 @@ public:
 
     void onEvent(const sf::Event& event) override;
 
-    void onFocus() override;
+    void onFocus();
 
     void update(float frametime) override;
 
@@ -22,7 +22,7 @@ private:
 
     sf::Sprite m_background;
     sf::Sprite m_title;
-    BitmapText m_about_text;
+    BitmapText m_aboutText;
     gui::Menu  m_menu;
 };
 

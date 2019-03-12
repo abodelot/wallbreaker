@@ -5,11 +5,11 @@ using namespace gui;
 CheckBox::CheckBox(bool checked):
     Widget()
 {
-    m_box.setSize(Theme::getBaseLine(), Theme::getBaseLine());
-    float size = Theme::getFont().getGlyphHeight() - Theme::PADDING;
+    m_box.setSize(Theme::font.getGlyphHeight(), Theme::font.getGlyphHeight());
+    m_box.setBodyColor(sf::Color::White);
+    float size = Theme::font.getGlyphHeight() - 4;
     m_box.item().setSize(size);
-    m_box.adjustItem();
-
+    m_box.centerItem();
     check(checked);
 
     setSize(m_box.getSize());
@@ -25,7 +25,7 @@ bool CheckBox::isChecked() const
 void CheckBox::check(bool checked)
 {
     m_checked = checked;
-    m_box.item().setColor(m_checked ? Theme::TEXT_COLOR : sf::Color::Transparent);
+    m_box.item().setColor(m_checked ? sf::Color::Black : sf::Color::Transparent);
 }
 
 
@@ -39,7 +39,14 @@ void CheckBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void CheckBox::onStateChanged(State state)
 {
-    m_box.applyState(state);
+    if (state == State::StateFocused)
+    {
+        m_box.setBodyColor(sf::Color(200, 200, 200));
+    }
+    else
+    {
+        m_box.setBodyColor(sf::Color::White);
+    }
 }
 
 

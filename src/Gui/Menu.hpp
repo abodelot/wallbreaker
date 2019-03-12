@@ -27,13 +27,12 @@ private:
      * Get mouse cursor relative position
      * @param x: absolute x position from the event
      * @param y: absolute y position from the event
-     * @param relative: if not NULL, compute mouse position relative to this widget
-     * @return relative mouse position
+     * @return mouse position relative to menu position
      */
     sf::Vector2f convertMousePosition(int x, int y) const;
 
     sf::RenderTarget& m_window;
-    const Widget*     m_triggered;
+    const Widget* m_triggered;
 };
 
 }

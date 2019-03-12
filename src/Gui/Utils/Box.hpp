@@ -34,7 +34,16 @@ public:
      */
     sf::Vector2f getSize() const;
 
-    void adjustItem();
+    /**
+     * Center the item inside the box
+     */
+    void centerItem();
+
+    void setBodyColor(const sf::Color& color);
+
+    void setTopLeftBorderColor(const sf::Color& color);
+
+    void setBottomRightBorderColor(const sf::Color& color);
 
     /**
      * @return true if point is inside the box limits
@@ -67,13 +76,11 @@ public:
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void setBodyColor(const sf::Color& color);
-
-    void setBorderColor(const sf::Color& color);
-
     T          m_item;
     bool       m_pressed;
-    sf::Vertex m_background[8]; // 0-3 for body, 4-7 for borders
+    sf::Vertex m_topLeftBorder[4];
+    sf::Vertex m_bottomRightBorder[4];
+    sf::Vertex m_background[4];
 };
 
 }

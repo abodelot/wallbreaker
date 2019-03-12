@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <SFML/Audio/Sound.hpp>
 #include "BitmapFont.hpp"
 
 namespace gui
@@ -11,37 +12,36 @@ namespace gui
 class Theme
 {
 public:
-    /**
-     * Load the GUI global font
-     */
-    static bool loadFont(const std::string& path);
+    static sf::Color textColor;
+    static sf::Color backgroundColor;
+    static sf::Color hoverColor;
+    static sf::Color focusColor;
+    static sf::Color topBorderColor;
+    static sf::Color bottomBorderColor;
 
-    /**
-     * Get font
-     */
-    static const BitmapFont& getFont();
+    static float borderSize;
+    static float widgetWidth;
+    static float padding; // Spacing inside widget
+    static float margin;  // Spacing between widgets
+
+    // Sound effect on button clicked
+    static sf::Sound clickSound;
+
+    // The GUI global font
+    static BitmapFont font;
 
     /**
      * Widget height based on text height
      */
-    static float getBaseLine();
-
-    static sf::Color BG_COLOR;
-    static sf::Color BG_COLOR_HOVER;
-    static sf::Color BG_COLOR_FOCUS;
-    static sf::Color BORDER_COLOR;
-    static sf::Color TEXT_COLOR;
-
-    static float BORDER_SIZE;
-    static float WIDGET_WIDTH;
-    static float PADDING; // Spacing inside widget
-    static float MARGIN;  // Spacing between widgets
-    static sf::Keyboard::Key PREV_WIDGET_KEY;
-    static sf::Keyboard::Key NEXT_WIDGET_KEY;
-
-private:
-    static BitmapFont m_font;
+    static float getBaseHeight();
 };
+
+/**
+ * Build color from hexadecimal string formatted as "#000000"
+ */
+sf::Color hexToColor(const std::string& string);
+
+sf::Color modulateColor(const sf::Color& color, float factor);
 
 }
 

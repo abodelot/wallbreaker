@@ -7,7 +7,7 @@
 
 HUD::HUD():
     m_life_count(0),
-    m_life_label(gui::Theme::getFont())
+    m_life_label(gui::Theme::font)
 {
     m_render_texture.create(ROW_WIDTH, APP_HEIGHT);
 
@@ -93,8 +93,8 @@ void HUD::updateTexture()
 // HUD::Item -------------------------------------------------------------------
 
 HUD::Item::Item():
-    label(gui::Theme::getFont()),
-    value(gui::Theme::getFont())
+    label(gui::Theme::font),
+    value(gui::Theme::font)
 {
     value.setColor(sf::Color::Yellow);
     setValue(0);

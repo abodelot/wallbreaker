@@ -4,14 +4,14 @@
 using namespace gui;
 
 Label::Label():
-    m_text(Theme::getFont())
+    m_text(Theme::font)
 {
     setSelectable(false);
 }
 
 
 Label::Label(const sf::String& string):
-    m_text(Theme::getFont())
+    m_text(Theme::font)
 {
     setSelectable(false);
     setText(string);
@@ -21,9 +21,12 @@ Label::Label(const sf::String& string):
 void Label::setText(const sf::String& string)
 {
     m_text.setString(string);
-    m_text.setColor(Theme::TEXT_COLOR);
-    m_text.setPosition(Theme::PADDING, Theme::PADDING);
-    setSize({m_text.getSize().x + Theme::PADDING * 2, m_text.getSize().y + Theme::PADDING * 2});
+    m_text.setColor(Theme::textColor);
+    m_text.setPosition(Theme::padding, Theme::padding);
+    setSize({
+        m_text.getSize().x + Theme::padding * 2,
+        m_text.getSize().y + Theme::padding * 2
+    });
 }
 
 
@@ -48,7 +51,10 @@ const sf::Color& Label::getColor() const
 void Label::setCharacterSize(int size)
 {
     m_text.setScale(size, size);
-    setSize({m_text.getSize().x + Theme::PADDING * 2, m_text.getSize().y + Theme::PADDING * 2});
+    setSize({
+        m_text.getSize().x + Theme::padding * 2,
+        m_text.getSize().y + Theme::padding * 2
+    });
 }
 
 

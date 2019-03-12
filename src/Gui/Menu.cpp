@@ -7,7 +7,7 @@ using namespace gui;
 Menu::Menu(sf::RenderTarget& window):
     Layout(Layout::Vertical),
     m_window(window),
-    m_triggered(NULL)
+    m_triggered(nullptr)
 {
 }
 
@@ -54,10 +54,10 @@ int Menu::onEvent(const sf::Event& event)
         break;
     }
 
-    if (m_triggered != NULL)
+    if (m_triggered != nullptr)
     {
         int id = m_triggered->getID();
-        m_triggered = NULL;
+        m_triggered = nullptr;
         return id;
     }
     return -1;

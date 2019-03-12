@@ -5,27 +5,33 @@ namespace gui
 
 template <class T>
 OptionsBox<T>::OptionsBox():
-    m_current_index(-1),
-    m_box(BitmapText(Theme::getFont()))
+    m_currentIndex(-1),
+    m_box(BitmapText(Theme::font))
 {
+    sf::Vector2f size(Theme::widgetWidth, Theme::getBaseHeight());
+
     // Build visual components
-    m_box.setSize(Theme::WIDGET_WIDTH, Theme::getBaseLine());
-    m_box.item().setColor(Theme::TEXT_COLOR);
+    m_box.setSize(
+        Theme::widgetWidth - Theme::getBaseHeight() * 2,
+        Theme::getBaseHeight()
+    );
+    m_box.move(Theme::getBaseHeight(), 0);
+    m_box.item().setColor(Theme::textColor);
 
     // Pack left arrow
-    float arrow_size = Theme::getFont().getGlyphHeight() - Theme::PADDING * 2;
-    m_arrow_left.item().build(arrow_size, Arrow::Left);
-    m_arrow_left.item().setColor(Theme::TEXT_COLOR);
-    m_arrow_left.setSize(Theme::getBaseLine(), Theme::getBaseLine());
+    const float arrowSize = Theme::font.getGlyphHeight() - 4;
+    m_arrowLeft.item().build(arrowSize, Arrow::Left);
+    m_arrowLeft.item().setColor(Theme::textColor);
+    m_arrowLeft.setSize(Theme::getBaseHeight(), Theme::getBaseHeight());
 
     // Pack right arrow
-    m_arrow_right.item().build(arrow_size, Arrow::Right);
-    m_arrow_right.item().setColor(Theme::TEXT_COLOR);
-    m_arrow_right.setSize(Theme::getBaseLine(), Theme::getBaseLine());
-    m_arrow_right.move(Theme::WIDGET_WIDTH - Theme::getBaseLine(), 0);
+    m_arrowRight.item().build(arrowSize, Arrow::Right);
+    m_arrowRight.item().setColor(Theme::textColor);
+    m_arrowRight.setSize(Theme::getBaseHeight(), Theme::getBaseHeight());
+    m_arrowRight.move(Theme::widgetWidth - Theme::getBaseHeight(), 0);
 
     // Widget local bounds
-    setSize(m_box.getSize());
+    setSize(size);
 }
 
 
@@ -47,9 +53,9 @@ void OptionsBox<T>::selectItem(size_t item_index)
 {
     if (item_index < m_items.size())
     {
-        m_current_index = item_index;
+        m_currentIndex = item_index;
         m_box.item().setString(m_items[item_index].label);
-        m_box.adjustItem();
+        m_box.centerItem();
     }
 }
 
@@ -57,14 +63,14 @@ void OptionsBox<T>::selectItem(size_t item_index)
 template <class T>
 const T& OptionsBox<T>::getSelectedValue() const
 {
-    return m_items[m_current_index].value;
+    return m_items[m_currentIndex].value;
 }
 
 
 template <class T>
 size_t OptionsBox<T>::getSelectedIndex() const
 {
-    return m_current_index;
+    return m_currentIndex;
 }
 
 
@@ -74,7 +80,7 @@ void OptionsBox<T>::selectNext()
     if (m_items.size() > 1)
     {
         // Get next item index
-        selectItem(m_current_index == (m_items.size() - 1) ? 0 : m_current_index + 1);
+        selectItem(m_currentIndex == (m_items.size() - 1) ? 0 : m_currentIndex + 1);
         triggerCallback();
     }
 }
@@ -86,7 +92,7 @@ void OptionsBox<T>::selectPrevious()
     if (m_items.size() > 1)
     {
         // Get previous item index
-        selectItem(m_current_index == 0 ? m_items.size() - 1 : m_current_index - 1);
+        selectItem(m_currentIndex == 0 ? m_items.size() - 1 : m_currentIndex - 1);
         triggerCallback();
     }
 }
@@ -97,8 +103,8 @@ void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 {
     transformStates(states);
     target.draw(m_box, states);
-    target.draw(m_arrow_left, states);
-    target.draw(m_arrow_right, states);
+    target.draw(m_arrowLeft, states);
+    target.draw(m_arrowRight, states);
 }
 
 
@@ -127,8 +133,8 @@ void OptionsBox<T>::onStateChanged(State state)
     // Hovered state is handled in the onMouseMoved callback
     if (state == StateDefault || state == StateFocused)
     {
-        m_arrow_left.applyState(state);
-        m_arrow_right.applyState(state);
+        m_arrowLeft.applyState(state);
+        m_arrowRight.applyState(state);
         m_box.applyState(state);
     }
 }
@@ -137,34 +143,39 @@ void OptionsBox<T>::onStateChanged(State state)
 template <class T>
 void OptionsBox<T>::onMouseMoved(const sf::Vector2f& pos)
 {
-    updateArrow(m_arrow_left, pos);
-    updateArrow(m_arrow_right, pos);
+    updateArrow(m_arrowLeft, pos);
+    updateArrow(m_arrowRight, pos);
 }
 
 
 template <class T>
 void OptionsBox<T>::onMousePressed(const sf::Vector2f& pos)
 {
-    if (m_arrow_left.containsPoint(pos))
-        m_arrow_left.press();
-
-    else if (m_arrow_right.containsPoint(pos))
-        m_arrow_right.press();
+    if (m_arrowLeft.containsPoint(pos))
+    {
+        Theme::clickSound.play();
+        m_arrowLeft.press();
+    }
+    else if (m_arrowRight.containsPoint(pos))
+    {
+        Theme::clickSound.play();
+        m_arrowRight.press();
+    }
 }
 
 
 template <class T>
 void OptionsBox<T>::onMouseReleased(const sf::Vector2f& pos)
 {
-    if (m_arrow_left.containsPoint(pos))
+    if (m_arrowLeft.containsPoint(pos))
     {
         selectPrevious();
-        m_arrow_left.release();
+        m_arrowLeft.release();
     }
-    else if (m_arrow_right.containsPoint(pos))
+    else if (m_arrowRight.containsPoint(pos))
     {
         selectNext();
-        m_arrow_right.release();
+        m_arrowRight.release();
     }
 }
 
@@ -174,13 +185,15 @@ void OptionsBox<T>::onKeyPressed(sf::Keyboard::Key key)
 {
     if (key == sf::Keyboard::Left)
     {
+        Theme::clickSound.play();
         selectPrevious();
-        m_arrow_left.press();
+        m_arrowLeft.press();
     }
     else if (key == sf::Keyboard::Right)
     {
+        Theme::clickSound.play();
         selectNext();
-        m_arrow_right.press();
+        m_arrowRight.press();
     }
 }
 
@@ -190,11 +203,11 @@ void OptionsBox<T>::onKeyReleased(sf::Keyboard::Key key)
 {
     if (key == sf::Keyboard::Left)
     {
-        m_arrow_left.release();
+        m_arrowLeft.release();
     }
     else if (key == sf::Keyboard::Right)
     {
-        m_arrow_right.release();
+        m_arrowRight.release();
     }
 }
 

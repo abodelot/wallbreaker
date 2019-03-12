@@ -6,10 +6,10 @@ using namespace gui;
 
 Button::Button(const sf::String& string):
     Widget(),
-    m_box(BitmapText(Theme::getFont()))
+    m_box(BitmapText(Theme::font))
 {
-    m_box.item().setColor(Theme::TEXT_COLOR);
-    m_box.setSize(Theme::WIDGET_WIDTH, Theme::getBaseLine());
+    m_box.item().setColor(Theme::textColor);
+    m_box.setSize(Theme::widgetWidth, Theme::getBaseHeight());
     setString(string);
     setSize(m_box.getSize());
 }
@@ -18,7 +18,7 @@ Button::Button(const sf::String& string):
 void Button::setString(const sf::String& string)
 {
     m_box.item().setString(string);
-    m_box.adjustItem();
+    m_box.centerItem();
 
 }
 
@@ -54,6 +54,7 @@ void Button::onMouseMoved(const sf::Vector2f&)
 
 void Button::onMousePressed(const sf::Vector2f&)
 {
+    Theme::clickSound.play();
     m_box.press();
 }
 
@@ -72,6 +73,7 @@ void Button::onKeyPressed(sf::Keyboard::Key key)
 {
     if (key == sf::Keyboard::Return)
     {
+        Theme::clickSound.play();
         triggerCallback();
         m_box.press();
     }
@@ -85,4 +87,3 @@ void Button::onKeyReleased(sf::Keyboard::Key key)
         m_box.release();
     }
 }
-

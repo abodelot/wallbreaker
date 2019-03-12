@@ -44,14 +44,13 @@ Widget* Layout::add(Widget* widget, int id)
     if (m_last != NULL)
     {
         if (m_type == Layout::Vertical)
-            pos.y = m_last->getPosition().y + m_last->getSize().y + Theme::MARGIN;
+            pos.y = m_last->getPosition().y + m_last->getSize().y + Theme::margin;
         else if (m_type == Layout::Horizontal)
-            pos.x = m_last->getPosition().x + m_last->getSize().x + Theme::MARGIN;
+            pos.x = m_last->getPosition().x + m_last->getSize().x + Theme::margin;
     }
     widget->setID(id);
     widget->setPosition(pos);
     push(widget);
-
     return widget;
 }
 
@@ -79,15 +78,15 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
 
     sf::Vector2f pos;
     if (m_last != NULL)
-        pos.y = getSize().y + Theme::MARGIN;
+        pos.y = getSize().y + Theme::margin;
 
     // Label on the left side
-    Label* label = new gui::Label(str);
+    Label* label = new Label(str);
     label->setPosition(pos);
     push(label);
 
     // Widget on the right side
-    float width = label->getSize().x + Theme::MARGIN;
+    float width = label->getSize().x + Theme::margin;
     if (width > m_form.label_width)
     {
         m_form.label_width = width;
@@ -101,7 +100,11 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
         }
     }
 
-    widget->setPosition(m_form.label_width, pos.y);
+    widget->setPosition(
+        m_form.label_width,
+        // Align bottom of widget with bottom of label
+        pos.y + (Theme::font.getGlyphHeight() + Theme::padding - widget->getSize().y)
+    );
     widget->setID(id);
     push(widget);
     return widget;
@@ -125,10 +128,10 @@ Widget* Layout::push(Widget* widget)
     recomputeSize();
 
     // Focus first widget
-    /*
     if (m_focus == NULL && widget->isSelectable())
+    {
         giveFocus(widget);
-    */
+    }
     return widget;
 }
 
@@ -261,13 +264,15 @@ void Layout::onMouseWheelMoved(int delta)
 
 void Layout::onKeyPressed(sf::Keyboard::Key key)
 {
-    if (key == Theme::NEXT_WIDGET_KEY)
+    if (key == sf::Keyboard::Down)
     {
         if (!focusNextWidget())
+        {
             // Try to focus first widget if possible
             focusNextWidget();
+        }
     }
-    else if (key == Theme::PREV_WIDGET_KEY)
+    else if (key == sf::Keyboard::Up)
     {
         if (!focusPreviousWidget())
             focusPreviousWidget();
@@ -312,12 +317,13 @@ bool Layout::giveFocus(Widget* widget)
 {
     if (widget != NULL)
     {
+        // If another widget was already focused, remove focus
         if (m_focus != NULL)
         {
             m_focus->setState(StateDefault);
             m_focus = NULL;
         }
-
+        // Apply focus to widget
         if (widget->isSelectable())
         {
             m_focus = widget;

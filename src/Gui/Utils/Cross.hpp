@@ -19,6 +19,7 @@ public:
 
     void setSize(float size);
     sf::Vector2f getSize() const;
+
     void setColor(const sf::Color& color);
 
 private:
