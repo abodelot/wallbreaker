@@ -13,24 +13,24 @@
 class OptionsMenu: public Screen
 {
 public:
-	OptionsMenu();
+    OptionsMenu();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	/**
-	 * Add a resolution in the option box widget
-	 */
-	void addResolution(const sf::Vector2u& res);
+    /**
+     * Add a resolution in the option box widget
+     */
+    void addResolution(const sf::Vector2u& res);
 
-	sf::Sprite m_background;
-	// Gui elements
-	gui::Menu                      m_menu;
-	gui::CheckBox*                 m_ck_music;
-	gui::CheckBox*                 m_ck_sound;
-	gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
+    sf::Sprite m_background;
+    // Gui elements
+    gui::Menu                      m_menu;
+    gui::CheckBox*                 m_ck_music;
+    gui::CheckBox*                 m_ck_sound;
+    gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
 };
 
 #endif // OPTIONSMENU_HPP

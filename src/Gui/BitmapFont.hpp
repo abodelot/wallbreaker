@@ -10,38 +10,38 @@ TODO: create bitmap fonts with different character sizes
 class BitmapFont
 {
 public:
-	// ASCII Printable characters range
-	static const int FIRST_CHAR = 32;
-	static const int LAST_CHAR = 126;
+    // ASCII Printable characters range
+    static const int FIRST_CHAR = 32;
+    static const int LAST_CHAR = 126;
 
-	BitmapFont();
+    BitmapFont();
 
-	/**
-	 * @param image_path: path to the bitmap font's image
-	 * @param width: nb characters by line
-	 * @param height: nb characters by column
-	 */
-	bool loadFromFile(const std::string& image_path, int width=16, int height=6);
+    /**
+     * @param image_path: path to the bitmap font's image
+     * @param width: nb characters by line
+     * @param height: nb characters by column
+     */
+    bool loadFromFile(const std::string& image_path, int width=16, int height=6);
 
-	// Get the font's texture
-	const sf::Texture& getTexture() const;
+    // Get the font's texture
+    const sf::Texture& getTexture() const;
 
-	/**
-	 * Get a glyph texture rect
-	 * @param char: glyph's letter
-	 * @return texture sub rect
-	 */
-	sf::IntRect getGlyphRect(char character) const;
+    /**
+     * Get a glyph texture rect
+     * @param char: glyph's letter
+     * @return texture sub rect
+     */
+    sf::IntRect getGlyphRect(char character) const;
 
-	int getGlyphHeight() const;
-	int getGlyphWidth() const;
+    int getGlyphHeight() const;
+    int getGlyphWidth() const;
 
 private:
-	sf::Texture m_texture;
-	int         m_width;
-	int         m_height;
-	int         m_glyph_width;
-	int         m_glyph_height;
+    sf::Texture m_texture;
+    int         m_width;
+    int         m_height;
+    int         m_glyph_width;
+    int         m_glyph_height;
 };
 
 

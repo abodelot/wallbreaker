@@ -3,8 +3,8 @@
 
 
 Entity::Entity():
-	m_parent(NULL),
-	m_alive(true)
+    m_parent(NULL),
+    m_alive(true)
 {
 }
 
@@ -16,68 +16,68 @@ Entity::~Entity()
 
 void Entity::setManager(Wallbreaker* parent)
 {
-	m_parent = parent;
+    m_parent = parent;
 }
 
 
 Wallbreaker* Entity::getManager()
 {
-	return m_parent;
+    return m_parent;
 }
 
 
 bool Entity::isAlive() const
 {
-	return m_alive;
+    return m_alive;
 }
 
 
 void Entity::kill()
 {
-	m_alive = false;
+    m_alive = false;
 }
 
 
 bool Entity::collidesWith(const Entity& other) const
 {
-	sf::FloatRect a(getPosition().x, getPosition().y, getWidth(), getHeight());
-	sf::FloatRect b(other.getPosition().x, other.getPosition().y, other.getWidth(), other.getHeight());
+    sf::FloatRect a(getPosition().x, getPosition().y, getWidth(), getHeight());
+    sf::FloatRect b(other.getPosition().x, other.getPosition().y, other.getWidth(), other.getHeight());
 
-	return a.intersects(b);
+    return a.intersects(b);
 }
 
 
 Ball* Entity::toBall()
 {
-	return NULL;
+    return NULL;
 }
 
 
 sf::Vector2f Entity::getCenter() const
 {
-	sf::Vector2f pos = getPosition() - getOrigin();
-	pos.x += getTextureRect().width / 2;
-	pos.y += getTextureRect().height / 2;
-	return pos;
+    sf::Vector2f pos = getPosition() - getOrigin();
+    pos.x += getTextureRect().width / 2;
+    pos.y += getTextureRect().height / 2;
+    return pos;
 }
 
 
 sf::IntRect Entity::getCollisionRect() const
 {
-	sf::IntRect rect = getTextureRect();
-	rect.left = getPosition().x;
-	rect.top  = getPosition().y;
-	return rect;
+    sf::IntRect rect = getTextureRect();
+    rect.left = getPosition().x;
+    rect.top  = getPosition().y;
+    return rect;
 }
 
 
 float Entity::getWidth() const
 {
-	return getTextureRect().width;
+    return getTextureRect().width;
 }
 
 
 float Entity::getHeight() const
 {
-	return getTextureRect().height;
+    return getTextureRect().height;
 }

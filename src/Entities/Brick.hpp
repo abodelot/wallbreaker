@@ -6,47 +6,47 @@
 class Brick: public sf::Sprite
 {
 public:
-	enum Type
-	{
-		NONE        = '.',
-		START       = 'a',
-		ROCK        = 'i',
-		ROCK_2      = 'j',
-		ROCK_3      = 'k',
-		UNBREAKABLE = 'l'
-	};
+    enum Type
+    {
+        NONE        = '.',
+        START       = 'a',
+        ROCK        = 'i',
+        ROCK_2      = 'j',
+        ROCK_3      = 'k',
+        UNBREAKABLE = 'l'
+    };
 
-	static const int HEIGHT = 8;
-	static const int WIDTH  = 16;
+    static const int HEIGHT = 8;
+    static const int WIDTH  = 16;
 
-	Brick();
+    Brick();
 
-	/**
-	 * Set the brick type
-	 */
-	void setType(int id);
-	inline Type getType() const { return m_type; }
+    /**
+     * Set the brick type
+     */
+    void setType(int id);
+    inline Type getType() const { return m_type; }
 
-	void setPosition(int x, int y);
+    void setPosition(int x, int y);
 
-	bool isActive() const;
+    bool isActive() const;
 
-	bool takeDamage(bool force_destruction=false);
+    bool takeDamage(bool force_destruction=false);
 
-	/**
-	 * Play a sound according to the brick type
-	 */
-	void playSound();
+    /**
+     * Play a sound according to the brick type
+     */
+    void playSound();
 
 private:
-	/**
-	 * Get color associated to the birck type
-	 */
-	sf::Color getBaseColor() const;
+    /**
+     * Get color associated to the birck type
+     */
+    sf::Color getBaseColor() const;
 
-	Type m_type;
-	bool m_broken;
-	ParticleSystem::Emitter m_emitter;
+    Type m_type;
+    bool m_broken;
+    ParticleSystem::Emitter m_emitter;
 };
 
 #endif // BRICK_HPP

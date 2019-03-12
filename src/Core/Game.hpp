@@ -13,69 +13,69 @@ class Screen;
 class Game
 {
 public:
-	/**
-	 * Get application controller singleton instance
-	 */
-	static Game& getInstance();
+    /**
+     * Get application controller singleton instance
+     */
+    static Game& getInstance();
 
-	/**
-	 * Init application and set current working directory
-	 */
-	void init(const std::string& path);
+    /**
+     * Init application and set current working directory
+     */
+    void init(const std::string& path);
 
-	/**
-	 * Enter application main loop
-	 */
-	void run();
+    /**
+     * Enter application main loop
+     */
+    void run();
 
-	/**
-	 * Exit application
-	 */
-	void quit();
+    /**
+     * Exit application
+     */
+    void quit();
 
-	/**
-	 * Register a new screen
-	 */
-	void addScreen(const std::string& id, Screen* screen);
+    /**
+     * Register a new screen
+     */
+    void addScreen(const std::string& id, Screen* screen);
 
-	/**
-	 * Set the next screen to be displayed
-	 */
-	void setCurrentScreen(const std::string& id);
+    /**
+     * Set the next screen to be displayed
+     */
+    void setCurrentScreen(const std::string& id);
 
-	/**
-	 * Restore a previous screen as the new current screen
-	 */
-	void restorePreviousScreen();
+    /**
+     * Restore a previous screen as the new current screen
+     */
+    void restorePreviousScreen();
 
-	/**
-	 * Set application window dimension
-	 */
-	void setResolution(size_t width, size_t height);
+    /**
+     * Set application window dimension
+     */
+    void setResolution(size_t width, size_t height);
 
-	/**
-	 * Get application render window
-	 */
-	sf::RenderWindow& getWindow();
+    /**
+     * Get application render window
+     */
+    sf::RenderWindow& getWindow();
 
-	/**
-	 * Save a picture of the screen
-	 */
-	void takeScreenshot() const;
+    /**
+     * Save a picture of the screen
+     */
+    void takeScreenshot() const;
 
 private:
-	Game();
-	Game(const Game&);
-	~Game();
+    Game();
+    Game(const Game&);
+    ~Game();
 
-	sf::RenderWindow m_window;
-	bool             m_running;
-	std::string      m_app_dir;
-	sf::View         m_view;
+    sf::RenderWindow m_window;
+    bool             m_running;
+    std::string      m_app_dir;
+    sf::View         m_view;
 
-	// Screen management
-	std::map<std::string, Screen*> m_screens;
-	Screen*                        m_current_screen;
+    // Screen management
+    std::map<std::string, Screen*> m_screens;
+    Screen*                        m_current_screen;
 };
 
 #endif // GAME_HPP

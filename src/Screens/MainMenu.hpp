@@ -9,21 +9,21 @@
 class MainMenu: public Screen
 {
 public:
-	MainMenu();
+    MainMenu();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void onFocus() override;
+    void onFocus() override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	sf::Sprite m_background;
-	sf::Sprite m_title;
-	BitmapText m_about_text;
-	gui::Menu  m_menu;
+    sf::Sprite m_background;
+    sf::Sprite m_title;
+    BitmapText m_about_text;
+    gui::Menu  m_menu;
 };
 
 #endif // MAIN_MENU_HPP

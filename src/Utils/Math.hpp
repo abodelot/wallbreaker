@@ -17,7 +17,7 @@ extern const float PI;
  */
 inline float to_radians(float degrees)
 {
-	return degrees * PI / 180;
+    return degrees * PI / 180;
 }
 
 /**
@@ -25,9 +25,9 @@ inline float to_radians(float degrees)
  */
 inline float to_degrees(float radians)
 {
-	// Normalize between 0 and 360
-	float degrees = int(radians / PI * 180) % 360;
-	return degrees < 0 ? degrees + 360 : degrees;
+    // Normalize between 0 and 360
+    float degrees = int(radians / PI * 180) % 360;
+    return degrees < 0 ? degrees + 360 : degrees;
 }
 
 /**
@@ -35,9 +35,9 @@ inline float to_degrees(float radians)
  */
 inline void translate(sf::Vector2f& point, float angle, float distance)
 {
-	// Y-axis is flipped
-	point.x = point.x + distance * std::cos(angle);
-	point.y = point.y - distance * std::sin(angle);
+    // Y-axis is flipped
+    point.x = point.x + distance * std::cos(angle);
+    point.y = point.y - distance * std::sin(angle);
 }
 
 /**
@@ -45,8 +45,8 @@ inline void translate(sf::Vector2f& point, float angle, float distance)
  */
 inline float distance(const sf::Vector2f& a, const sf::Vector2f& b = sf::Vector2f(0.f, 0.f))
 {
-	// sqrt((x1 - x2)² + (y1 - y2)²)
-	return std::sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    // sqrt((x1 - x2)² + (y1 - y2)²)
+    return std::sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
 /**
@@ -54,8 +54,8 @@ inline float distance(const sf::Vector2f& a, const sf::Vector2f& b = sf::Vector2
  */
 inline float angle(const sf::Vector2f& a, const sf::Vector2f& b = sf::Vector2f(0.f, 0.f))
 {
-	// Y-axis is flipped
-	return std::atan2(b.y - a.y, b.x - a.x);
+    // Y-axis is flipped
+    return std::atan2(b.y - a.y, b.x - a.x);
 }
 
 // Random ----------------------------------------------------------------------
@@ -85,7 +85,7 @@ void set_seed(unsigned int seed);
 template <class T>
 inline T clamp(T value, T min, T max)
 {
-	return value < min ? min : (value > max ? max : value);
+    return value < min ? min : (value > max ? max : value);
 }
 
 }

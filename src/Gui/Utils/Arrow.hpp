@@ -12,27 +12,27 @@ namespace gui
 class Arrow: public sf::Drawable
 {
 public:
-	enum Direction { Left, Right, Top, Bottom };
+    enum Direction { Left, Right, Top, Bottom };
 
-	Arrow();
-	Arrow(float size, Direction direction);
+    Arrow();
+    Arrow(float size, Direction direction);
 
-	void build(float size, Direction direction);
+    void build(float size, Direction direction);
 
-	void setColor(const sf::Color& color);
+    void setColor(const sf::Color& color);
 
-	void move(float dx, float dy);
-	void setPosition(float x, float y);
+    void move(float dx, float dy);
+    void setPosition(float x, float y);
 
-	sf::Vector2f getSize() const;
+    sf::Vector2f getSize() const;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	void updateGeometry(float x, float y, float size, Direction direction);
+    void updateGeometry(float x, float y, float size, Direction direction);
 
-	sf::Vertex m_triangle[3];
-	Direction m_direction;
+    sf::Vertex m_triangle[3];
+    Direction m_direction;
 };
 
 }

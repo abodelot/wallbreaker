@@ -17,73 +17,73 @@ template <class T>
 class OptionsBox: public Widget
 {
 public:
-	OptionsBox();
+    OptionsBox();
 
-	/**
-	 * Append a new item in the list
-	 * @param label: displayed label when selected
-	 * @param value: value associated
-	 * @param select: if true, new item becomes the default selection
-	 */
-	void addItem(const sf::String& label, const T& value, bool select = false);
+    /**
+     * Append a new item in the list
+     * @param label: displayed label when selected
+     * @param value: value associated
+     * @param select: if true, new item becomes the default selection
+     */
+    void addItem(const sf::String& label, const T& value, bool select = false);
 
-	/**
-	 * Make an item the current one
-	 * @param item_index: position of the item in the list
-	 */
-	void selectItem(size_t item_index);
+    /**
+     * Make an item the current one
+     * @param item_index: position of the item in the list
+     */
+    void selectItem(size_t item_index);
 
-	/**
-	 * Get the value of the selected item
-	 * @return associated value
-	 */
-	const T& getSelectedValue() const;
+    /**
+     * Get the value of the selected item
+     * @return associated value
+     */
+    const T& getSelectedValue() const;
 
-	/**
-	 * Get the index of the selected item
-	 */
-	size_t getSelectedIndex() const;
+    /**
+     * Get the index of the selected item
+     */
+    size_t getSelectedIndex() const;
 
-	/**
-	 * Select next item in the list
-	 */
-	void selectNext();
+    /**
+     * Select next item in the list
+     */
+    void selectNext();
 
-	/**
-	 * Select previous item in the list
-	 */
-	void selectPrevious();
+    /**
+     * Select previous item in the list
+     */
+    void selectPrevious();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onStateChanged(State state);
-	void onMouseMoved(float x, float y);
-	void onMousePressed(float x, float y);
-	void onMouseReleased(float x, float y);
-	void onKeyPressed(sf::Keyboard::Key key);
-	void onKeyReleased(sf::Keyboard::Key key);
+    void onStateChanged(State state) override;
+    void onMouseMoved(const sf::Vector2f& pos) override;
+    void onMousePressed(const sf::Vector2f& pos) override;
+    void onMouseReleased(const sf::Vector2f& pos) override;
+    void onKeyPressed(sf::Keyboard::Key key) override;
+    void onKeyReleased(sf::Keyboard::Key key) override;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	void updateArrow(Box<Arrow>& arrow, float x, float y);
+    void updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos);
 
-	struct Item
-	{
-		Item(const sf::String& string, const T& value);
+    struct Item
+    {
+        Item(const sf::String& string, const T& value);
 
-		sf::String label;
-		T value;
-	};
+        sf::String label;
+        T value;
+    };
 
-	typedef std::vector<Item> ItemVector;
-	ItemVector         m_items;
-	size_t             m_current_index;
+    typedef std::vector<Item> ItemVector;
+    ItemVector         m_items;
+    size_t             m_current_index;
 
-	// Visual components
-	Box<BitmapText>    m_box;
-	Box<Arrow>         m_arrow_left;
-	Box<Arrow>         m_arrow_right;
+    // Visual components
+    Box<BitmapText>    m_box;
+    Box<Arrow>         m_arrow_left;
+    Box<Arrow>         m_arrow_right;
 };
 
 }

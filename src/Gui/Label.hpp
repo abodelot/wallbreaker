@@ -14,28 +14,28 @@ namespace gui
 class Label: public Widget
 {
 public:
-	Label();
-	Label(const sf::String& string);
+    Label();
+    Label(const sf::String& string);
 
-	/**
-	 * Label's text
-	 */
-	void setText(const sf::String& string);
-	const sf::String& getText() const;
+    /**
+     * Label's text
+     */
+    void setText(const sf::String& string);
+    const sf::String& getText() const;
 
-	/**
-	 * Label's color
-	 */
-	void setColor(const sf::Color& color);
-	const sf::Color& getColor() const;
+    /**
+     * Label's color
+     */
+    void setColor(const sf::Color& color);
+    const sf::Color& getColor() const;
 
-	void setCharacterSize(int size);
-	int getCharacterSize() const;
+    void setCharacterSize(int size);
+    int getCharacterSize() const;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	BitmapText m_text;
+    BitmapText m_text;
 };
 
 }
