@@ -24,19 +24,20 @@ Editor::Editor():
     m_borders_sprite.setTexture(Resources::getTexture("borders.png"));
 
     // Initialize visual grid (+0.5 for portable pixel-perfect rendition)
+    const sf::Color gridColor(0x5f, 0x5f, 0x5f);
     for (int i = 1; i < LevelManager::NB_BRICK_LINES; ++i)
     {
-        m_grid_lines[i * 2].color        = sf::Color(0, 0, 0, 128);
+        m_grid_lines[i * 2].color        = gridColor;
         m_grid_lines[i * 2].position     = sf::Vector2f(0.5, Brick::HEIGHT * i - 0.5);
-        m_grid_lines[i * 2 + 1].color    = sf::Color(0, 0, 0, 128);
+        m_grid_lines[i * 2 + 1].color    = gridColor;
         m_grid_lines[i * 2 + 1].position = sf::Vector2f(m_width + 0.5, Brick::HEIGHT * i - 0.5);
     }
 
     for (int i = 1; i < LevelManager::NB_BRICK_COLS; ++i)
     {
-        m_grid_cols[i * 2].color        = sf::Color(0, 0, 0, 128);
+        m_grid_cols[i * 2].color        = gridColor;
         m_grid_cols[i * 2].position     = sf::Vector2f(Brick::WIDTH * i - 0.5, 0.5);
-        m_grid_cols[i * 2 + 1].color    = sf::Color(0, 0, 0, 128);
+        m_grid_cols[i * 2 + 1].color    = gridColor;
         m_grid_cols[i * 2 + 1].position = sf::Vector2f(Brick::WIDTH * i - 0.5, m_height + 0.5);
     }
 
