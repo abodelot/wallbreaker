@@ -204,7 +204,10 @@ void Game::takeScreenshot() const
     strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
     std::string filename = screenshot_path + "/" + current_time + ".png";
 
-    if (m_window.capture().saveToFile(filename))
+    sf::Texture texture;
+    texture.create(m_window.getSize().x, m_window.getSize().y);
+    texture.update(m_window);
+    if (texture.copyToImage().saveToFile(filename))
     {
         std::cout << "screenshot saved to " << filename << std::endl;
     }

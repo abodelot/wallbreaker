@@ -11,6 +11,9 @@ settings.ini
 wallbreaker.layout
 wallbreaker.depend
 
+# Vim
+*.swp
+
 # Compiled Object files
 *.slo
 *.lo
