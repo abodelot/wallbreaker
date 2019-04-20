@@ -35,7 +35,7 @@ Game::~Game()
 
 void Game::init(const std::string& path)
 {
-    // Set application directory
+    // Set application directory: compute dirname from path
     size_t last_dir = path.find_last_of("/\\");
     m_app_dir = path.substr(0, last_dir + 1);
     if (m_app_dir.empty())
@@ -55,9 +55,9 @@ void Game::init(const std::string& path)
 
     // Load configuration from settings file
     IniParser config;
-    std::cout << "* loading settings from " << WB_SETTINGS_FILE << std::endl;
     if (config.load(m_app_dir + WB_SETTINGS_FILE))
     {
+        std::cout << "* loading settings from " << WB_SETTINGS_FILE << std::endl;
         config.seek_section("Wallbreaker");
         size_t app_width = config.get("app_width", APP_WIDTH * 2);
         size_t app_height = config.get("app_height", APP_HEIGHT * 2);

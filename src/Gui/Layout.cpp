@@ -75,7 +75,7 @@ Label* Layout::addLabel(const sf::String& string)
 Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
 {
     if (m_type != Layout::Form)
-        throw std::logic_error("Layout::Form must me bused for adding a new row");
+        throw std::logic_error("Layout::Form is required for adding a new row");
 
     sf::Vector2f pos;
     if (m_last != NULL)

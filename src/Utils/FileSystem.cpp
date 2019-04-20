@@ -76,5 +76,3 @@ std::string FileSystem::initSettingsDirectory(const std::string& appname)
     }
     return config_dir;
 }
-
-

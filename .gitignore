@@ -18,6 +18,7 @@ wallbreaker.depend
 *.slo
 *.lo
 *.o
+*.d
 
 # Compiled Dynamic libraries
 *.so

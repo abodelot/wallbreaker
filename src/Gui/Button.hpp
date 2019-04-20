@@ -18,7 +18,7 @@ public:
     Button(const sf::String& string);
 
     /**
-     * Set the displayed button label
+     * Set/get the displayed button label
      */
     void setString(const sf::String& string);
     const sf::String& getString() const;

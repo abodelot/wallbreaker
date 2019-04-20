@@ -4,7 +4,7 @@
 #include "Core/Config.hpp"
 #include "Gui/Theme.hpp"
 
-#define ABOUT_TEXT (APP_TITLE " " APP_VERSION " - " APP_URL)
+#define ABOUT_TEXT (APP_TITLE " " APP_VERSION " - " APP_URL " (Built " __DATE__ ", " __TIME__ ")")
 
 MainMenu::MainMenu():
     m_background(Resources::getTexture("background.png")),
@@ -18,11 +18,13 @@ MainMenu::MainMenu():
     m_about_text.setPosition(0, APP_HEIGHT - m_about_text.getSize().y);
     m_about_text.setColor(gui::Theme::BORDER_COLOR);
 
-    m_menu.setPosition(117, 100);
     m_menu.addButton("New game", 1);
     m_menu.addButton("Editor",   2);
     m_menu.addButton("Options",  3);
     m_menu.addButton("Quit",     4);
+    // Center menu horizontally
+    int x = (APP_WIDTH - m_menu.getSize().x) / 2;
+    m_menu.setPosition(x, 100);
 }
 
 
@@ -54,6 +56,7 @@ void MainMenu::onFocus()
 
 void MainMenu::update(float frametime)
 {
+    // About text is scrolled horizontally
     m_about_text.move(-50 * frametime, 0);
     float width = m_about_text.getSize().x;
     if (m_about_text.getPosition().x + width < 0)

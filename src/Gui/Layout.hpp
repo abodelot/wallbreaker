@@ -34,8 +34,14 @@ public:
      * @return added widget
      */
     Widget* add(Widget* widget, int id = -1);
+
+    // Shortcut for add(new Button)
     Button* addButton(const sf::String& string, int id = -1);
+
+    // Shortcut for add(new Label)
     Label*  addLabel(const sf::String& string);
+
+    // Add a label and a widget in a new horizontal row
     Widget* addRow(const sf::String& str, Widget* widget, int id = -1);
 
 protected:
@@ -62,11 +68,11 @@ private:
 
     Widget* push(Widget* widget);
 
-    Widget*   m_first;
-    Widget*   m_last;
-    Type      m_type;
-    Widget*   m_hover;
-    Widget*   m_focus;
+    Widget* m_first;
+    Widget* m_last;
+    Type    m_type;
+    Widget* m_hover;
+    Widget* m_focus;
 
     struct FormInfo // Layout::Form
     {
