@@ -46,10 +46,10 @@ public:
 private:
     float   m_angle;
     float   m_velocity;
-    int     m_powered;
+    int     m_powerHits;
     // If ball is glued to a sticky paddle
-    Paddle* m_glued_to;
-    float   m_glued_at;
+    Paddle* m_gluedTo;
+    float   m_gluedAt;
 
     ParticleSystem::Emitter m_emitter;
 

@@ -45,8 +45,8 @@ void Game::init(const std::string& path)
     Resources::setSearchPath(m_app_dir + "/resources/");
 
     // Init levels
-    std::cout << "* loading levels from " << WB_LEVEL_FILE << std::endl;
-    LevelManager::getInstance().openFromFile(m_app_dir + WB_LEVEL_FILE);
+    std::cout << "* loading levels from " << APP_LEVEL_FILE << std::endl;
+    LevelManager::getInstance().openFromFile(m_app_dir + APP_LEVEL_FILE);
 
     // Init GUI module
     gui::Theme::loadFont(m_app_dir + "/resources/images/font.png");
@@ -55,9 +55,9 @@ void Game::init(const std::string& path)
 
     // Load configuration from settings file
     IniParser config;
-    if (config.load(m_app_dir + WB_SETTINGS_FILE))
+    if (config.load(m_app_dir + APP_SETTINGS_FILE))
     {
-        std::cout << "* loading settings from " << WB_SETTINGS_FILE << std::endl;
+        std::cout << "* loading settings from " << APP_SETTINGS_FILE << std::endl;
         config.seek_section("Wallbreaker");
         size_t app_width = config.get("app_width", APP_WIDTH * 2);
         size_t app_height = config.get("app_height", APP_HEIGHT * 2);
@@ -122,7 +122,7 @@ void Game::quit()
     config.set("app_height", m_window.getSize().y);
     config.set("sound",      SoundSystem::isSoundEnabled());
     config.set("music",      SoundSystem::isMusicEnabled());
-    config.save(m_app_dir + WB_SETTINGS_FILE);
+    config.save(m_app_dir + APP_SETTINGS_FILE);
 }
 
 
@@ -193,7 +193,7 @@ sf::RenderWindow& Game::getWindow()
 void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
-    std::string screenshot_path = m_app_dir + WB_SCREENSHOT_DIR;
+    std::string screenshot_path = m_app_dir + APP_SCREENSHOT_DIR;
     if (!FileSystem::isDirectory(screenshot_path))
     {
         FileSystem::createDirectory(screenshot_path);

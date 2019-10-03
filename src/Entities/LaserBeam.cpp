@@ -11,7 +11,7 @@ LaserBeam::LaserBeam()
 
 void LaserBeam::onUpdate(float frametime)
 {
-    float delta = 100 * frametime;
+    const float delta = 150 * frametime;
     move(0, -delta);
 }
 

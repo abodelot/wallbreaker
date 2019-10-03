@@ -92,11 +92,11 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
     {
         m_form.label_width = width;
         size_t i = 0;
-        for (Widget* widget = m_first; widget != NULL; widget = widget->m_next)
+        for (Widget* w= m_first; w != NULL; w = w->m_next)
         {
             // Re-align previous widgets
             if (i % 2)
-                widget->setPosition(width, widget->getPosition().y);
+                w->setPosition(width, w->getPosition().y);
             ++i;
         }
     }

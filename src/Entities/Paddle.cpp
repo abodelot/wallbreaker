@@ -3,12 +3,13 @@
 #include "Paddle.hpp"
 #include "LaserBeam.hpp"
 #include "Ball.hpp"
-#include "Core/Game.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
 #include "Screens/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
+// Paddle speed when moved with arrow keys
+#define PADDLE_SPEED 150
 
 Paddle::Paddle():
     m_sticky(false)
@@ -18,12 +19,23 @@ Paddle::Paddle():
 }
 
 
-void Paddle::onUpdate(float)
+void Paddle::onMouseMoved(const sf::Vector2f& mouse)
 {
     // Paddle follows the mouse cursor
-    const sf::RenderWindow& window = Game::getInstance().getWindow();
-    int x = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
-    setPosition(x - getWidth() / 2, getPosition().y);
+    setPosition(mouse.x - getWidth() / 2, getPosition().y);
+}
+
+
+void Paddle::onUpdate(float frametime)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        move(-PADDLE_SPEED * frametime, 0);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
+        move(PADDLE_SPEED * frametime, 0);
+    }
 }
 
 

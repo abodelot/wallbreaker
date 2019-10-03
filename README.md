@@ -7,7 +7,7 @@ Wallbreaker is a clone of the famous Arkanoid/Breakout games, written in C++ wit
 
 ## How to play?
 
-- Move the paddle with the mouse to catch the ball
+- Move the paddle with the mouse to catch the ball, or use the left/right arrow keys.
 - Click or press `Space` to release balls glued to sticky paddle.
 - Click or press `Space` to shoot lasers with laser paddle.
 - Press `F2` to take a screenshot.

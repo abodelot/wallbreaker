@@ -123,6 +123,13 @@ void Wallbreaker::onEvent(const sf::Event& event)
                     }
                     break;
 
+                case sf::Event::MouseMoved:
+                    // Paddle follows the mouse cursor
+                    m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords({
+                        event.mouseMove.x, event.mouseMove.y
+                    }));
+                    break;
+
                 case sf::Event::MouseButtonPressed:
                     if (m_paddle.isSticky())
                         applyOnEachBall(&Ball::unstick);
@@ -161,7 +168,8 @@ void Wallbreaker::onEvent(const sf::Event& event)
             break;
 
         case READY:
-            if (event.type == sf::Event::MouseButtonPressed)
+            if (event.type == sf::Event::MouseButtonPressed ||
+                (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space))
                 setStatus(PLAYING);
             break;
 
@@ -202,8 +210,10 @@ void Wallbreaker::update(float frametime)
         {
             Entity* ball = m_entities.front();
             // Keep the ball centered on the player pad
-            ball->setPosition(m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
-                              m_height - m_paddle.getHeight() - ball->getHeight());
+            ball->setPosition(
+                m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
+                m_height - m_paddle.getHeight() - ball->getHeight()
+            );
         }
         m_particles.update(frametime);
     }
@@ -363,10 +373,10 @@ void Wallbreaker::updateEntities(float frametime)
             else
             {
                 // Get corners
-                int left =   (int) entity.getX() / Brick::WIDTH;
-                int top =    (int) entity.getY() / Brick::HEIGHT;
-                int right =  (int) (entity.getX() + entity.getWidth())  / Brick::WIDTH;
-                int bottom = (int) (entity.getY() + entity.getHeight()) / Brick::HEIGHT;
+                int left =   entity.getX() / Brick::WIDTH;
+                int top =    entity.getY() / Brick::HEIGHT;
+                int right =  (entity.getX() + entity.getWidth())  / Brick::WIDTH;
+                int bottom = (entity.getY() + entity.getHeight()) / Brick::HEIGHT;
 
                 if (checkBrick(entity, top, left, old_pos)
                  || checkBrick(entity, top, right, old_pos)

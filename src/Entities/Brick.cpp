@@ -10,7 +10,7 @@ Brick::Brick():
     m_broken(false)
 {
     setTexture(Resources::getTexture("bricks.png"));
-    m_emitter.setParticleCount(20);
+    m_emitter.setParticleCount(40);
     m_emitter.setTimeToLive(5.f);
     m_emitter.setSpeed(15, 5);
     m_emitter.setAngle(0.f, math::PI * 2);

@@ -40,7 +40,7 @@ public:
 
 private:
     /**
-     * Get color associated to the birck type
+     * Get color associated to the brick type
      */
     sf::Color getBaseColor() const;
 

@@ -7,9 +7,9 @@ namespace math
 // Set the random numbers sequence seed with the current system time, so that it is always different
 unsigned int static set_random_seed()
 {
-    unsigned int seed = static_cast<unsigned int>(time(NULL));
-    srand(seed);
-    return seed;
+    unsigned int timestamp = static_cast<unsigned int>(time(NULL));
+    srand(timestamp);
+    return timestamp;
 }
 
 

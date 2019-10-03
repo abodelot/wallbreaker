@@ -10,6 +10,8 @@ class Paddle: public Entity
 public:
     Paddle();
 
+    void onMouseMoved(const sf::Vector2f& mouse);
+
     void onUpdate(float frametime) override;
 
     /**

@@ -217,8 +217,8 @@ void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
             if (brick.isActive())
             {
                 // Cast brick shadow
-                for (int i = 0; i < 4; ++i)
-                    shadow[i].position = brick.getPosition() + sf::Vector2f(3, 3);
+                for (int k = 0; k < 4; ++k)
+                    shadow[k].position = brick.getPosition() + sf::Vector2f(3, 3);
 
                 shadow[1].position.x += Brick::WIDTH;
                 shadow[2].position.x += Brick::WIDTH;
