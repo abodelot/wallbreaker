@@ -1,6 +1,7 @@
 #include "PowerUp.hpp"
 #include "Paddle.hpp"
 #include "Brick.hpp"
+#include "Entities/Context.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Screens/Wallbreaker.hpp"
@@ -43,17 +44,17 @@ void PowerUp::onPaddleHit(Paddle& paddle)
             paddle.activeLaser();
             break;
         case TRIPLE_BALL:
-            getManager()->createBall();
-            getManager()->createBall();
+            Context::get().wallbreaker->createBall();
+            Context::get().wallbreaker->createBall();
             break;
         case POWER_BALL:
-            getManager()->applyOnEachBall(&Ball::enablePowerBall);
+            Context::get().wallbreaker->applyOnEachBall(&Ball::enablePowerBall);
             break;
         case EXTRA_LIFE:
-            getManager()->addPlayerLife();
+            Context::get().wallbreaker->addPlayerLife();
             break;
         case SPEED_RESET:
-            getManager()->applyOnEachBall(&Ball::resetSpeed);
+            Context::get().wallbreaker->applyOnEachBall(&Ball::resetSpeed);
             break;
     }
     kill();

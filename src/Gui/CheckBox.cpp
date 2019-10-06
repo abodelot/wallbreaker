@@ -41,7 +41,7 @@ void CheckBox::onStateChanged(State state)
 {
     if (state == State::StateFocused)
     {
-        m_box.setBodyColor(sf::Color(200, 200, 200));
+        m_box.setBodyColor(sf::Color(255, 200, 180));
     }
     else
     {

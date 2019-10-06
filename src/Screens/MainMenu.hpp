@@ -2,6 +2,8 @@
 #define MAIN_MENU_HPP
 
 #include "Screen.hpp"
+#include "Core/ParticleSystem.hpp"
+#include "Core/ParticleEmitter.hpp"
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
@@ -24,6 +26,8 @@ private:
     sf::Sprite m_title;
     BitmapText m_aboutText;
     gui::Menu  m_menu;
+    ParticleEmitter m_emitter;
+    ParticleSystem m_particles;
 };
 
 #endif // MAIN_MENU_HPP

@@ -1,136 +1,11 @@
 #include "ParticleSystem.hpp"
+#include "ParticleEmitter.hpp"
 #include "Utils/Math.hpp"
-
-
-// ParticleSystem::Emitter -----------------------------------------------------
-
-ParticleSystem::Emitter::Emitter():
-    m_looping(false),
-    m_time_to_live(5),
-    m_particle_count(100),
-    m_start_color(sf::Color::White),
-    m_end_color(sf::Color(0, 0, 0, 0)),
-    m_angle(0),
-    m_angle_variation(math::PI * 2),
-    m_speed(100),
-    m_speed_variation(50)
-{
-    // Default particle are just 1 pixel
-    m_texture_rect.width = 1;
-    m_texture_rect.height = 1;
-}
-
-
-void ParticleSystem::Emitter::setLooping(bool looping)
-{
-    m_looping = looping;
-}
-
-
-void ParticleSystem::Emitter::setTimeToLive(float duration)
-{
-    m_time_to_live = duration;
-}
-
-
-void ParticleSystem::Emitter::setParticleColor(const sf::Color& color)
-{
-    m_start_color = color;
-}
-
-
-void ParticleSystem::Emitter::setParticleColor(const sf::Color& start, const sf::Color& end)
-{
-    m_start_color = start;
-    m_end_color = end;
-}
-
-
-void ParticleSystem::Emitter::setAngle(float angle, float variation)
-{
-    m_angle = angle;
-    m_angle_variation = variation;
-}
-
-
-void ParticleSystem::Emitter::setSpeed(float speed, float variation)
-{
-    m_speed = speed;
-    m_speed_variation = variation;
-}
-
-
-void ParticleSystem::Emitter::launchParticles()
-{
-    ParticleSystem::getInstance().create(*this);
-}
-
-
-void ParticleSystem::Emitter::clearParticles()
-{
-    ParticleSystem::getInstance().removeByEmitter(*this);
-}
-
-
-void ParticleSystem::Emitter::setParticleCount(int count)
-{
-    m_particle_count = count;
-}
-
-
-int ParticleSystem::Emitter::getParticleCount() const
-{
-    return m_particle_count;
-}
-
-
-void ParticleSystem::Emitter::setSpawnPosition(const sf::Vector2f& position)
-{
-    m_spawn_position = position;
-}
-
-
-const sf::Vector2f& ParticleSystem::Emitter::getSpawnPosition() const
-{
-    return m_spawn_position;
-}
-
-
-float ParticleSystem::Emitter::getParticleAngle() const
-{
-    return math::rand(m_angle - m_angle_variation, m_angle + m_angle_variation);
-}
-
-
-float ParticleSystem::Emitter::getParticleSpeed() const
-{
-    return math::rand(m_speed - m_speed_variation, m_speed + m_speed_variation);
-}
-
-
-void ParticleSystem::Emitter::setTextureRect(const sf::IntRect& rect)
-{
-    m_texture_rect = rect;
-}
-
-
-const sf::IntRect& ParticleSystem::Emitter::getTextureRect() const
-{
-    return m_texture_rect;
-}
-
-// ParticleSystem --------------------------------------------------------------
-
-ParticleSystem& ParticleSystem::getInstance()
-{
-    static ParticleSystem self;
-    return self;
-}
 
 
 ParticleSystem::ParticleSystem():
     m_vertices(sf::Quads, 4000),
-    m_texture(NULL)
+    m_texture(nullptr)
 {
 }
 
@@ -141,7 +16,7 @@ ParticleSystem::~ParticleSystem()
 }
 
 
-void ParticleSystem::create(const Emitter& emitter)
+void ParticleSystem::create(const ParticleEmitter& emitter)
 {
     for (int i = emitter.getParticleCount(); i >= 0; --i)
     {
@@ -222,7 +97,7 @@ void ParticleSystem::setTexture(const sf::Texture* texture)
 }
 
 
-void ParticleSystem::removeByEmitter(const Emitter& emitter)
+void ParticleSystem::removeByEmitter(const ParticleEmitter& emitter)
 {
     for (ParticleList::iterator it = m_particles.begin(); it != m_particles.end();)
     {
@@ -240,13 +115,12 @@ void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) con
     target.draw(m_vertices, states);
 }
 
-// ParticleSystem::Particle ----------------------------------------------------
 
-ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
+ParticleSystem::Particle::Particle(const ParticleEmitter& e):
     emitter(e),
     position(e.getSpawnPosition()),
     color(e.m_start_color),
-    lifespan(math::rand(0.f, e.m_time_to_live))
+    lifespan(math::rand(0.f, e.m_timeToLive))
 {
     remaining_time = lifespan;
 

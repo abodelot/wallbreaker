@@ -1,6 +1,7 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Paddle.hpp"
+#include "Context.hpp"
 #include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
@@ -34,12 +35,12 @@ Ball::Ball():
     m_emitter.setAngle(0, math::PI * 2);
     m_emitter.setTimeToLive(1.f);
     m_emitter.setLooping(true);
+    m_emitter.setParticleSystem(*Context::get().particles);
 }
 
 
 Ball::~Ball()
 {
-    m_emitter.clearParticles();
     --s_instance_count;
 }
 
@@ -70,10 +71,10 @@ void Ball::resetSpeed()
 }
 
 
-void Ball::onInit()
+void Ball::createParticles()
 {
     m_emitter.setSpawnPosition(getCenter());
-    m_emitter.launchParticles();
+    m_emitter.createParticles();
 }
 
 

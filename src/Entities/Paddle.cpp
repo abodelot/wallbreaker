@@ -3,6 +3,7 @@
 #include "Paddle.hpp"
 #include "LaserBeam.hpp"
 #include "Ball.hpp"
+#include "Entities/Context.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
 #include "Screens/Wallbreaker.hpp"
@@ -84,7 +85,7 @@ void Paddle::activeLaser()
     if (m_sticky)
     {
         m_sticky = false;
-        getManager()->applyOnEachBall(&Ball::unstick);
+        Context::get().wallbreaker->applyOnEachBall(&Ball::unstick);
     }
 }
 

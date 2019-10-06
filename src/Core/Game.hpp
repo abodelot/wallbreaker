@@ -8,7 +8,7 @@
 class Screen;
 
 /**
- * Application controller
+ * Application singleton controller
  */
 class Game
 {

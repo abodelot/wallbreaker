@@ -90,6 +90,10 @@ void Game::run()
             {
                 quit();
             }
+            else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F2)
+            {
+                takeScreenshot();
+            }
             else
             {
                 m_current_screen->onEvent(event);
@@ -186,7 +190,7 @@ void Game::setResolution(size_t width, size_t height)
     m_window.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
     m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
     m_window.setView(m_view);
-    m_window.setFramerateLimit(60);
+    m_window.setFramerateLimit(APP_FPS);
     m_window.setKeyRepeatEnabled(false);
 
     // Center window on desktop

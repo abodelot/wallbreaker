@@ -6,6 +6,7 @@
 #define APP_TITLE         "Wallbreaker"
 #define APP_WIDTH         320
 #define APP_HEIGHT        240
+#define APP_FPS           60
 
 #define APP_AUTHOR        "Alexandre Bodelot"
 #define APP_VERSION       "0.2"

@@ -6,7 +6,6 @@
 class Ball;
 class Paddle;
 class Brick;
-class Wallbreaker;
 
 /**
  * Base class for game entities
@@ -16,9 +15,6 @@ class Entity: public sf::Sprite
 public:
     Entity();
     virtual ~Entity();
-
-    void setManager(Wallbreaker* parent);
-    Wallbreaker* getManager();
 
     bool isAlive() const;
 
@@ -32,7 +28,6 @@ public:
 
     // callbacks ---------------------------------------------------------------
 
-    virtual void onInit() {};
     virtual void onUpdate(float frametime) = 0;
 
     virtual void onBrickHit(Brick&, const sf::Vector2f&) {};
@@ -56,8 +51,7 @@ public:
     sf::IntRect getCollisionRect() const;
 
 private:
-    Wallbreaker* m_parent;
-    bool         m_alive;
+    bool m_alive;
 };
 
 #endif // ENTITY_HPP

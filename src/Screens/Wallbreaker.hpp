@@ -4,13 +4,15 @@
 #include "Screen.hpp"
 #include "Core/Config.hpp"
 #include "Core/HUD.hpp"
+#include "Core/ParticleSystem.hpp"
 #include "Entities/Paddle.hpp"
 #include "Entities/Ball.hpp"
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
+#include <list>
+
 class LevelManager;
-class ParticleSystem;
 
 /**
  * Game screen
@@ -24,6 +26,8 @@ public:
     ~Wallbreaker();
 
     void onEvent(const sf::Event& event) override;
+
+    void onFocus() override;
 
     void update(float frametime) override;
 
@@ -58,7 +62,7 @@ private:
     const int         m_height;
     LevelManager&     m_level;
     int               m_remainingBricks;
-    ParticleSystem&   m_particles;
+    ParticleSystem    m_particles;
     BitmapText        m_infoText;
     sf::Sprite        m_hudSprite;
     HUD               m_hud;

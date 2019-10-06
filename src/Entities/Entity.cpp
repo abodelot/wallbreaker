@@ -3,7 +3,6 @@
 
 
 Entity::Entity():
-    m_parent(NULL),
     m_alive(true)
 {
 }
@@ -11,18 +10,6 @@ Entity::Entity():
 
 Entity::~Entity()
 {
-}
-
-
-void Entity::setManager(Wallbreaker* parent)
-{
-    m_parent = parent;
-}
-
-
-Wallbreaker* Entity::getManager()
-{
-    return m_parent;
 }
 
 
@@ -49,7 +36,7 @@ bool Entity::collidesWith(const Entity& other) const
 
 Ball* Entity::toBall()
 {
-    return NULL;
+    return nullptr;
 }
 
 

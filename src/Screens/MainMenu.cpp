@@ -25,6 +25,15 @@ MainMenu::MainMenu():
     m_menu.addButton("Quit",     4);
     // Center menu horizontally
     m_menu.setPosition((APP_WIDTH - m_menu.getSize().x) / 2, 100);
+
+    m_emitter.setParticleColor({0x90, 0x50, 0x37});
+    m_emitter.setLooping(true);
+    m_emitter.setSpawnArea({0, 0, APP_WIDTH, APP_HEIGHT});
+    m_emitter.setSpeed(10, 5);
+    m_emitter.setTimeToLive(12);
+    m_emitter.setParticleCount(150);
+    m_emitter.setParticleSystem(m_particles);
+    m_emitter.createParticles();
 }
 
 
@@ -63,12 +72,14 @@ void MainMenu::update(float frametime)
     {
         m_aboutText.setPosition(APP_WIDTH, m_aboutText.getPosition().y);
     }
+    m_particles.update(frametime);
 }
 
 
 void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(m_background, states);
+    target.draw(m_particles, states);
     target.draw(m_title, states);
     target.draw(m_aboutText, states);
     m_menu.show();

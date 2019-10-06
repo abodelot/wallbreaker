@@ -1,7 +1,8 @@
 #ifndef BRICK_HPP
 #define BRICK_HPP
 
-#include "Core/ParticleSystem.hpp"
+#include "Core/ParticleEmitter.hpp"
+#include <SFML/Graphics/Sprite.hpp>
 
 class Brick: public sf::Sprite
 {
@@ -46,7 +47,7 @@ private:
 
     Type m_type;
     bool m_broken;
-    ParticleSystem::Emitter m_emitter;
+    ParticleEmitter m_emitter;
 };
 
 #endif // BRICK_HPP

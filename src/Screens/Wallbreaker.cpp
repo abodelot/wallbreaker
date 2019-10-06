@@ -2,10 +2,10 @@
 #include "Core/Game.hpp"
 #include "Core/Effect.hpp"
 #include "Core/LevelManager.hpp"
-#include "Core/ParticleSystem.hpp"
 #include "Core/Resources.hpp"
 #include "Core/Settings.hpp"
 #include "Core/SoundSystem.hpp"
+#include "Entities/Context.hpp"
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
 #include "Gui/Theme.hpp"
@@ -20,7 +20,6 @@ Wallbreaker::Wallbreaker():
     m_height(LevelManager::NB_BRICK_LINES * Brick::HEIGHT),
     m_level(LevelManager::getInstance()),
     m_remainingBricks(0),
-    m_particles(ParticleSystem::getInstance()),
     m_infoText(gui::Theme::font),
     m_score(0),
     m_status(READY),
@@ -47,7 +46,6 @@ Wallbreaker::Wallbreaker():
     m_bordersSprite.setPosition(X_OFFSET, 0);
     // Player paddle positioned at the bottom-center
     m_paddle.setPosition((m_width - m_paddle.getWidth()) / 2, m_height - m_paddle.getHeight());
-    m_paddle.setManager(this);
 
     // Build 'pause' menu
     m_pauseMenu.setPosition(
@@ -62,7 +60,10 @@ Wallbreaker::Wallbreaker():
     m_gameOverMenu.addButton("Try again", 1);
     m_gameOverMenu.addButton("Quit",      2);
 
-    resetGame();
+    // States are stored in Game, therefore Wallbreaker instance is unique and
+    // context can be safely defined once in Wallbreaker ctor
+    Context::get().wallbreaker = this;
+    Context::get().particles = &m_particles;
 }
 
 
@@ -82,9 +83,6 @@ void Wallbreaker::onEvent(const sf::Event& event)
                 case sf::Event::KeyPressed:
                     switch (event.key.code)
                     {
-                        case sf::Keyboard::F2:
-                            Game::getInstance().takeScreenshot();
-                            break;
                         case sf::Keyboard::Escape:
                             setStatus(PAUSED);
                             break;
@@ -178,6 +176,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
             if (event.type == sf::Event::MouseButtonPressed ||
                 (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space))
             {
+                applyOnEachBall(&Ball::createParticles);
                 setStatus(PLAYING);
             }
             else if (event.type == sf::Event::MouseMoved)
@@ -201,6 +200,15 @@ void Wallbreaker::onEvent(const sf::Event& event)
                     break;
             }
             break;
+    }
+}
+
+
+void Wallbreaker::onFocus()
+{
+    if (m_status != PAUSED)
+    {
+        resetGame();
     }
 }
 
@@ -328,8 +336,6 @@ void Wallbreaker::applyOnEachBall(Ball::ActionPointer action)
 
 void Wallbreaker::addEntity(Entity* entity)
 {
-    entity->setManager(this);
-    entity->onInit();
     m_entities.push_back(entity);
 }
 
@@ -525,8 +531,13 @@ void Wallbreaker::createBall()
 {
     Ball* ball = new Ball();
     // Center ball on player pad
-    float x = m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2;
-    float y = m_height - m_paddle.getHeight() - ball->getHeight();
-    ball->setPosition(x, y);
+    ball->setPosition(
+        m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2,
+        m_height - m_paddle.getHeight() - ball->getHeight()
+    );
+    if (m_status == PLAYING)
+    {
+        ball->createParticles();
+    }
     addEntity(ball);
 }

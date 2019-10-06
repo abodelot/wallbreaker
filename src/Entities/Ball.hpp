@@ -2,7 +2,7 @@
 #define BALL_HPP
 
 #include "Entity.hpp"
-#include "Core/ParticleSystem.hpp"
+#include "Core/ParticleEmitter.hpp"
 
 
 class Ball: public Entity
@@ -29,9 +29,9 @@ public:
 
     void resetSpeed();
 
-    // callbacks ---------------------------------------------------------------
+    void createParticles();
 
-    void onInit() override;
+    // callbacks ---------------------------------------------------------------
 
     void onUpdate(float frametime) override;
 
@@ -51,7 +51,7 @@ private:
     Paddle* m_gluedTo;
     float   m_gluedAt;
 
-    ParticleSystem::Emitter m_emitter;
+    ParticleEmitter m_emitter;
 
     static int s_instance_count;
 };

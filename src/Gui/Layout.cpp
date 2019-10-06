@@ -126,12 +126,6 @@ Widget* Layout::push(Widget* widget)
         m_last = widget;
     }
     recomputeSize();
-
-    // Focus first widget
-    if (m_focus == NULL && widget->isSelectable())
-    {
-        giveFocus(widget);
-    }
     return widget;
 }
 

@@ -2,6 +2,7 @@
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Effect.hpp"
+#include "Entities/Context.hpp"
 #include "Utils/Math.hpp"
 
 
@@ -14,6 +15,7 @@ Brick::Brick():
     m_emitter.setTimeToLive(5.f);
     m_emitter.setSpeed(15, 5);
     m_emitter.setAngle(0.f, math::PI * 2);
+    m_emitter.setParticleSystem(*Context::get().particles);
 }
 
 
@@ -40,11 +42,8 @@ void Brick::setType(int type)
 
 void Brick::setPosition(int x, int y)
 {
-    sf::Vector2f pos(x, y);
-    sf::Sprite::setPosition(pos);
-    pos.x += WIDTH / 2;
-    pos.y += HEIGHT / 2;
-    m_emitter.setSpawnPosition(pos);
+    sf::Sprite::setPosition(x, y);
+    m_emitter.setSpawnArea(sf::FloatRect(x, y, WIDTH, HEIGHT));
 }
 
 
@@ -84,7 +83,7 @@ bool Brick::takeDamage(bool force_destruction)
         Effect::fadeOut(*this);
         Effect::rotate(*this, math::rand(-60, 60));
         Effect::zoom(*this, 0.5);
-        m_emitter.launchParticles();
+        m_emitter.createParticles();
     }
     return m_broken;
 }

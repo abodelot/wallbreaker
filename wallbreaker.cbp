@@ -57,6 +57,8 @@
 		<Unit filename="src/Core/LevelManager.cpp" />
 		<Unit filename="src/Core/LevelManager.hpp" />
 		<Unit filename="src/Core/Main.cpp" />
+		<Unit filename="src/Core/ParticleEmitter.cpp" />
+		<Unit filename="src/Core/ParticleEmitter.hpp" />
 		<Unit filename="src/Core/ParticleSystem.cpp" />
 		<Unit filename="src/Core/ParticleSystem.hpp" />
 		<Unit filename="src/Core/Resources.cpp" />
@@ -69,6 +71,8 @@
 		<Unit filename="src/Entities/Ball.hpp" />
 		<Unit filename="src/Entities/Brick.cpp" />
 		<Unit filename="src/Entities/Brick.hpp" />
+		<Unit filename="src/Entities/Context.cpp" />
+		<Unit filename="src/Entities/Context.hpp" />
 		<Unit filename="src/Entities/Entity.cpp" />
 		<Unit filename="src/Entities/Entity.hpp" />
 		<Unit filename="src/Entities/LaserBeam.cpp" />
