@@ -1,14 +1,14 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
-#include "Screen.hpp"
+#include "State.hpp"
 #include "Core/ParticleSystem.hpp"
 #include "Core/ParticleEmitter.hpp"
 #include "Gui/BitmapText.hpp"
 #include "Gui/Menu.hpp"
 
 
-class MainMenu: public Screen
+class MainMenu: public State
 {
 public:
     MainMenu();

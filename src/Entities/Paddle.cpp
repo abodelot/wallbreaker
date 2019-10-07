@@ -6,7 +6,7 @@
 #include "Entities/Context.hpp"
 #include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
-#include "Screens/Wallbreaker.hpp"
+#include "States/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
 // Paddle speed when moved with arrow keys

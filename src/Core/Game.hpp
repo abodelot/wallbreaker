@@ -5,7 +5,7 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 
-class Screen;
+class State;
 
 /**
  * Application singleton controller
@@ -34,19 +34,19 @@ public:
     void quit();
 
     /**
-     * Register a new screen
+     * Register a new game state
      */
-    void addScreen(const std::string& id, Screen* screen);
+    void addState(const std::string& name, State* state);
 
     /**
-     * Set the next screen to be displayed
+     * Set the next state to be displayed
      */
-    void setCurrentScreen(const std::string& id);
+    void setCurrentState(const std::string& name);
 
     /**
-     * Restore a previous screen as the new current screen
+     * Restore a previous state as the new current state
      */
-    void restorePreviousScreen();
+    void restorePreviousState();
 
     /**
      * Set application window dimension
@@ -75,9 +75,9 @@ private:
     std::string      m_appDir;
     sf::View         m_view;
 
-    // Screen management
-    std::map<std::string, Screen*> m_screens;
-    Screen*                        m_current_screen;
+    // State management
+    std::map<std::string, State*> m_states;
+    State* m_currentState;
 };
 
 #endif // GAME_HPP

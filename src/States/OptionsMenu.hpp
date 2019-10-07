@@ -1,7 +1,7 @@
 #ifndef OPTIONSMENU_HPP
 #define OPTIONSMENU_HPP
 
-#include "Screen.hpp"
+#include "State.hpp"
 #include "Gui/Menu.hpp"
 #include "Gui/OptionsBox.hpp"
 #include "Gui/Button.hpp"
@@ -10,7 +10,7 @@
 /**
  * Menu dedicated to settings management
  */
-class OptionsMenu: public Screen
+class OptionsMenu: public State
 {
 public:
     OptionsMenu();

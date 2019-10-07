@@ -1,7 +1,7 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-#include "Screen.hpp"
+#include "State.hpp"
 #include "Core/Config.hpp"
 #include "Core/LevelManager.hpp"
 #include "Entities/Brick.hpp"
@@ -14,7 +14,7 @@ class OptionsBox;
 class CheckBox;
 }
 
-class Editor: public Screen
+class Editor: public State
 {
 public:
     Editor();

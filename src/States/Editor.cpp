@@ -169,7 +169,7 @@ void Editor::onEvent(const sf::Event& event)
             toggleGrid();
             break;
         case 6: // Back
-            Game::getInstance().restorePreviousScreen();
+            Game::getInstance().restorePreviousState();
             break;
         case 7: // Test current level
             break;

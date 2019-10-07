@@ -157,11 +157,11 @@ void Wallbreaker::onEvent(const sf::Event& event)
                     setStatus(PLAYING);
                     break;
                 case 2: // Go to options menu
-                    Game::getInstance().setCurrentScreen("OptionsMenu");
+                    Game::getInstance().setCurrentState("OptionsMenu");
                     break;
                 case 3: // Clear game and back to main menu
                     resetGame();
-                    Game::getInstance().restorePreviousScreen();
+                    Game::getInstance().restorePreviousState();
                     break;
                 default:
                     // Resume
@@ -195,7 +195,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
                     break;
                 case 2: // Clear game and back to main menu
                     resetGame();
-                    Game::getInstance().restorePreviousScreen();
+                    Game::getInstance().restorePreviousState();
                     break;
             }
             break;

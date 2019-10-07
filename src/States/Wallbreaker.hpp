@@ -1,7 +1,7 @@
 #ifndef WALLBREAKER_HPP
 #define WALLBREAKER_HPP
 
-#include "Screen.hpp"
+#include "State.hpp"
 #include "Core/Config.hpp"
 #include "Core/HUD.hpp"
 #include "Core/ParticleSystem.hpp"
@@ -17,7 +17,7 @@ class LevelManager;
 /**
  * Game screen
  */
-class Wallbreaker: public Screen
+class Wallbreaker: public State
 {
 public:
     enum Status { READY, PLAYING, PAUSED, GAME_OVER };

@@ -42,13 +42,13 @@ void MainMenu::onEvent(const sf::Event& event)
     switch (m_menu.onEvent(event))
     {
         case 1:
-            Game::getInstance().setCurrentScreen("Wallbreaker");
+            Game::getInstance().setCurrentState("Wallbreaker");
             break;
         case 2:
-            Game::getInstance().setCurrentScreen("Editor");
+            Game::getInstance().setCurrentState("Editor");
             break;
         case 3:
-            Game::getInstance().setCurrentScreen("OptionsMenu");
+            Game::getInstance().setCurrentState("OptionsMenu");
             break;
         case 4:
             Game::getInstance().quit();

@@ -4,7 +4,7 @@
 #include "Entities/Context.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
-#include "Screens/Wallbreaker.hpp"
+#include "States/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
 #define POWERUP_WIDTH 20

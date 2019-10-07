@@ -1,14 +1,14 @@
-#include <iostream>
 #include "Game.hpp"
 #include "Config.hpp"
 #include "Resources.hpp"
 #include "LevelManager.hpp"
 #include "Settings.hpp"
 #include "SoundSystem.hpp"
-#include "Screens/Screen.hpp"
+#include "States/State.hpp"
 #include "Gui/Theme.hpp"
 #include "Utils/IniParser.hpp"
 #include "Utils/FileSystem.hpp"
+#include <iostream>
 
 
 Game& Game::getInstance()
@@ -20,15 +20,15 @@ Game& Game::getInstance()
 
 Game::Game():
     m_running(true),
-    m_current_screen(NULL)
+    m_currentState(nullptr)
 {
 }
 
 
 Game::~Game()
 {
-    // Delete all allocated screens
-    for (auto it = m_screens.begin(); it != m_screens.end(); ++it)
+    // Delete all allocated states
+    for (auto it = m_states.begin(); it != m_states.end(); ++it)
         delete it->second;
 }
 
@@ -79,7 +79,7 @@ void Game::run()
 
     while (m_running)
     {
-        // Poll events and send them to the current screen
+        // Poll events and send them to the current state
         sf::Event event;
         while (m_window.pollEvent(event))
         {
@@ -93,18 +93,18 @@ void Game::run()
             }
             else
             {
-                m_current_screen->onEvent(event);
+                m_currentState->onEvent(event);
             }
         }
 
-        // Update current screen
+        // Update current state
         float frametime = clock.restart().asSeconds();
-        m_current_screen->update(frametime);
+        m_currentState->update(frametime);
 
-        // Render current screen
+        // Render current state
         m_window.clear();
         m_window.setView(m_view);
-        m_window.draw(*m_current_screen);
+        m_window.draw(*m_currentState);
         m_window.display();
     }
 }
@@ -141,39 +141,39 @@ void Game::quit()
 }
 
 
-void Game::addScreen(const std::string& id, Screen* screen)
+void Game::addState(const std::string& id, State* state)
 {
-    m_screens.insert(std::pair<std::string, Screen*>(id, screen));
+    m_states.emplace(id, state);
 }
 
 
-void Game::setCurrentScreen(const std::string& id)
+void Game::setCurrentState(const std::string& name)
 {
-    auto it = m_screens.find(id);
-    if (it != m_screens.end())
+    auto it = m_states.find(name);
+    if (it != m_states.end())
     {
-        Screen* previous = m_current_screen;
-        m_current_screen = it->second;
-        m_current_screen->setPrevious(previous);
-        m_current_screen->onFocus();
+        State* previous = m_currentState;
+        m_currentState = it->second;
+        m_currentState->setPrevious(previous);
+        m_currentState->onFocus();
     }
     else
     {
-        std::cerr << "[Game] Screen '" << id << "' is not registered" << std::endl;
+        std::cerr << "[Game] State '" << name << "' is not registered" << std::endl;
     }
 }
 
 
-void Game::restorePreviousScreen()
+void Game::restorePreviousState()
 {
-    if (m_current_screen && m_current_screen->getPrevious())
+    if (m_currentState && m_currentState->getPrevious())
     {
-        m_current_screen = m_current_screen->getPrevious();
-        m_current_screen->onFocus();
+        m_currentState = m_currentState->getPrevious();
+        m_currentState->onFocus();
     }
     else
     {
-        std::cerr << "[Game] No previous screen available" << std::endl;
+        std::cerr << "[Game] No previous state available" << std::endl;
     }
 }
 
