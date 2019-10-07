@@ -1,29 +1,35 @@
+#include "FileSystem.hpp"
+
 #include <cstdlib>
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <iostream>
 
-#include "FileSystem.hpp"
-
 
 #if defined(_WIN32) || defined(__WIN32__)
     // Windows
     #define SYS_WINDOWS
     #include <direct.h>     // _mkdir
-
-#elif defined(linux) || defined(__linux)
+#elif defined(__linux__)
     // Linux
     #define SYS_LINUX
-
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
     // Mac OS
     #define SYS_MACOS
-
 #endif
 
+namespace filesystem {
 
-bool FileSystem::isDirectory(const std::string& path)
+std::string dirname(const std::string& path)
+{
+    size_t last_separator = path.find_last_of("/\\");
+    std::string result = path.substr(0, last_separator + 1);
+    return result;
+}
+
+
+bool is_directory(const std::string& path)
 {
     struct stat buf;
     if (stat(path.c_str(), &buf) == 0)
@@ -34,7 +40,7 @@ bool FileSystem::isDirectory(const std::string& path)
 }
 
 
-bool FileSystem::createDirectory(const std::string& name)
+bool create_directory(const std::string& name)
 {
     bool success = false;
 
@@ -50,29 +56,26 @@ bool FileSystem::createDirectory(const std::string& name)
 }
 
 
-std::string FileSystem::initSettingsDirectory(const std::string& appname)
+std::string init_app_directory(const std::string& appname)
 {
-    std::string config_dir;
+    std::string app_dir;
 
     // Set config directory path
 #ifdef SYS_WINDOWS
-    config_dir = getenv("APPDATA");
-    config_dir += "\\" + appname;
-
+    app_dir = std::string(std::getenv("APPDATA")) + "\\" + appname;
 #elif defined(SYS_LINUX)
-    config_dir = getenv("HOME");
-    config_dir += "/.config/" + appname;
-
+    app_dir = std::string(std::getenv("HOME")) + "/.config/" + appname;
 #elif defined(SYS_MACOS)
-    config_dir = getenv("HOME");
-    config_dir += "/Library/Application Support/" + appname;
-
+    app_dir = std::string(std::getenv("HOME")) + "/Library/Application Support/"
+        + appname;
 #endif
 
     // Create directory if it doesn't already exist
-    if (!isDirectory(config_dir))
+    if (!is_directory(app_dir))
     {
-        createDirectory(config_dir);
+        create_directory(app_dir);
     }
-    return config_dir;
+    return app_dir;
+}
+
 }

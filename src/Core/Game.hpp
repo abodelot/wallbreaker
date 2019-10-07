@@ -72,7 +72,7 @@ private:
 
     sf::RenderWindow m_window;
     bool             m_running;
-    std::string      m_app_dir;
+    std::string      m_appDir;
     sf::View         m_view;
 
     // Screen management

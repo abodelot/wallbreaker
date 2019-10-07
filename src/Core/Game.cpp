@@ -36,25 +36,22 @@ Game::~Game()
 void Game::init(const std::string& path)
 {
     // Set application directory: compute dirname from path
-    size_t last_dir = path.find_last_of("/\\");
-    m_app_dir = path.substr(0, last_dir + 1);
-    if (m_app_dir.empty())
-        m_app_dir = "./";
+    m_appDir = filesystem::dirname(path);
 
     // Init resources search directory
-    Resources::setSearchPath(m_app_dir + "/resources/");
+    Resources::setSearchPath(m_appDir + "/resources/");
 
     // Init levels
     std::cout << "* loading levels from " << APP_LEVEL_FILE << std::endl;
-    LevelManager::getInstance().openFromFile(m_app_dir + APP_LEVEL_FILE);
+    LevelManager::getInstance().openFromFile(m_appDir + APP_LEVEL_FILE);
 
     initGuiTheme();
 
-    SoundSystem::openMusicFromFile(m_app_dir + "/resources/musics/evolution_sphere.ogg");
+    SoundSystem::openMusicFromFile(m_appDir + "/resources/musics/evolution_sphere.ogg");
 
     // Load configuration from settings file
     IniParser config;
-    if (config.load(m_app_dir + APP_SETTINGS_FILE))
+    if (config.load(m_appDir + APP_SETTINGS_FILE))
     {
         std::cout << "* loading settings from " << APP_SETTINGS_FILE << std::endl;
         config.seek_section("Wallbreaker");
@@ -116,7 +113,7 @@ void Game::run()
 void Game::initGuiTheme()
 {
     // Load assets for GUI
-    gui::Theme::font.loadFromFile(m_app_dir + "/resources/images/font.png");
+    gui::Theme::font.loadFromFile(m_appDir + "/resources/images/font.png");
     gui::Theme::clickSound.setBuffer(Resources::getSoundBuffer("click.ogg"));
 
     gui::Theme::textColor = gui::hexToColor("#d9d9f5");
@@ -140,7 +137,7 @@ void Game::quit()
     config.set("app_height", m_window.getSize().y);
     config.set("sound",      SoundSystem::isSoundEnabled());
     config.set("music",      SoundSystem::isMusicEnabled());
-    config.save(m_app_dir + APP_SETTINGS_FILE);
+    config.save(m_appDir + APP_SETTINGS_FILE);
 }
 
 
@@ -211,16 +208,16 @@ sf::RenderWindow& Game::getWindow()
 void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
-    std::string screenshot_path = m_app_dir + APP_SCREENSHOT_DIR;
-    if (!FileSystem::isDirectory(screenshot_path))
+    std::string screenshotPath = m_appDir + APP_SCREENSHOT_DIR;
+    if (!filesystem::is_directory(screenshotPath))
     {
-        FileSystem::createDirectory(screenshot_path);
+        filesystem::create_directory(screenshotPath);
     }
 
-    char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
+    char currentTime[20]; // YYYY-MM-DD_HH-MM-SS + \0
     time_t t = time(NULL);
-    strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
-    std::string filename = screenshot_path + "/" + current_time + ".png";
+    strftime(currentTime, sizeof currentTime, "%Y-%m-%d_%H-%M-%S", localtime(&t));
+    std::string filename = screenshotPath + "/" + currentTime + ".png";
 
     sf::Texture texture;
     texture.create(m_window.getSize().x, m_window.getSize().y);

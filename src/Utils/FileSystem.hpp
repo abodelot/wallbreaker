@@ -3,22 +3,32 @@
 
 #include <string>
 
+namespace filesystem {
+
 /**
- * Static class for handling OS-specific paths
+ * Strips last component from path
  */
-class FileSystem
-{
-public:
-    static bool isDirectory(const std::string& path);
+std::string dirname(const std::string& path);
 
-    static bool createDirectory(const std::string& path);
+/**
+ * Checks if the given path corresponds to a directory.
+ * @return true if the file indicated refers to a directory, false otherwise
+ */
+bool is_directory(const std::string& path);
 
-    /**
-     * Ensure settings directory is created
-     * @param appname: name of application directory
-     * @return path to settings directory
-     */
-    static std::string initSettingsDirectory(const std::string& appname);
-};
+/**
+ * Creates a directory.
+ * @return true if a directory was created, false otherwise
+ */
+bool create_directory(const std::string& dir);
+
+/**
+ * Ensures application settings directory is created.
+ * @param appname: name of application settings directory
+ * @return path to directory, according to OS specifications
+ */
+std::string init_app_directory(const std::string& appname);
+
+}
 
 #endif // FILESYSTEM_HPP
