@@ -18,4 +18,8 @@
 #define APP_SETTINGS_FILE  "settings.ini"
 #define APP_SCREENSHOT_DIR "screenshots"
 
+// Game
+
+#define MAX_PLAYER_LIVES  5
+
 #endif // CONFIG_HPP

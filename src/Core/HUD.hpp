@@ -1,15 +1,18 @@
 #ifndef HUD_HPP
 #define HUD_HPP
 
-#include <SFML/Graphics.hpp>
+#include "Core/Config.hpp"
 #include "Gui/BitmapText.hpp"
+#include <SFML/Graphics.hpp>
 
 /**
  * Info panel
  */
-class HUD
+class HUD: public sf::Drawable, public sf::Transformable
 {
 public:
+    static const int WIDTH = 64;
+
     HUD();
 
     void setLevel(int level);
@@ -20,38 +23,33 @@ public:
 
     void setHighscore(int highscore);
 
-    void setLiveCount(int n);
-
-    /**
-     * Get texture used internally for rendering
-     */
-    const sf::Texture& getTexture() const;
+    void setLifeCount(int lifeCount);
 
 private:
-    HUD(const HUD& hud);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void updateTexture();
-
-    struct Item: public sf::Drawable
+    class Item: public sf::Drawable
     {
+    public:
         Item();
         void setPosition(float x , float y);
         void setLabel(const sf::String& str);
         void setValue(int value);
+
+    private:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         BitmapText label;
         BitmapText value;
     };
 
-    Item              m_bricks;
-    Item              m_level;
-    Item              m_score;
-    Item              m_highscore;
-    int               m_life_count;
-    BitmapText        m_life_label;
-    sf::Sprite        m_life_icon;
-    sf::RenderTexture m_render_texture;
+    Item       m_bricks;
+    Item       m_level;
+    Item       m_score;
+    Item       m_highscore;
+    int        m_lifeCount;
+    BitmapText m_lifeLabel;
+    sf::Sprite m_lifeIcons[MAX_PLAYER_LIVES];
 };
 
 #endif // HUD_HPP

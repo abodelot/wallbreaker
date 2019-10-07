@@ -12,7 +12,6 @@
 #include "Gui/Label.hpp"
 #include "Utils/Math.hpp"
 
-#define MAX_PLAYER_LIVES 5
 #define X_OFFSET 32
 
 Wallbreaker::Wallbreaker():
@@ -30,7 +29,7 @@ Wallbreaker::Wallbreaker():
     // Initialize render texture
     m_levelTexture.create(m_width, m_height);
 
-    // Sprites used for rendering the game area and the HUD
+    // Sprites used for rendering the game area
     m_levelSprite.setTexture(m_levelTexture.getTexture());
     m_levelSprite.setOrigin(m_width / 2, m_height / 2);
     m_levelSprite.setPosition(
@@ -38,8 +37,8 @@ Wallbreaker::Wallbreaker():
         m_height / 2 + LevelManager::BORDER_SIZE
     );
 
-    m_hudSprite.setTexture(m_hud.getTexture());
-    m_hudSprite.setPosition(m_width + LevelManager::BORDER_SIZE * 2 + X_OFFSET, 0);
+    // Align on right
+    m_hud.setPosition(APP_WIDTH - HUD::WIDTH, 0);
 
     m_backgroundSprite.setTexture(Resources::getTexture("background.png"));
     m_bordersSprite.setTexture(Resources::getTexture("borders.png"));
@@ -250,7 +249,7 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_backgroundSprite, states);
     target.draw(m_bordersSprite, states);
     target.draw(m_levelSprite, states);
-    target.draw(m_hudSprite, states);
+    target.draw(m_hud, states);
 
     if (m_status != PLAYING)
     {
@@ -282,7 +281,7 @@ void Wallbreaker::resetGame(size_t level)
 
     // Reset lives
     m_playerLives = MAX_PLAYER_LIVES;
-    m_hud.setLiveCount(MAX_PLAYER_LIVES);
+    m_hud.setLifeCount(MAX_PLAYER_LIVES);
 
     // Load level
     m_remainingBricks = m_level.loadAt(level);
@@ -317,7 +316,7 @@ void Wallbreaker::updateLevelTexture()
 void Wallbreaker::addPlayerLife()
 {
     if (m_playerLives < MAX_PLAYER_LIVES)
-        m_hud.setLiveCount(++m_playerLives);
+        m_hud.setLifeCount(++m_playerLives);
 }
 
 
@@ -429,7 +428,7 @@ void Wallbreaker::updateEntities(float frametime)
             it = m_entities.erase(it);
             if (Ball::getCount() == 0)
             {
-                m_hud.setLiveCount(--m_playerLives);
+                m_hud.setLifeCount(--m_playerLives);
                 SoundSystem::playSound("life-lost.ogg");
                 setStatus(m_playerLives == 0 ? GAME_OVER : READY);
                 break;

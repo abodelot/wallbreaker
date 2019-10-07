@@ -64,7 +64,6 @@ private:
     int               m_remainingBricks;
     ParticleSystem    m_particles;
     BitmapText        m_infoText;
-    sf::Sprite        m_hudSprite;
     HUD               m_hud;
     sf::Sprite        m_bordersSprite;
     sf::Sprite        m_backgroundSprite;

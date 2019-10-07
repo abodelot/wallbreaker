@@ -5,7 +5,7 @@
 #include "Config.hpp"
 #include "Entities/Brick.hpp"
 
-class LevelManager: public sf::Drawable, sf::NonCopyable
+class LevelManager: public sf::Drawable, public sf::Transformable, sf::NonCopyable
 {
 public:
     static const int NB_BRICK_LINES = 29; // number of lines
