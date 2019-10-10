@@ -89,7 +89,7 @@ bool Brick::takeDamage(bool force_destruction)
 }
 
 
-void Brick::playSound()
+void Brick::playSound() const
 {
     // The higher the ID, the higher the pitch
     float pitch = 0.7f + (float)(m_type - START) / 5;
@@ -105,7 +105,6 @@ sf::Color Brick::getBaseColor() const
         case 1: return sf::Color(0x1b, 0xbc, 0x9b);
         case 2: return sf::Color(0x35, 0x98, 0xdb);
         case 3: return sf::Color(0x9b, 0x58, 0xb5);
-
         case 4: return sf::Color(0xe2, 0x5d, 0xb5);
         case 5: return sf::Color(0xe8, 0x4c, 0x3d);
         case 6: return sf::Color(0xe7, 0x7e, 0x23);

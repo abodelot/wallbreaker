@@ -1,4 +1,5 @@
 #include "HUD.hpp"
+#include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Gui/Theme.hpp"
 
@@ -9,9 +10,19 @@ HUD::HUD():
 {
     m_lifeLabel.setString("Lifes");
     m_lifeLabel.setPosition((HUD::WIDTH - m_lifeLabel.getSize().x) / 2, 20);
+
+    // Life icons
+    const sf::Texture& texture = Resources::getTexture("hud-life.png");
+    const sf::Vector2u& iconSize = texture.getSize();
+    // Center horizontally, 1px padding between icons
+    float x = (HUD::WIDTH - (iconSize.x + 1) * MAX_PLAYER_LIVES) / 2 + iconSize.x / 2;
+    float y = m_lifeLabel.getY() + 20;
     for (int i = 0; i < MAX_PLAYER_LIVES; ++i)
     {
-        m_lifeIcons[i].setTexture(Resources::getTexture("hud-life.png"));
+        m_lifeIcons[i].setTexture(texture);
+        m_lifeIcons[i].setPosition(x, y);
+        m_lifeIcons[i].setOrigin(iconSize.x / 2, iconSize.y / 2);
+        x += iconSize.x + 1;
     }
 
     m_level.setPosition(0, 60);
@@ -54,15 +65,16 @@ void HUD::setHighscore(int highscore)
 
 void HUD::setLifeCount(int lifeCount)
 {
-    m_lifeCount = lifeCount;
-    // Keep life icons centered
-    const float width = m_lifeIcons[0].getTextureRect().width;
-    const float x = (HUD::WIDTH - width * m_lifeCount) / 2;
-    const float y = m_lifeLabel.getY() + 14;
-    for (int i = 0; i < m_lifeCount; ++i)
+    if (lifeCount > 0)
     {
-        m_lifeIcons[i].setPosition(x + i * width, y);
+        Effect::zoomAndRevert(m_lifeIcons[lifeCount - 1], 2, 0.3);
     }
+
+    for (int i = 0; i < MAX_PLAYER_LIVES; ++i)
+    {
+        m_lifeIcons[i].setColor(i < lifeCount ? sf::Color::White : sf::Color::Black);
+    }
+    m_lifeCount = lifeCount;
 }
 
 
@@ -75,7 +87,7 @@ void HUD::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_score, states);
     target.draw(m_highscore, states);
     target.draw(m_lifeLabel, states);
-    for (int i = 0; i < m_lifeCount; ++i)
+    for (int i = 0; i < MAX_PLAYER_LIVES; ++i)
     {
         target.draw(m_lifeIcons[i], states);
     }

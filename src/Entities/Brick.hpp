@@ -37,7 +37,7 @@ public:
     /**
      * Play a sound according to the brick type
      */
-    void playSound();
+    void playSound() const;
 
 private:
     /**
