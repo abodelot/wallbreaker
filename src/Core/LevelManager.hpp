@@ -1,5 +1,5 @@
-#ifndef LEVEL_HPP
-#define LEVEL_HPP
+#ifndef LEVEL_MANAGER_HPP
+#define LEVEL_MANAGER_HPP
 
 #include <fstream>
 #include "Config.hpp"
@@ -72,11 +72,6 @@ private:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    /**
-     * Load level at the current stream position
-     */
-    int load();
-
     Brick        m_bricks[NB_BRICK_LINES][NB_BRICK_COLS];
     std::fstream m_level_file;
     int          m_current_level;
@@ -84,4 +79,4 @@ private:
     size_t       m_brick_count;
 };
 
-#endif // LEVEL_HPP
+#endif

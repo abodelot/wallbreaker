@@ -146,7 +146,9 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previousPos)
     float ballAngle = math::to_degrees(math::angle(ballCenter, brickCenter));
 
     // Get brick ratio angle
-    float brickRatio = math::to_degrees(std::tan((float) Brick::HEIGHT / Brick::WIDTH));
+    float brickRatio = math::to_degrees(
+        std::tan(static_cast<float>(Brick::HEIGHT) / Brick::WIDTH)
+    );
 
     // Check if collision was with a vertical side
     if ((ballAngle > brickRatio       && ballAngle < (180 - brickRatio)) ||

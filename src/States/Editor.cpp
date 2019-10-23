@@ -119,11 +119,15 @@ void Editor::onEvent(const sf::Event& event)
         case sf::Event::MouseWheelMoved:
             if (event.mouseWheel.delta > 0)
             {
-                m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE ? m_cursor.getType() + 1 : Brick::START);
+                m_cursor.setType(m_cursor.getType() < Brick::UNBREAKABLE
+                    ? static_cast<Brick::Type>(m_cursor.getType() + 1)
+                    : Brick::START);
             }
             else
             {
-                m_cursor.setType(m_cursor.getType() > Brick::START ? m_cursor.getType() - 1 : Brick::UNBREAKABLE);
+                m_cursor.setType(m_cursor.getType() > Brick::START
+                    ? static_cast<Brick::Type>(m_cursor.getType() - 1)
+                    : Brick::UNBREAKABLE);
             }
             break;
 
@@ -198,6 +202,8 @@ void Editor::draw(sf::RenderTarget& target, sf::RenderStates) const
 
 void Editor::updateTexture()
 {
+    m_level_texture.clear(sf::Color(255, 255, 255, 0));
+
     // Draw bricks
     m_level_texture.draw(m_level);
     m_level_texture.draw(m_cursor_prelight, 4, sf::Quads);

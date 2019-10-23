@@ -8,11 +8,12 @@
 #include "Utils/Math.hpp"
 
 #define POWERUP_WIDTH 20
-#define POWERUP_HEIGHT 10
+#define POWERUP_HEIGHT 12
+#define POWERUP_SPEED 50
 
 PowerUp* PowerUp::createRandom()
 {
-    return new PowerUp((Type) math::rand(0, SPEED_RESET));
+    return new PowerUp(static_cast<Type>(math::rand(0, SPEED_RESET)));
 }
 
 
@@ -64,5 +65,5 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 
 void PowerUp::onUpdate(float frametime)
 {
-    move(0, 50 * frametime);
+    move(0, POWERUP_SPEED * frametime);
 }

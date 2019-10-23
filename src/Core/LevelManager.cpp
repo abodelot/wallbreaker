@@ -2,10 +2,10 @@
 #include "LevelManager.hpp"
 
 /**
- * Number of bytes per level in the levels file
+ * Number of bytes for each level in the levels file
  * NB_BRICK_COLS + 1 because additional '\n' character for each line
  */
-#define LEVEL_SIZE() ((NB_BRICK_COLS + 1) * NB_BRICK_LINES)
+#define LEVEL_BYTES ((NB_BRICK_COLS + 1) * NB_BRICK_LINES)
 
 
 LevelManager& LevelManager::getInstance()
@@ -40,7 +40,7 @@ bool LevelManager::openFromFile(const std::string& filename)
     {
         // Number of levels = file size / size of one level
         m_level_file.seekg(0, std::ifstream::end);
-        m_level_count = m_level_file.tellg() / LEVEL_SIZE();
+        m_level_count = m_level_file.tellg() / LEVEL_BYTES;
 
         // Restore cursor position
         m_level_file.seekg(0);
@@ -57,8 +57,8 @@ int LevelManager::loadAt(size_t index)
     {
         // -1 because stream cursor needs to be BEFORE the level
         m_current_level = index - 1;
-        m_level_file.seekg(LEVEL_SIZE() * m_current_level);
-        return load();
+        m_level_file.seekg(LEVEL_BYTES * m_current_level);
+        return loadNext();
     }
     return false;
 }
@@ -78,14 +78,48 @@ int LevelManager::reload()
 
 int LevelManager::loadNext()
 {
-    return load();
+    m_brick_count = 0;
+
+    if (m_level_file.eof())
+        return 0;
+
+    std::string line;
+    for (int i = 0; i < NB_BRICK_LINES; ++i)
+    {
+        std::getline(m_level_file, line);
+        if (m_level_file.eof())
+        {
+            return 0;
+        }
+        int length = line.size();
+        for (int j = 0; j < NB_BRICK_COLS && j < length; ++j)
+        {
+            Brick& brick = m_bricks[i][j];
+            // Set brick type
+            Brick::Type type = static_cast<Brick::Type>(line[j]);
+            brick.setType(type);
+            if (type != Brick::NONE && type != Brick::UNBREAKABLE)
+                ++m_brick_count;
+            // Reset brick position and rotation
+            brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
+            brick.setRotation(0);
+            brick.setScale(1, 1);
+        }
+    }
+    ++m_current_level;
+#ifdef WALLBREAKER_DEBUG
+    std::cout << "level " << m_current_level << "/" << m_level_count << " loaded, contains "
+        << m_brick_count << " bricks" << std::endl;
+#endif
+
+    return m_brick_count;
 }
 
 
 void LevelManager::save()
 {
     // Set stream cursor before current level
-    m_level_file.seekp(LEVEL_SIZE() * (m_current_level - 1));
+    m_level_file.seekp(LEVEL_BYTES * (m_current_level - 1));
     for (int i = 0; i < NB_BRICK_LINES; ++i)
     {
         for (int j = 0; j < NB_BRICK_COLS; ++j)
@@ -136,76 +170,29 @@ size_t LevelManager::getBrickCount() const
 }
 
 
-int LevelManager::load()
-{
-    m_brick_count = 0;
-
-    if (m_level_file.eof())
-        return 0;
-
-    std::string line;
-    for (int i = 0; i < NB_BRICK_LINES; ++i)
-    {
-        std::getline(m_level_file, line);
-        if (m_level_file.eof())
-        {
-            return 0;
-        }
-        int length = line.size();
-#ifdef WALLBREAKER_DEBUG
-        printf("%2d  ", i + 1);
-#endif
-        for (int j = 0; j < NB_BRICK_COLS && j < length; ++j)
-        {
-            Brick& brick = m_bricks[i][j];
-            // Set brick type
-            int type = line[j];
-            brick.setType(type);
-            if (type != Brick::NONE && type != Brick::UNBREAKABLE)
-                ++m_brick_count;
-            // Reset brick position and rotation
-            brick.setPosition(j * Brick::WIDTH, i * Brick::HEIGHT);
-            brick.setRotation(0);
-            brick.setScale(1, 1);
-#ifdef WALLBREAKER_DEBUG
-            putchar(line[j]);
-#endif
-        }
-#ifdef WALLBREAKER_DEBUG
-        putchar('\n');
-#endif
-    }
-    ++m_current_level;
-#ifdef WALLBREAKER_DEBUG
-    printf("level %d/%d loaded (contains %u bricks)\n", m_current_level, m_level_count, m_brick_count);
-#endif
-
-    return m_brick_count;
-}
-
-
 void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.clear(sf::Color(255, 255, 255, 0));
+    states.transform *= getTransform();
+
     // Cast borders shadow
     sf::Vertex shadow[4];
     for (int i = 0; i < 4; ++i)
         shadow[i].color = sf::Color::Black;
 
+    const float width = NB_BRICK_COLS * Brick::WIDTH;
+    const float height = NB_BRICK_LINES * Brick::HEIGHT;
+
     // Vertical top border
-    shadow[1].position.x = BORDER_SIZE / 2;
-    shadow[2].position.x = BORDER_SIZE / 2;
-    shadow[2].position.y = target.getSize().y;
-    shadow[3].position.y = target.getSize().y;
+    shadow[1].position = {BORDER_SIZE / 2.f, 0};
+    shadow[2].position = {BORDER_SIZE / 2.f, height};
+    shadow[3].position = {0, height};
     target.draw(shadow, 4, sf::Quads, states);
 
     // Horizontal left border
-    shadow[0].position.x = BORDER_SIZE / 2;
-    shadow[1].position.x = target.getSize().x;
-    shadow[2].position.x = target.getSize().x;
-    shadow[2].position.y = BORDER_SIZE / 2;
-    shadow[3].position.x = shadow[0].position.x;
-    shadow[3].position.y = shadow[2].position.y;
+    shadow[0].position = {BORDER_SIZE / 2.f, 0};
+    shadow[1].position = {width, 0};
+    shadow[2].position = {width, BORDER_SIZE / 2.f};
+    shadow[3].position = {BORDER_SIZE / 2.f, BORDER_SIZE / 2.f};
     target.draw(shadow, 4, sf::Quads, states);
 
     // Draw bricks

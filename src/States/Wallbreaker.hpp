@@ -58,12 +58,14 @@ private:
 
     void setStatus(Status status);
 
+    void animateBricks();
+
     const int         m_width;
     const int         m_height;
     LevelManager&     m_level;
     int               m_remainingBricks;
     ParticleSystem    m_particles;
-    BitmapText        m_infoText;
+    BitmapText        m_titleText;
     HUD               m_hud;
     sf::Sprite        m_bordersSprite;
     sf::Sprite        m_backgroundSprite;

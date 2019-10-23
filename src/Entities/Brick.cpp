@@ -19,12 +19,12 @@ Brick::Brick():
 }
 
 
-void Brick::setType(int type)
+void Brick::setType(Type type)
 {
     if (type < START || type > UNBREAKABLE)
         type = NONE;
 
-    m_type = (Type) type;
+    m_type = type;
     m_broken = false;
     if (type != NONE)
     {
@@ -92,7 +92,7 @@ bool Brick::takeDamage(bool force_destruction)
 void Brick::playSound() const
 {
     // The higher the ID, the higher the pitch
-    float pitch = 0.7f + (float)(m_type - START) / 5;
+    float pitch = 0.7f + (m_type - START) / 5.f;
     SoundSystem::playSound("ball.ogg", pitch);
 }
 

@@ -5,6 +5,10 @@ Wallbreaker is a clone of the famous Arkanoid/Breakout games, written in C++ wit
 - Author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
 - Website: https://github.com/abodelot/wallbreaker
 
+![game](doc/game.png)
+
+The game also includes a level editor.
+
 ## How to play?
 
 - Move the paddle with the mouse to catch the ball, or use the left/right arrow keys.
@@ -18,6 +22,8 @@ Wallbreaker is a clone of the famous Arkanoid/Breakout games, written in C++ wit
 - Left click: add brick
 - Right click: remove brick
 - G: show/hide the grid
+
+![editor](doc/editor.png)
 
 ## How to build from source?
 

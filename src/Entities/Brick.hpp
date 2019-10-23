@@ -25,7 +25,7 @@ public:
     /**
      * Set the brick type
      */
-    void setType(int id);
+    void setType(Type id);
     inline Type getType() const { return m_type; }
 
     void setPosition(int x, int y);

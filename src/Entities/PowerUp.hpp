@@ -25,13 +25,13 @@ public:
      */
     static PowerUp* createRandom();
 
-    PowerUp(Type type);
-
     void onPaddleHit(Paddle& paddle) override;
 
     void onUpdate(float frametime) override;
 
 private:
+    PowerUp(Type type);
+
     Type m_type;
 };
 

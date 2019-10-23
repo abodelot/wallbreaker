@@ -19,7 +19,7 @@ Wallbreaker::Wallbreaker():
     m_height(LevelManager::NB_BRICK_LINES * Brick::HEIGHT),
     m_level(LevelManager::getInstance()),
     m_remainingBricks(0),
-    m_infoText(gui::Theme::font),
+    m_titleText(gui::Theme::font),
     m_score(0),
     m_status(READY),
     m_playerLives(0),
@@ -257,7 +257,7 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
         overlay.setPosition(m_levelSprite.getPosition() - m_levelSprite.getOrigin());
         overlay.setFillColor({0, 0, 0, 128});
         target.draw(overlay);
-        target.draw(m_infoText);
+        target.draw(m_titleText);
         if (m_status == PAUSED)
         {
             m_pauseMenu.show();
@@ -287,15 +287,15 @@ void Wallbreaker::resetGame(size_t level)
     m_remainingBricks = m_level.loadAt(level);
     m_hud.setBrickCount(m_remainingBricks);
     m_hud.setLevel(m_level.getCurrentLevel());
-    m_levelSprite.setScale(0, 0);
-    Effect::zoom(m_levelSprite, 1);
 
+    animateBricks();
     setStatus(READY);
 }
 
 
 void Wallbreaker::updateLevelTexture()
 {
+    m_levelTexture.clear(sf::Color::Transparent);
     // Draw bricks
     m_levelTexture.draw(m_level);
 
@@ -483,8 +483,7 @@ void Wallbreaker::loadNextLevel()
     m_hud.setBrickCount(m_remainingBricks);
     SoundSystem::playSound("level-complete.ogg");
 
-    m_levelSprite.setScale(0, 0);
-    Effect::zoom(m_levelSprite, 1);
+    animateBricks();
 }
 
 
@@ -500,17 +499,17 @@ void Wallbreaker::setStatus(Status status)
         // Clear all and spawn a new ball
         clearEntities();
         createBall();
-        m_infoText.setString("Ready?");
+        m_titleText.setString("Ready?");
         Game::getInstance().getWindow().setMouseCursorVisible(false);
         break;
 
     case GAME_OVER:
-        m_infoText.setString(m_playerLives > 0 ? "Game complete!" : "Game Over");
+        m_titleText.setString(m_playerLives > 0 ? "Game complete!" : "Game Over");
         Game::getInstance().getWindow().setMouseCursorVisible(true);
         break;
 
     case PAUSED:
-        m_infoText.setString("Paused");
+        m_titleText.setString("Paused");
         Game::getInstance().getWindow().setMouseCursorVisible(true);
         break;
 
@@ -519,9 +518,9 @@ void Wallbreaker::setStatus(Status status)
         break;
     }
     // Center text
-    m_infoText.setScale(2, 2);
-    m_infoText.setPosition(
-        X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_infoText.getSize().x) / 2, 80
+    m_titleText.setScale(2, 2);
+    m_titleText.setPosition(
+        X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_titleText.getSize().x) / 2, 80
     );
 }
 
@@ -539,4 +538,21 @@ void Wallbreaker::createBall()
         ball->createParticles();
     }
     addEntity(ball);
+}
+
+
+void Wallbreaker::animateBricks()
+{
+    for (size_t i = 0; i < LevelManager::NB_BRICK_LINES; ++i)
+    {
+        for (size_t j = 0; j < LevelManager::NB_BRICK_COLS; ++j)
+        {
+            Brick& brick = m_level.getBrick(i, j);
+            if (brick.getType() != Brick::NONE)
+            {
+                brick.setScale(0, 0);
+                Effect::zoom(brick, 1, 1);
+            }
+        }
+    }
 }
