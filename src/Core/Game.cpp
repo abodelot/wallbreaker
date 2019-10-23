@@ -138,6 +138,8 @@ void Game::quit()
     config.set("sound",      SoundSystem::isSoundEnabled());
     config.set("music",      SoundSystem::isMusicEnabled());
     config.save(m_appDir + APP_SETTINGS_FILE);
+
+    SoundSystem::stopAll();
 }
 
 

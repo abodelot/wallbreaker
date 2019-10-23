@@ -21,7 +21,7 @@ public:
     /**
      * Play a sound effect
      */
-    static void playSound(const std::string& sound_name, float pitch = 1.f);
+    static void playSound(const std::string& filename, float pitch = 1.f);
 
     /**
      * Control music volume

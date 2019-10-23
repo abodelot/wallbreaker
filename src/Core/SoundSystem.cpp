@@ -2,13 +2,13 @@
 #include "Resources.hpp"
 
 
-sf::Sound        SoundSystem::m_sounds[MAX_SOUNDS];
-int              SoundSystem::m_last_sound_played = 0;
-sf::Music        SoundSystem::m_music;
-int              SoundSystem::m_music_volume = 100;
-int              SoundSystem::m_sound_volume = 100;
-bool             SoundSystem::m_enable_music = true;
-bool             SoundSystem::m_enable_sound = true;
+sf::Sound SoundSystem::m_sounds[MAX_SOUNDS];
+int       SoundSystem::m_last_sound_played = 0;
+sf::Music SoundSystem::m_music;
+int       SoundSystem::m_music_volume = 100;
+int       SoundSystem::m_sound_volume = 100;
+bool      SoundSystem::m_enable_music = true;
+bool      SoundSystem::m_enable_sound = true;
 
 template <class T>
 static inline void clamp(T& value, T min, T max)
@@ -54,7 +54,7 @@ void SoundSystem::pauseMusic()
 }
 
 
-void SoundSystem::playSound(const std::string& sound_name, float pitch)
+void SoundSystem::playSound(const std::string& filename, float pitch)
 {
     if (m_enable_sound)
     {
@@ -67,7 +67,7 @@ void SoundSystem::playSound(const std::string& sound_name, float pitch)
         {
             sound.stop();
         }
-        sound.setBuffer(Resources::getSoundBuffer(sound_name));
+        sound.setBuffer(Resources::getSoundBuffer(filename));
         sound.setPitch(pitch);
         sound.play();
         ++m_last_sound_played;

@@ -9,7 +9,7 @@
 #define APP_FPS           60
 
 #define APP_AUTHOR        "Alexandre Bodelot"
-#define APP_VERSION       "0.2"
+#define APP_VERSION       "0.3"
 #define APP_URL           "https://github.com/abodelot/wallbreaker"
 
 // Paths
