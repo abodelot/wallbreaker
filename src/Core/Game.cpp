@@ -27,9 +27,6 @@ Game::Game():
 
 Game::~Game()
 {
-    // Delete all allocated states
-    for (auto it = m_states.begin(); it != m_states.end(); ++it)
-        delete it->second;
 }
 
 
@@ -145,24 +142,16 @@ void Game::quit()
 
 void Game::addState(const std::string& id, State* state)
 {
-    m_states.emplace(id, state);
+    m_states.emplace(id, std::unique_ptr<State>(state));
 }
 
 
 void Game::setCurrentState(const std::string& name)
 {
-    auto it = m_states.find(name);
-    if (it != m_states.end())
-    {
-        State* previous = m_currentState;
-        m_currentState = it->second;
-        m_currentState->setPrevious(previous);
-        m_currentState->onFocus();
-    }
-    else
-    {
-        std::cerr << "[Game] State '" << name << "' is not registered" << std::endl;
-    }
+    State* previous = m_currentState;
+    m_currentState = m_states.at(name).get();
+    m_currentState->setPrevious(previous);
+    m_currentState->onFocus();
 }
 
 
@@ -194,9 +183,9 @@ void Game::setResolution(size_t width, size_t height)
 
     // Center window on desktop
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    m_window.setPosition({int(desktop.width - width) / 2, int(desktop.height - height) / 2});
+    m_window.setPosition(sf::Vector2i((desktop.width - width) / 2, (desktop.height - height) / 2));
     // Set application icon
-    static sf::Image icon = Resources::getTexture("application-icon.png").copyToImage();
+    sf::Image icon = Resources::getTexture("application-icon.png").copyToImage();
     m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 

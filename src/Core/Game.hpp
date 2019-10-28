@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 #include <SFML/Graphics.hpp>
 
 class State;
@@ -76,7 +77,7 @@ private:
     sf::View         m_view;
 
     // State management
-    std::map<std::string, State*> m_states;
+    std::map<std::string, std::unique_ptr<State>> m_states;
     State* m_currentState;
 };
 
