@@ -16,9 +16,19 @@ OptionsMenu::OptionsMenu():
 
     // Create checkbox for turning music on/off
     m_ck_music = new gui::CheckBox(SoundSystem::isMusicEnabled());
+    m_ck_music->setCallback([this]() {
+        SoundSystem::enableMusic(m_ck_music->isChecked());
+    });
 
     // Create checkbox for turning sound on/off
     m_ck_sound = new gui::CheckBox(SoundSystem::isSoundEnabled());
+    m_ck_sound->setCallback([this]() {
+        SoundSystem::enableSound(m_ck_sound->isChecked());
+        if (m_ck_sound->isChecked())
+        {
+            SoundSystem::playSound("ball.ogg");
+        }
+    });
 
     // Create options box for selecting a resolution
     m_opt_resolution = new gui::OptionsBox<sf::Vector2u>;
@@ -26,41 +36,29 @@ OptionsMenu::OptionsMenu():
     addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
     addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
     addResolution({APP_WIDTH * 4, APP_HEIGHT * 4});
+    m_opt_resolution->setCallback([this]() {
+        const sf::Vector2u& res = m_opt_resolution->getSelectedValue();
+        Game::getInstance().setResolution(res.x, res.y);
+    });
+
+    // Back button
+    gui::Button* btnBack = new gui::Button("Back");
+    btnBack->setCallback([this]() {
+        Game::getInstance().restorePreviousState();
+    });
 
     // Add widgets in form
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
-    form->addRow("Music:", m_ck_music, 1);
-    form->addRow("Sound:", m_ck_sound, 2);
-    form->addRow("Resolution:", m_opt_resolution, 3);
-    form->addRow("", new gui::Button("Back"), 4);
+    form->addRow("Music:", m_ck_music);
+    form->addRow("Sound:", m_ck_sound);
+    form->addRow("Resolution:", m_opt_resolution);
+    form->addRow("", btnBack);
 }
 
 
 void OptionsMenu::onEvent(const sf::Event& event)
 {
-    switch (m_menu.onEvent(event))
-    {
-        case 1: // Music on/off
-            SoundSystem::enableMusic(m_ck_music->isChecked());
-            break;
-        case 2: // Sound on/off
-            SoundSystem::enableSound(m_ck_sound->isChecked());
-            if (m_ck_sound->isChecked())
-            {
-                SoundSystem::playSound("ball.ogg");
-            }
-            break;
-        case 3: // Resolution
-        {
-            const sf::Vector2u& res = m_opt_resolution->getSelectedValue();
-            Game::getInstance().setResolution(res.x, res.y);
-            break;
-        }
-        case 4: // Back
-            Game::getInstance().restorePreviousState();
-            break;
-
-    }
+    m_menu.onEvent(event);
 }
 
 

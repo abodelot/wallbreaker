@@ -59,15 +59,43 @@ Editor::Editor():
     m_opt_levels = new gui::OptionsBox<size_t>;
     for (size_t i = 1; i <= m_level.getLevelCount(); ++i)
         m_opt_levels->addItem("Level " + std::to_string(i), i);
-    m_menu.add(m_opt_levels,      1);
-    m_menu.addButton("Save",      2);
-    m_menu.addButton("Reload",    3);
-    //m_menu.addButton("Test level", 7);
-    m_menu.addButton("New level", 4);
+
+    m_opt_levels->setCallback([this]() {
+        size_t level = m_opt_levels->getSelectedValue();
+        if (m_level.loadAt(level))
+        {
+            updateTexture();
+        }
+    });
+    m_menu.add(m_opt_levels);
+
+    m_menu.addButton("Save", [this]() {
+        m_level.save();
+    });
+
+    m_menu.addButton("Reload", [this]() {
+        m_level.reload();
+        updateTexture();
+    });
+
+    m_menu.addButton("New level", [this]() {
+        size_t index = m_level.append();
+        // Insert new level in level list
+        m_opt_levels->addItem("Level " + std::to_string(index), index, true);
+        updateTexture();
+    });
+
+    // Toggle the editor grid on/off
     m_ck_grid = new gui::CheckBox(m_show_grid);
+    m_ck_grid->setCallback([this]() {
+        toggleGrid();
+    });
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
-    form->addRow("Show grid:", m_ck_grid, 5);
-    m_menu.addButton("Back",      6);
+    form->addRow("Show grid:", m_ck_grid);
+
+    m_menu.addButton("Back", [this]() {
+        Game::getInstance().restorePreviousState();
+    });
 }
 
 
@@ -143,41 +171,7 @@ void Editor::onEvent(const sf::Event& event)
     }
 
     // Handle GUI events
-    switch (m_menu.onEvent(event))
-    {
-        case 1: // Level selector
-        {
-            size_t level = m_opt_levels->getSelectedValue();
-            if (m_level.loadAt(level))
-            {
-                updateTexture();
-            }
-            break;
-        }
-        case 2: // Save
-            m_level.save();
-            break;
-        case 3: // Reload
-            m_level.reload();
-            updateTexture();
-            break;
-        case 4: // New level
-        {
-            size_t index = m_level.append();
-            // Insert new level in level list
-            m_opt_levels->addItem("Level " + std::to_string(index), index, true);
-            updateTexture();
-            break;
-        }
-        case 5: // Grid on/off
-            toggleGrid();
-            break;
-        case 6: // Back
-            Game::getInstance().restorePreviousState();
-            break;
-        case 7: // Test current level
-            break;
-    }
+    m_menu.onEvent(event);
 }
 
 

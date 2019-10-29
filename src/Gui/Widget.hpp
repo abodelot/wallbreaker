@@ -2,6 +2,7 @@
 #define GUI_WIDGET_HPP
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 namespace gui
 {
@@ -22,12 +23,6 @@ class Widget: public sf::Drawable
 {
 public:
     Widget();
-
-    /**
-     * Give an ID to the widget
-     */
-    void setID(int id);
-    int getID() const;
 
     /**
      * Widget's position
@@ -58,6 +53,11 @@ public:
      */
     bool isFocused() const;
 
+    /**
+     * Define a user callback function for this widget
+     */
+    void setCallback(std::function<void(void)> callback);
+
     // Callbacks ---------------------------------------------------------------
 
     virtual void onStateChanged(State state);
@@ -75,9 +75,9 @@ protected:
     void setSelectable(bool selectable);
 
     /**
-     * Notify parent that the widget has been triggered by user input
+     * Call the user callback function associated to this widget, if any
      */
-    virtual void triggerCallback(const Widget* triggered = NULL);
+    void triggerCallback();
 
     void setState(State state);
     State getState() const;
@@ -89,18 +89,18 @@ protected:
      */
     void setParent(Layout* parent);
 
-    virtual Layout* toLayout() { return NULL; }
+    virtual Layout* toLayout() { return nullptr; }
 
 private:
     Layout*      m_parent;
     Widget*      m_previous;
     Widget*      m_next;
-
     State        m_state;
     sf::Vector2f m_position;
     sf::Vector2f m_size;
-    int          m_id;
     bool         m_selectable;
+
+    std::function<void(void)> m_callback;
 };
 
 }

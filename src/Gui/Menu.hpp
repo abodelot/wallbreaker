@@ -16,9 +16,7 @@ public:
      * Handle event and send it to widgets
      * @return triggered widget ID, or -1 if none
      */
-    int onEvent(const sf::Event& event);
-
-    void triggerCallback(const Widget* widget) override;
+    void onEvent(const sf::Event& event);
 
     void show(sf::RenderStates states = sf::RenderStates::Default) const;
 
@@ -32,7 +30,6 @@ private:
     sf::Vector2f convertMousePosition(int x, int y) const;
 
     sf::RenderTarget& m_window;
-    const Widget* m_triggered;
 };
 
 }

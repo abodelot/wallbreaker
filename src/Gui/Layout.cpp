@@ -8,11 +8,11 @@ using namespace gui;
 
 
 Layout::Layout(Type type):
-    m_first(NULL),
-    m_last(NULL),
+    m_first(nullptr),
+    m_last(nullptr),
     m_type(type),
-    m_hover(NULL),
-    m_focus(NULL)
+    m_hover(nullptr),
+    m_focus(nullptr)
 {
 }
 
@@ -21,7 +21,7 @@ Layout::~Layout()
 {
     // Deallocate all widgets
     const Widget* widget = m_first;
-    while (widget != NULL)
+    while (widget != nullptr)
     {
         const Widget* next = widget->m_next;
         delete widget;
@@ -38,28 +38,19 @@ Layout* Layout::addLayout(Type type)
 }
 
 
-Widget* Layout::add(Widget* widget, int id)
+Widget* Layout::add(Widget* widget)
 {
     sf::Vector2f pos;
-    if (m_last != NULL)
+    if (m_last != nullptr)
     {
         if (m_type == Layout::Vertical)
             pos.y = m_last->getPosition().y + m_last->getSize().y + Theme::margin;
         else if (m_type == Layout::Horizontal)
             pos.x = m_last->getPosition().x + m_last->getSize().x + Theme::margin;
     }
-    widget->setID(id);
     widget->setPosition(pos);
     push(widget);
     return widget;
-}
-
-
-Button* Layout::addButton(const sf::String& string, int id)
-{
-    Button* button = new Button(string);
-    add(button, id);
-    return button;
 }
 
 
@@ -71,13 +62,22 @@ Label* Layout::addLabel(const sf::String& string)
 }
 
 
-Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
+Button* Layout::addButton(const sf::String& label, std::function<void(void)> callback)
+{
+    Button* button = new Button(label);
+    button->setCallback(callback);
+    add(button);
+    return button;
+}
+
+
+Widget* Layout::addRow(const sf::String& str, Widget* widget)
 {
     if (m_type != Layout::Form)
         throw std::logic_error("Layout::Form is required for adding a new row");
 
     sf::Vector2f pos;
-    if (m_last != NULL)
+    if (m_last != nullptr)
         pos.y = getSize().y + Theme::margin;
 
     // Label on the left side
@@ -91,7 +91,7 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
     {
         m_form.label_width = width;
         size_t i = 0;
-        for (Widget* w= m_first; w != NULL; w = w->m_next)
+        for (Widget* w = m_first; w != nullptr; w = w->m_next)
         {
             // Re-align previous widgets
             if (i % 2)
@@ -105,7 +105,6 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget, int id)
         // Align bottom of widget with bottom of label
         pos.y + (Theme::font.getGlyphHeight() + Theme::padding - widget->getSize().y)
     );
-    widget->setID(id);
     push(widget);
     return widget;
 }
@@ -115,12 +114,14 @@ Widget* Layout::push(Widget* widget)
 {
     widget->setParent(this);
 
-    if (m_first == NULL)
+    if (m_first == nullptr)
     {
+        // Widget is the first element
         m_first = m_last = widget;
     }
     else
     {
+        // Append widget to the linked list
         m_last->m_next = widget;
         widget->m_previous = m_last;
         m_last = widget;
@@ -136,7 +137,7 @@ void Layout::recomputeSize()
     float max_height = 0;
     //float max_visible_width = 0;
     //float max_visible_height = 0;
-    for (const Widget* widget = m_first; widget != NULL; widget = widget->m_next)
+    for (const Widget* widget = m_first; widget != nullptr; widget = widget->m_next)
     {
         float width = widget->getPosition().x + widget->getSize().x;
         if (width > max_width)
@@ -164,10 +165,10 @@ void Layout::onStateChanged(State state)
 {
     if (state == StateDefault)
     {
-        if (m_focus != NULL)
+        if (m_focus != nullptr)
         {
             m_focus->setState(StateDefault);
-            m_focus = NULL;
+            m_focus = nullptr;
         }
     }
 }
@@ -175,7 +176,7 @@ void Layout::onStateChanged(State state)
 
 void Layout::onMouseMoved(const sf::Vector2f& pos)
 {
-    for (Widget* widget = m_first; widget != NULL; widget = widget->m_next)
+    for (Widget* widget = m_first; widget != nullptr; widget = widget->m_next)
     {
         // Convert mouse position to widget coordinates system
         sf::Vector2f mouse = pos - widget->getPosition();
@@ -184,7 +185,7 @@ void Layout::onMouseMoved(const sf::Vector2f& pos)
             if (m_hover != widget)
             {
                 // A new widget is hovered
-                if (m_hover != NULL)
+                if (m_hover != nullptr)
                     m_hover->setState(StateDefault);
 
                 m_hover = widget;
@@ -203,18 +204,18 @@ void Layout::onMouseMoved(const sf::Vector2f& pos)
         }
     }
     // No widget hovered, remove hovered state
-    if (m_hover != NULL)
+    if (m_hover != nullptr)
     {
         m_hover->onMouseMoved(pos);
         m_hover->setState(m_focus == m_hover ? StateFocused : StateDefault);
-        m_hover = NULL;
+        m_hover = nullptr;
     }
 }
 
 
 void Layout::onMousePressed(const sf::Vector2f& pos)
 {
-    if (m_hover != NULL)
+    if (m_hover != nullptr)
     {
         // Clicked widget takes focus
         if (m_focus != m_hover)
@@ -225,17 +226,17 @@ void Layout::onMousePressed(const sf::Vector2f& pos)
         m_hover->onMousePressed(pos - m_hover->getPosition());
     }
     // User didn't click on a widget, remove focus state
-    else if (m_focus != NULL)
+    else if (m_focus != nullptr)
     {
         m_focus->setState(StateDefault);
-        m_focus = NULL;
+        m_focus = nullptr;
     }
 }
 
 
 void Layout::onMouseReleased(const sf::Vector2f& pos)
 {
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
     {
         // Convert mouse position to widget coordinates system
         sf::Vector2f mouse = pos - m_focus->getPosition();
@@ -249,7 +250,7 @@ void Layout::onMouseReleased(const sf::Vector2f& pos)
 
 void Layout::onMouseWheelMoved(int delta)
 {
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
     {
         m_focus->onMouseWheelMoved(delta);
     }
@@ -271,7 +272,7 @@ void Layout::onKeyPressed(sf::Keyboard::Key key)
         if (!focusPreviousWidget())
             focusPreviousWidget();
     }
-    else if (m_focus != NULL)
+    else if (m_focus != nullptr)
     {
         m_focus->onKeyPressed(key);
     }
@@ -280,7 +281,7 @@ void Layout::onKeyPressed(sf::Keyboard::Key key)
 
 void Layout::onKeyReleased(sf::Keyboard::Key key)
 {
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
     {
         m_focus->onKeyReleased(key);
     }
@@ -289,7 +290,7 @@ void Layout::onKeyReleased(sf::Keyboard::Key key)
 
 void Layout::onTextEntered(sf::Uint32 unicode)
 {
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
     {
         m_focus->onTextEntered(unicode);
     }
@@ -300,7 +301,7 @@ void Layout::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     transformStates(states);
 
-    for (const Widget* widget = m_first; widget != NULL; widget = widget->m_next)
+    for (const Widget* widget = m_first; widget != nullptr; widget = widget->m_next)
     {
         target.draw(*widget, states);
     }
@@ -309,13 +310,13 @@ void Layout::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 bool Layout::giveFocus(Widget* widget)
 {
-    if (widget != NULL)
+    if (widget != nullptr)
     {
         // If another widget was already focused, remove focus
-        if (m_focus != NULL)
+        if (m_focus != nullptr)
         {
             m_focus->setState(StateDefault);
-            m_focus = NULL;
+            m_focus = nullptr;
         }
         // Apply focus to widget
         if (widget->isSelectable())
@@ -332,19 +333,19 @@ bool Layout::giveFocus(Widget* widget)
 bool Layout::focusPreviousWidget()
 {
     // If a subframe is already focused
-    if (m_focus != NULL && m_focus->toLayout() != NULL)
+    if (m_focus != nullptr && m_focus->toLayout() != nullptr)
     {
         if (m_focus->toLayout()->focusPreviousWidget())
             return true;
     }
 
-    Widget* start = m_focus != NULL ? m_focus->m_previous : m_last;
-    for (Widget* widget = start; widget != NULL; widget = widget->m_previous)
+    Widget* start = m_focus != nullptr ? m_focus->m_previous : m_last;
+    for (Widget* widget = start; widget != nullptr; widget = widget->m_previous)
     {
-        if (widget != NULL)
+        if (widget != nullptr)
         {
             Layout* container = widget->toLayout();
-            if (container != NULL)
+            if (container != nullptr)
             {
                 if (container->focusPreviousWidget())
                 {
@@ -359,9 +360,9 @@ bool Layout::focusPreviousWidget()
         }
     }
 
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
         m_focus->setState(StateDefault);
-    m_focus = NULL;
+    m_focus = nullptr;
     return false;
 }
 
@@ -369,19 +370,19 @@ bool Layout::focusPreviousWidget()
 bool Layout::focusNextWidget()
 {
     // If a subframe is already focused
-    if (m_focus != NULL && m_focus->toLayout() != NULL)
+    if (m_focus != nullptr && m_focus->toLayout() != nullptr)
     {
         if (m_focus->toLayout()->focusNextWidget())
             return true;
     }
 
-    Widget* start = m_focus != NULL ? m_focus->m_next : m_first;
-    for (Widget* widget = start; widget != NULL; widget = widget->m_next)
+    Widget* start = m_focus != nullptr ? m_focus->m_next : m_first;
+    for (Widget* widget = start; widget != nullptr; widget = widget->m_next)
     {
-        if (widget != NULL)
+        if (widget != nullptr)
         {
             Layout* container = widget->toLayout();
-            if (container != NULL)
+            if (container != nullptr)
             {
                 if (container->focusNextWidget())
                 {
@@ -396,8 +397,8 @@ bool Layout::focusNextWidget()
         }
     }
 
-    if (m_focus != NULL)
+    if (m_focus != nullptr)
         m_focus->setState(StateDefault);
-    m_focus = NULL;
+    m_focus = nullptr;
     return false;
 }

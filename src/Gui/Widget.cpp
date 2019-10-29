@@ -4,25 +4,12 @@
 using namespace gui;
 
 Widget::Widget():
-    m_parent(NULL),
-    m_previous(NULL),
-    m_next(NULL),
+    m_parent(nullptr),
+    m_previous(nullptr),
+    m_next(nullptr),
     m_state(StateDefault),
-    m_id(-1),
     m_selectable(true)
 {
-}
-
-
-void Widget::setID(int id)
-{
-    m_id = id;
-}
-
-
-int Widget::getID() const
-{
-    return m_id;
 }
 
 
@@ -89,12 +76,18 @@ void Widget::setSelectable(bool selectable)
 }
 
 
-void Widget::triggerCallback(const Widget* triggered)
+void Widget::setCallback(std::function<void(void)> callback)
 {
-    // Notify parent that a widget is triggered
-    // If NULL, this is the widget being triggered
-    if (m_parent != NULL)
-        m_parent->triggerCallback(triggered == NULL ? this : triggered);
+    m_callback = callback;
+}
+
+
+void Widget::triggerCallback()
+{
+    if (m_callback)
+    {
+        m_callback();
+    }
 }
 
 

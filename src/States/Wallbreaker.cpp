@@ -50,14 +50,29 @@ Wallbreaker::Wallbreaker():
     m_pauseMenu.setPosition(
         LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::widgetWidth) / 2, 120
     );
-    m_pauseMenu.addButton("Resume",  1);
-    m_pauseMenu.addButton("Options", 2);
-    m_pauseMenu.addButton("Quit",    3);
+    m_pauseMenu.addButton("Resume", [this]() {
+        setStatus(PLAYING);
+    });
+    m_pauseMenu.addButton("Options", [this]() {
+        Game::getInstance().setCurrentState("OptionsMenu");
+    });
+    m_pauseMenu.addButton("Quit", [this]() {
+        // Clear game and back to main menu
+        resetGame();
+        Game::getInstance().restorePreviousState();
+    });
 
     // Build 'game over' menu
     m_gameOverMenu.setPosition(m_pauseMenu.getPosition());
-    m_gameOverMenu.addButton("Try again", 1);
-    m_gameOverMenu.addButton("Quit",      2);
+    m_gameOverMenu.addButton("Try again", [this]() {
+        // Reload current level
+        resetGame(m_level.getCurrentLevel());
+    });
+    m_gameOverMenu.addButton("Quit", [this]() {
+        // Clear game and back to main menu
+        resetGame();
+        Game::getInstance().restorePreviousState();
+    });
 
     // States are stored in Game, therefore Wallbreaker instance is unique and
     // context can be safely defined once in Wallbreaker ctor
@@ -151,24 +166,10 @@ void Wallbreaker::onEvent(const sf::Event& event)
             break;
 
         case PAUSED:
-            switch (m_pauseMenu.onEvent(event))
-            {
-                case 1: // Resume
-                    setStatus(PLAYING);
-                    break;
-                case 2: // Go to options menu
-                    Game::getInstance().setCurrentState("OptionsMenu");
-                    break;
-                case 3: // Clear game and back to main menu
-                    resetGame();
-                    Game::getInstance().restorePreviousState();
-                    break;
-                default:
-                    // Resume
-                    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-                        setStatus(PLAYING);
-                    break;
-            }
+            m_pauseMenu.onEvent(event);
+            // Resume
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+                setStatus(PLAYING);
             break;
 
         case READY:
@@ -188,16 +189,7 @@ void Wallbreaker::onEvent(const sf::Event& event)
             break;
 
         case GAME_OVER:
-            switch (m_gameOverMenu.onEvent(event))
-            {
-                case 1: // Continue (reload current level)
-                    resetGame(m_level.getCurrentLevel());
-                    break;
-                case 2: // Clear game and back to main menu
-                    resetGame();
-                    Game::getInstance().restorePreviousState();
-                    break;
-            }
+            m_gameOverMenu.onEvent(event);
             break;
     }
 }

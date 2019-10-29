@@ -6,13 +6,12 @@ using namespace gui;
 
 Menu::Menu(sf::RenderTarget& window):
     Layout(Layout::Vertical),
-    m_window(window),
-    m_triggered(nullptr)
+    m_window(window)
 {
 }
 
 
-int Menu::onEvent(const sf::Event& event)
+void Menu::onEvent(const sf::Event& event)
 {
     switch (event.type)
     {
@@ -53,20 +52,6 @@ int Menu::onEvent(const sf::Event& event)
     default:
         break;
     }
-
-    if (m_triggered != nullptr)
-    {
-        int id = m_triggered->getID();
-        m_triggered = nullptr;
-        return id;
-    }
-    return -1;
-}
-
-
-void Menu::triggerCallback(const Widget* widget)
-{
-    m_triggered = widget;
 }
 
 

@@ -33,16 +33,21 @@ public:
      * The container will take care of widget deallocation
      * @return added widget
      */
-    Widget* add(Widget* widget, int id = -1);
-
-    // Shortcut for add(new Button)
-    Button* addButton(const sf::String& string, int id = -1);
+    Widget* add(Widget* widget);
 
     // Shortcut for add(new Label)
     Label* addLabel(const sf::String& string);
 
+    /**
+     * Shortcut method for:
+     *   gui::Button* btn = new gui::Button(label);
+     *   btn->setCallback(callback);
+     *   layout.add(btn);
+     */
+    Button* addButton(const sf::String& label, std::function<void(void)> callback);
+
     // Add a label and a widget in a new horizontal row
-    Widget* addRow(const sf::String& str, Widget* widget, int id = -1);
+    Widget* addRow(const sf::String& str, Widget* widget);
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
