@@ -16,7 +16,7 @@ C_NONE   := \033[0m
 
 $(TARGET): $(OBJ)
 	@echo "$(C_GREEN)linking$(C_NONE) $@"
-	@$(CC) $(LDFLAGS) -o $@ $^
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJDIR)/%.o: %.cpp
 	@echo "$(C_GREEN)compiling\033[0m $<"
