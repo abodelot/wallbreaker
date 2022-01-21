@@ -53,8 +53,7 @@ const sf::Vector2f& Widget::getSize() const
 
 bool Widget::containsPoint(const sf::Vector2f& point) const
 {
-    return point.x > 0.f && point.x < m_size.x &&
-           point.y > 0.f && point.y < m_size.y;
+    return point.x > 0.f && point.x < m_size.x && point.y > 0.f && point.y < m_size.y;
 }
 
 
@@ -117,15 +116,3 @@ void Widget::transformStates(sf::RenderStates& states) const
         0, 1, m_position.y,
         0, 0, 1);
 }
-
-
-// callbacks -------------------------------------------------------------------
-
-void Widget::onStateChanged(State) {}
-void Widget::onMouseMoved(const sf::Vector2f&) {}
-void Widget::onMousePressed(const sf::Vector2f&) {}
-void Widget::onMouseReleased(const sf::Vector2f&) {}
-void Widget::onMouseWheelMoved(int) {}
-void Widget::onKeyPressed(sf::Keyboard::Key) {}
-void Widget::onKeyReleased(sf::Keyboard::Key) {}
-void Widget::onTextEntered(sf::Uint32) {}

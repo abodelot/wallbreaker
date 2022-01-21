@@ -35,6 +35,13 @@ mrproper: clean
 
 all: mrproper $(TARGET)
 
+# Linter commands
+lint:
+	clang-format $(SRC) --dry-run --Werror
+
+format:
+	clang-format $(SRC) -i --Werror
+
 # Extract version number from latest tag (v0.1 => 0.1)
 APP_VERSION=`git describe --tags --abbrev=0 | cut -c2-`
 # Example: Linux_x86_64

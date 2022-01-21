@@ -1,10 +1,10 @@
 #include "Resources.hpp"
 
 
-std::string           Resources::m_path = "./";
+std::string Resources::m_path = "./";
 Resources::TextureMap Resources::m_textures;
-Resources::FontMap    Resources::m_fonts;
-Resources::SoundMap   Resources::m_sounds;
+Resources::FontMap Resources::m_fonts;
+Resources::SoundMap Resources::m_sounds;
 
 
 void Resources::setSearchPath(const std::string& path)

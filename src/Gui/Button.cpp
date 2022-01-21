@@ -19,7 +19,6 @@ void Button::setString(const sf::String& string)
 {
     m_box.item().setString(string);
     m_box.centerItem();
-
 }
 
 

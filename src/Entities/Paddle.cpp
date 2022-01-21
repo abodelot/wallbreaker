@@ -110,18 +110,18 @@ void Paddle::setType(Type type)
     sf::IntRect subrect;
     switch (type)
     {
-        case SMALL:
-            subrect = sf::IntRect(0, 0, 24, 16);
-            break;
-        case MEDIUM:
-            subrect = sf::IntRect(0, 16, 32, 16);
-            break;
-        case LARGE:
-            subrect = sf::IntRect(0, 32, 48, 16);
-            break;
-        case LASER:
-            subrect = sf::IntRect(0, 48, 32, 16);
-            break;
+    case SMALL:
+        subrect = sf::IntRect(0, 0, 24, 16);
+        break;
+    case MEDIUM:
+        subrect = sf::IntRect(0, 16, 32, 16);
+        break;
+    case LARGE:
+        subrect = sf::IntRect(0, 32, 48, 16);
+        break;
+    case LASER:
+        subrect = sf::IntRect(0, 48, 32, 16);
+        break;
     }
     setTextureRect(subrect);
     m_type = type;

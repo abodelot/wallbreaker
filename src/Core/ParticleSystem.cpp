@@ -54,24 +54,24 @@ void ParticleSystem::update(float frametime)
 
             // Update color
             float elapsed = p.lifespan - p.remaining_time;
-            p.color.r = p.emitter.m_start_color.r + (elapsed * (p.emitter.m_end_color.r - p.emitter.m_start_color.r) / p.lifespan);
-            p.color.g = p.emitter.m_start_color.g + (elapsed * (p.emitter.m_end_color.g - p.emitter.m_start_color.g) / p.lifespan);
-            p.color.b = p.emitter.m_start_color.b + (elapsed * (p.emitter.m_end_color.b - p.emitter.m_start_color.b) / p.lifespan);
-            p.color.a = p.emitter.m_start_color.a + (elapsed * (p.emitter.m_end_color.a - p.emitter.m_start_color.a) / p.lifespan);
+            p.color.r = p.emitter.m_startColor.r + (elapsed * (p.emitter.m_endColor.r - p.emitter.m_startColor.r) / p.lifespan);
+            p.color.g = p.emitter.m_startColor.g + (elapsed * (p.emitter.m_endColor.g - p.emitter.m_startColor.g) / p.lifespan);
+            p.color.b = p.emitter.m_startColor.b + (elapsed * (p.emitter.m_endColor.b - p.emitter.m_startColor.b) / p.lifespan);
+            p.color.a = p.emitter.m_startColor.a + (elapsed * (p.emitter.m_endColor.a - p.emitter.m_startColor.a) / p.lifespan);
 
             // Build the vertices
             sf::Vertex vertices[4];
             const sf::IntRect& r = p.emitter.getTextureRect();
 
-            vertices[0].texCoords = sf::Vector2f(r.left,           r.top);
-            vertices[1].texCoords = sf::Vector2f(r.left,           r.top + r.height);
+            vertices[0].texCoords = sf::Vector2f(r.left, r.top);
+            vertices[1].texCoords = sf::Vector2f(r.left, r.top + r.height);
             vertices[2].texCoords = sf::Vector2f(r.left + r.width, r.top + r.height);
             vertices[3].texCoords = sf::Vector2f(r.left + r.width, r.top);
 
-            vertices[0].position  = sf::Vector2f(p.position.x,           p.position.y);
-            vertices[1].position  = sf::Vector2f(p.position.x,           p.position.y + r.height);
-            vertices[2].position  = sf::Vector2f(p.position.x + r.width, p.position.y + r.height);
-            vertices[3].position  = sf::Vector2f(p.position.x + r.width, p.position.y);
+            vertices[0].position = sf::Vector2f(p.position.x, p.position.y);
+            vertices[1].position = sf::Vector2f(p.position.x, p.position.y + r.height);
+            vertices[2].position = sf::Vector2f(p.position.x + r.width, p.position.y + r.height);
+            vertices[3].position = sf::Vector2f(p.position.x + r.width, p.position.y);
 
             for (int i = 0; i < 4; ++i)
             {
@@ -119,7 +119,7 @@ void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) con
 ParticleSystem::Particle::Particle(const ParticleEmitter& e):
     emitter(e),
     position(e.getSpawnPosition()),
-    color(e.m_start_color),
+    color(e.m_startColor),
     lifespan(math::rand(0.f, e.m_timeToLive))
 {
     remaining_time = lifespan;

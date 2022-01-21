@@ -59,17 +59,17 @@ bool Brick::takeDamage(bool force_destruction)
 
     switch (m_type)
     {
-        case UNBREAKABLE:
-            return false;
-        case ROCK:
-            setType(ROCK_2);
-            break;
-        case ROCK_2:
-            setType(ROCK_3);
-            break;
-        default:
-            m_broken = true;
-            break;
+    case UNBREAKABLE:
+        return false;
+    case ROCK:
+        setType(ROCK_2);
+        break;
+    case ROCK_2:
+        setType(ROCK_3);
+        break;
+    default:
+        m_broken = true;
+        break;
     }
 
     if (force_destruction)
@@ -101,15 +101,15 @@ sf::Color Brick::getBaseColor() const
 {
     switch (m_type - START)
     {
-        case 0: return sf::Color(0x2e, 0xcd, 0x71);
-        case 1: return sf::Color(0x1b, 0xbc, 0x9b);
-        case 2: return sf::Color(0x35, 0x98, 0xdb);
-        case 3: return sf::Color(0x9b, 0x58, 0xb5);
-        case 4: return sf::Color(0xe2, 0x5d, 0xb5);
-        case 5: return sf::Color(0xe8, 0x4c, 0x3d);
-        case 6: return sf::Color(0xe7, 0x7e, 0x23);
-        case 7: return sf::Color(0xf1, 0xc4, 0x0f);
+    case 0: return sf::Color(0x2e, 0xcd, 0x71);
+    case 1: return sf::Color(0x1b, 0xbc, 0x9b);
+    case 2: return sf::Color(0x35, 0x98, 0xdb);
+    case 3: return sf::Color(0x9b, 0x58, 0xb5);
+    case 4: return sf::Color(0xe2, 0x5d, 0xb5);
+    case 5: return sf::Color(0xe8, 0x4c, 0x3d);
+    case 6: return sf::Color(0xe7, 0x7e, 0x23);
+    case 7: return sf::Color(0xf1, 0xc4, 0x0f);
 
-        default: return sf::Color(0xbe, 0xc3, 0xc7);
+    default: return sf::Color(0xbe, 0xc3, 0xc7);
     }
 }

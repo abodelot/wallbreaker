@@ -31,7 +31,7 @@ void Arrow::setColor(const sf::Color& color)
 void Arrow::setPosition(float x, float y)
 {
     float size = std::max(std::abs(m_triangle[0].position.x - m_triangle[1].position.x),
-                          std::abs(m_triangle[1].position.y - m_triangle[1].position.y));
+        std::abs(m_triangle[1].position.y - m_triangle[1].position.y));
     updateGeometry(x, y, size, m_direction);
 }
 
@@ -49,7 +49,7 @@ void Arrow::move(float dx, float dy)
 sf::Vector2f Arrow::getSize() const
 {
     float size = std::max(std::abs(m_triangle[0].position.x - m_triangle[1].position.x),
-                          std::abs(m_triangle[1].position.y - m_triangle[1].position.y));
+        std::abs(m_triangle[1].position.y - m_triangle[1].position.y));
     return sf::Vector2f(size, size);
 }
 
@@ -64,27 +64,27 @@ void Arrow::updateGeometry(float x, float y, float size, Direction direction)
 {
     switch (direction)
     {
-        // Points are defined clock-wise
-        case Top:
-            m_triangle[0].position = {x + size / 2, y};
-            m_triangle[1].position = {x + size, y + size};
-            m_triangle[2].position = {x, y + size};
-            break;
-        case Bottom:
-            m_triangle[0].position = {x, y};
-            m_triangle[1].position = {x + size, y};
-            m_triangle[2].position = {x + size / 2, y + size};
-            break;
-        case Left:
-            m_triangle[0].position = {x, y + size / 2};
-            m_triangle[1].position = {x + size, y};
-            m_triangle[2].position = {x + size, y + size};
-            break;
-        case Right:
-            m_triangle[0].position = {x, y};
-            m_triangle[1].position = {x + size, y + size / 2};
-            m_triangle[2].position = {x, y + size};
-            break;
+    // Points are defined clock-wise
+    case Top:
+        m_triangle[0].position = {x + size / 2, y};
+        m_triangle[1].position = {x + size, y + size};
+        m_triangle[2].position = {x, y + size};
+        break;
+    case Bottom:
+        m_triangle[0].position = {x, y};
+        m_triangle[1].position = {x + size, y};
+        m_triangle[2].position = {x + size / 2, y + size};
+        break;
+    case Left:
+        m_triangle[0].position = {x, y + size / 2};
+        m_triangle[1].position = {x + size, y};
+        m_triangle[2].position = {x + size, y + size};
+        break;
+    case Right:
+        m_triangle[0].position = {x, y};
+        m_triangle[1].position = {x + size, y + size / 2};
+        m_triangle[2].position = {x, y + size};
+        break;
     }
     m_direction = direction;
 }

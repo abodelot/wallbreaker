@@ -129,11 +129,11 @@ void Game::quit()
     // Save configuration to settings file
     IniParser config;
     config.seek_section("Wallbreaker");
-    config.set("highscore",  Settings::highscore);
-    config.set("app_width",  m_window.getSize().x);
+    config.set("highscore", Settings::highscore);
+    config.set("app_width", m_window.getSize().x);
     config.set("app_height", m_window.getSize().y);
-    config.set("sound",      SoundSystem::isSoundEnabled());
-    config.set("music",      SoundSystem::isMusicEnabled());
+    config.set("sound", SoundSystem::isSoundEnabled());
+    config.set("music", SoundSystem::isMusicEnabled());
     config.save(m_appDir + APP_SETTINGS_FILE);
 
     SoundSystem::stopAll();

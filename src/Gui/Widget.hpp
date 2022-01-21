@@ -60,14 +60,14 @@ public:
 
     // Callbacks ---------------------------------------------------------------
 
-    virtual void onStateChanged(State state);
-    virtual void onMouseMoved(const sf::Vector2f&);
-    virtual void onMousePressed(const sf::Vector2f&);
-    virtual void onMouseReleased(const sf::Vector2f&);
-    virtual void onMouseWheelMoved(int delta);
-    virtual void onKeyPressed(sf::Keyboard::Key key);
-    virtual void onKeyReleased(sf::Keyboard::Key key);
-    virtual void onTextEntered(sf::Uint32 unicode);
+    virtual void onStateChanged(State state) { (void) state; }
+    virtual void onMouseMoved(const sf::Vector2f& pos) { (void) pos; }
+    virtual void onMousePressed(const sf::Vector2f& pos) { (void) pos; }
+    virtual void onMouseReleased(const sf::Vector2f& pos) { (void) pos; }
+    virtual void onMouseWheelMoved(int delta) { (void) delta; }
+    virtual void onKeyPressed(sf::Keyboard::Key key) { (void) key; }
+    virtual void onKeyReleased(sf::Keyboard::Key key) { (void) key; }
+    virtual void onTextEntered(sf::Uint32 unicode) { (void) unicode; }
 
 protected:
     friend class Layout;

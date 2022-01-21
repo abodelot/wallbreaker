@@ -1,5 +1,5 @@
-#include <cmath>
 #include "Cross.hpp"
+#include <cmath>
 
 using namespace gui;
 
@@ -35,7 +35,7 @@ void Cross::setSize(float size)
 sf::Vector2f Cross::getSize() const
 {
     return sf::Vector2f(m_vertices[1].position.x - m_vertices[3].position.x,
-                        m_vertices[2].position.y - m_vertices[0].position.y);
+        m_vertices[2].position.y - m_vertices[0].position.y);
 }
 
 
@@ -56,14 +56,14 @@ void Cross::updateGeometry(float x, float y, float size)
 {
     float offset = std::sqrt(2);
     // top-left to bottom-right
-    m_vertices[0].position = {x + offset,        y};
-    m_vertices[1].position = {x + size,          y + size - offset};
+    m_vertices[0].position = {x + offset, y};
+    m_vertices[1].position = {x + size, y + size - offset};
     m_vertices[2].position = {x + size - offset, y + size};
-    m_vertices[3].position = {x,                 y + offset};
+    m_vertices[3].position = {x, y + offset};
 
     // top-right to bottom-left
     m_vertices[4].position = {x + size - offset, y};
-    m_vertices[5].position = {x + size,          y + offset};
-    m_vertices[6].position = {x + offset,        y + size};
-    m_vertices[7].position = {x,                 y + size - offset};
+    m_vertices[5].position = {x + size, y + offset};
+    m_vertices[6].position = {x + offset, y + size};
+    m_vertices[7].position = {x, y + size - offset};
 }

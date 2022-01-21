@@ -10,8 +10,8 @@ int main(int /*argc*/, char* argv[])
     Game& game = Game::getInstance();
     game.init(argv[0]);
     // Register game states
-    game.addState("Editor",      new Editor);
-    game.addState("MainMenu",    new MainMenu);
+    game.addState("Editor", new Editor);
+    game.addState("MainMenu", new MainMenu);
     game.addState("OptionsMenu", new OptionsMenu);
     game.addState("Wallbreaker", new Wallbreaker);
 

@@ -27,9 +27,8 @@ void Entity::kill()
 
 bool Entity::collidesWith(const Entity& other) const
 {
-    sf::FloatRect a(getPosition().x, getPosition().y, getWidth(), getHeight());
-    sf::FloatRect b(other.getPosition().x, other.getPosition().y, other.getWidth(), other.getHeight());
-
+    sf::FloatRect a(getX(), getY(), getWidth(), getHeight());
+    sf::FloatRect b(other.getX(), other.getY(), other.getWidth(), other.getHeight());
     return a.intersects(b);
 }
 
@@ -53,7 +52,7 @@ sf::IntRect Entity::getCollisionRect() const
 {
     sf::IntRect rect = getTextureRect();
     rect.left = getPosition().x;
-    rect.top  = getPosition().y;
+    rect.top = getPosition().y;
     return rect;
 }
 

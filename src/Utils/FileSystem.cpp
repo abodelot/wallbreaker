@@ -8,18 +8,19 @@
 
 
 #if defined(_WIN32) || defined(__WIN32__)
-    // Windows
-    #define SYS_WINDOWS
-    #include <direct.h>     // _mkdir
+// Windows
+#define SYS_WINDOWS
+#include <direct.h> // _mkdir
 #elif defined(__linux__)
-    // Linux
-    #define SYS_LINUX
+// Linux
+#define SYS_LINUX
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
-    // Mac OS
-    #define SYS_MACOS
+// Mac OS
+#define SYS_MACOS
 #endif
 
-namespace filesystem {
+namespace filesystem
+{
 
 std::string dirname(const std::string& path)
 {

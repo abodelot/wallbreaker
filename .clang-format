@@ -1,0 +1,15 @@
+---
+BasedOnStyle: Webkit
+AlignConsecutiveMacros: true
+AlignTrailingComments: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: None
+BreakBeforeTernaryOperators: true
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+MaxEmptyLinesToKeep: 2
+SpaceBeforeCtorInitializerColon: false
+SpaceBeforeRangeBasedForLoopColon: false
+SortIncludes: false

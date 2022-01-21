@@ -54,13 +54,13 @@ private:
     bool         m_looping;
     float        m_timeToLive;
     sf::FloatRect m_spawnArea;
-    int          m_particle_count;
-    sf::Color    m_start_color;
-    sf::Color    m_end_color;
+    int          m_particleCount;
+    sf::Color    m_startColor;
+    sf::Color    m_endColor;
     float        m_angle;
-    float        m_angle_variation;
+    float        m_angleVariation;
     float        m_speed;
-    float        m_speed_variation;
+    float        m_speedVariation;
     sf::IntRect  m_textureRect;
 };
 

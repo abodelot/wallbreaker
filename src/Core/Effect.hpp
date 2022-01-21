@@ -5,13 +5,13 @@
 #include <SFML/Graphics.hpp>
 
 /**
- * Animation manager based on sprite transformations
+ * Static class for managing animations based on sprite transformations.
  */
 class Effect
 {
 public:
     /**
-     * Zoom animation
+     * Create a Zoom animation
      * @param target: sprite to zoom
      * @param factor: final scale factor
      */
@@ -19,7 +19,7 @@ public:
     static void zoomAndRevert(sf::Sprite& target, float factor, float duration = 1.f);
 
     /**
-     * Move animation
+     * Create a Move animation
      * @param target: sprite to move
      * @param distance: relative movement, final position is current position + distance
      */
@@ -27,7 +27,7 @@ public:
     static void moveAndRevert(sf::Sprite& target, const sf::Vector2f& distance, float duration = 1.f);
 
     /**
-     * Rotate animation
+     * Create a Rotate animation
      * @param target: sprite to rotate
      * @param angle: angle of the rotation (degrees), final rotation is current rotation + angle
      */
@@ -35,23 +35,23 @@ public:
     static void rotateAndRevert(sf::Sprite& target, float angle, float duration = 1.f);
 
     /**
-     * Fade-in animation
+     * Create a Fade-in animation
      */
     static void fadeIn(sf::Sprite& target, float duration = 1.f);
 
     /**
-     * Fade-out animation
+     * Create a Fade-out animation
      */
     static void fadeOut(sf::Sprite& target, float duration = 1.f);
 
     /**
-     * Update animations for the current frame
+     * Update all animations for the current frame
      */
     static void update(float frametime);
 
     /**
-     * Stop and delete running animations
-     * All animations will be immiediatly set to their final state
+     * Stop and delete all running animations
+     * All sprite targets will be immediately set to their final animation state
      */
     static void stopAll();
 
@@ -100,20 +100,20 @@ private:
         Object(Type t, sf::Sprite& s, float dur):
             type(t), target(s), duration(dur)
         {
-            created_at.restart();
+            createdAt.restart();
         }
 
         Object(Data& d, Type t, sf::Sprite& s, float dur):
             data(d), type(t), target(s), duration(dur)
         {
-            created_at.restart();
+            createdAt.restart();
         }
 
         Data data;
         Type type;
         sf::Sprite& target;
         const float duration;
-        sf::Clock created_at;
+        sf::Clock createdAt;
     };
 
     static void pushObject(Object::Data& data, Type type, sf::Sprite& target, float duration);

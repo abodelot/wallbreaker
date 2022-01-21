@@ -6,6 +6,9 @@
 
 class ParticleEmitter;
 
+/**
+ * Manager and renderer for particles. See ParticleEmitter for creating particles.
+ */
 class ParticleSystem: public sf::Drawable, sf::NonCopyable
 {
 public:

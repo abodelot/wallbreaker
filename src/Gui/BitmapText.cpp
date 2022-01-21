@@ -27,7 +27,6 @@ void BitmapText::setString(const sf::String& string)
 }
 
 
-
 const sf::String& BitmapText::getString() const
 {
     return m_string;
@@ -124,34 +123,34 @@ void BitmapText::updateGeometry()
         // Handle special characters
         switch (current)
         {
-            case L'\t':
-                x += m_font->getGlyphWidth() * 4;
-                continue;
-            case L'\n':
-                y += m_font->getGlyphHeight();
-                x = 0;
-                continue;
-            case L'\v':
-                y += m_font->getGlyphWidth() * 4;
-                continue;
+        case L'\t':
+            x += m_font->getGlyphWidth() * 4;
+            continue;
+        case L'\n':
+            y += m_font->getGlyphHeight();
+            x = 0;
+            continue;
+        case L'\v':
+            y += m_font->getGlyphWidth() * 4;
+            continue;
         }
 
         // Extract the current glyph's description
         const sf::IntRect& glyph = m_font->getGlyphRect(current);
 
-        int right  = glyph.width;
+        int right = glyph.width;
         int bottom = glyph.height;
 
         float u1 = static_cast<float>(glyph.left);
         float v1 = static_cast<float>(glyph.top);
         float u2 = static_cast<float>(glyph.left + glyph.width);
-        float v2 = static_cast<float>(glyph.top  + glyph.height);
+        float v2 = static_cast<float>(glyph.top + glyph.height);
 
         // Add a quad for the current character
-        m_vertices.append(sf::Vertex(sf::Vector2f(x, y),                  m_color, sf::Vector2f(u1, v1)));
-        m_vertices.append(sf::Vertex(sf::Vector2f(x + right, y),          m_color, sf::Vector2f(u2, v1)));
+        m_vertices.append(sf::Vertex(sf::Vector2f(x, y), m_color, sf::Vector2f(u1, v1)));
+        m_vertices.append(sf::Vertex(sf::Vector2f(x + right, y), m_color, sf::Vector2f(u2, v1)));
         m_vertices.append(sf::Vertex(sf::Vector2f(x + right, y + bottom), m_color, sf::Vector2f(u2, v2)));
-        m_vertices.append(sf::Vertex(sf::Vector2f(x, y + bottom),         m_color, sf::Vector2f(u1, v2)));
+        m_vertices.append(sf::Vertex(sf::Vector2f(x, y + bottom), m_color, sf::Vector2f(u1, v2)));
 
         // Advance to the next character
         x += glyph.width;

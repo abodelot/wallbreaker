@@ -56,12 +56,12 @@ private:
     static const int MAX_SOUNDS = 20;
 
     static sf::Sound   m_sounds[MAX_SOUNDS];
-    static int         m_last_sound_played;
+    static int         m_lastSoundPlayed;
     static sf::Music   m_music;
-    static int         m_music_volume;
-    static int         m_sound_volume;
-    static bool        m_enable_music;
-    static bool        m_enable_sound;
+    static int         m_musicVolume;
+    static int         m_soundVolume;
+    static bool        m_enableMusic;
+    static bool        m_enableSound;
 };
 
 #endif // SOUNDSYSTEM_HPP

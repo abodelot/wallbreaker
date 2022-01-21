@@ -121,9 +121,7 @@ void HUD::Item::setValue(int val)
 {
     value.setString(std::to_string(val));
     value.setPosition(
-        (HUD::WIDTH - value.getSize().x) / 2,
-        label.getPosition().y + label.getSize().y + 2
-    );
+        (HUD::WIDTH - value.getSize().x) / 2, label.getPosition().y + label.getSize().y + 2);
 }
 
 

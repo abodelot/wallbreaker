@@ -78,57 +78,57 @@ void Effect::update(float frametime)
 {
     for (ObjectList::iterator it = m_objects.begin(); it != m_objects.end();)
     {
-        float elapsed = it->created_at.getElapsedTime().asSeconds();
+        float elapsed = it->createdAt.getElapsedTime().asSeconds();
         if (elapsed >= it->duration)
         {
             switch (it->type)
             {
-                // Apply the opposite animation
-                case ZOOM_REVERT:
-                {
-                    Object::Zoom& zoom = it->data.zoom;
-                    zoom.scale_per_sec *= -1;
-                    zoom.final_scale = zoom.final_scale + zoom.scale_per_sec * it->duration;
-                    it->type = ZOOM;
-                    it->created_at.restart();
-                    continue;
-                }
-                case MOVE_REVERT:
-                {
-                    Object::Move& move = it->data.move;
-                    move.x_per_sec *= -1;
-                    move.y_per_sec *= -1;
-                    move.final_x = move.final_x + move.x_per_sec * it->duration;
-                    move.final_y = move.final_y + move.y_per_sec * it->duration;
-                    it->type = MOVE;
-                    it->created_at.restart();
-                    continue;
-                }
-                case ROTATE_REVERT:
-                {
-                    Object::Rotate& rotate = it->data.rotate;
-                    rotate.angle_per_sec *= -1;
-                    rotate.final_angle = rotate.final_angle + rotate.angle_per_sec * it->duration;
-                    it->type = ROTATE;
-                    it->created_at.restart();
-                    continue;
-                }
-                // When effect ends, make sure it reaches the actual final value
-                case ZOOM:
-                    it->target.setScale(it->data.zoom.final_scale, it->data.zoom.final_scale);
-                    break;
-                case MOVE:
-                    it->target.setPosition(it->data.move.final_x, it->data.move.final_y);
-                    break;
-                case ROTATE:
-                    it->target.setRotation(it->data.rotate.final_angle);
-                    break;
-                case FADE_IN:
-                    it->target.setColor({255, 255, 255, 255});
-                    break;
-                case FADE_OUT:
-                    it->target.setColor({255, 255, 255, 0});
-                    break;
+            // Apply the opposite animation
+            case ZOOM_REVERT:
+            {
+                Object::Zoom& zoom = it->data.zoom;
+                zoom.scale_per_sec *= -1;
+                zoom.final_scale = zoom.final_scale + zoom.scale_per_sec * it->duration;
+                it->type = ZOOM;
+                it->createdAt.restart();
+                continue;
+            }
+            case MOVE_REVERT:
+            {
+                Object::Move& move = it->data.move;
+                move.x_per_sec *= -1;
+                move.y_per_sec *= -1;
+                move.final_x = move.final_x + move.x_per_sec * it->duration;
+                move.final_y = move.final_y + move.y_per_sec * it->duration;
+                it->type = MOVE;
+                it->createdAt.restart();
+                continue;
+            }
+            case ROTATE_REVERT:
+            {
+                Object::Rotate& rotate = it->data.rotate;
+                rotate.angle_per_sec *= -1;
+                rotate.final_angle = rotate.final_angle + rotate.angle_per_sec * it->duration;
+                it->type = ROTATE;
+                it->createdAt.restart();
+                continue;
+            }
+            // When effect ends, make sure it reaches the actual final value
+            case ZOOM:
+                it->target.setScale(it->data.zoom.final_scale, it->data.zoom.final_scale);
+                break;
+            case MOVE:
+                it->target.setPosition(it->data.move.final_x, it->data.move.final_y);
+                break;
+            case ROTATE:
+                it->target.setRotation(it->data.rotate.final_angle);
+                break;
+            case FADE_IN:
+                it->target.setColor({255, 255, 255, 255});
+                break;
+            case FADE_OUT:
+                it->target.setColor({255, 255, 255, 0});
+                break;
             }
             it = m_objects.erase(it);
         }
@@ -136,34 +136,36 @@ void Effect::update(float frametime)
         {
             switch (it->type)
             {
-                case ZOOM:
-                case ZOOM_REVERT:
-                    it->target.setScale(it->target.getScale().x + frametime * it->data.zoom.scale_per_sec,
-                                        it->target.getScale().y + frametime * it->data.zoom.scale_per_sec);
-                    break;
+            case ZOOM:
+            case ZOOM_REVERT:
+                it->target.setScale(
+                    it->target.getScale().x + frametime * it->data.zoom.scale_per_sec,
+                    it->target.getScale().y + frametime * it->data.zoom.scale_per_sec);
+                break;
 
-                case MOVE:
-                case MOVE_REVERT:
-                    it->target.move(frametime * it->data.move.x_per_sec, frametime * it->data.move.y_per_sec);
-                    break;
+            case MOVE:
+            case MOVE_REVERT:
+                it->target.move(
+                    frametime * it->data.move.x_per_sec, frametime * it->data.move.y_per_sec);
+                break;
 
-                case ROTATE:
-                case ROTATE_REVERT:
-                    it->target.rotate(frametime * it->data.rotate.angle_per_sec);
-                    break;
+            case ROTATE:
+            case ROTATE_REVERT:
+                it->target.rotate(frametime * it->data.rotate.angle_per_sec);
+                break;
 
-                case FADE_IN:
-                {
-                    sf::Uint8 delta = elapsed * 255 / it->duration;
-                    it->target.setColor(sf::Color(255, 255, 255, delta));
-                    break;
-                }
-                case FADE_OUT:
-                {
-                    sf::Uint8 delta = elapsed * 255 / it->duration;
-                    it->target.setColor(sf::Color(255, 255, 255, 255 - delta));
-                    break;
-                }
+            case FADE_IN:
+            {
+                sf::Uint8 delta = elapsed * 255 / it->duration;
+                it->target.setColor(sf::Color(255, 255, 255, delta));
+                break;
+            }
+            case FADE_OUT:
+            {
+                sf::Uint8 delta = elapsed * 255 / it->duration;
+                it->target.setColor(sf::Color(255, 255, 255, 255 - delta));
+                break;
+            }
             }
             ++it;
         }

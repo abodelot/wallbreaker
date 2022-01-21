@@ -103,8 +103,7 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget)
     widget->setPosition(
         m_form.label_width,
         // Align bottom of widget with bottom of label
-        pos.y + (Theme::font.getGlyphHeight() + Theme::padding - widget->getSize().y)
-    );
+        pos.y + (Theme::font.getGlyphHeight() + Theme::padding - widget->getSize().y));
     push(widget);
     return widget;
 }

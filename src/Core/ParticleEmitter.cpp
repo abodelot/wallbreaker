@@ -7,13 +7,13 @@ ParticleEmitter::ParticleEmitter():
     m_particleSystem(nullptr),
     m_looping(false),
     m_timeToLive(5),
-    m_particle_count(100),
-    m_start_color(sf::Color::White),
-    m_end_color(sf::Color(0, 0, 0, 0)),
+    m_particleCount(100),
+    m_startColor(sf::Color::White),
+    m_endColor(sf::Color(0, 0, 0, 0)),
     m_angle(0),
-    m_angle_variation(math::PI * 2),
+    m_angleVariation(math::PI * 2),
     m_speed(100),
-    m_speed_variation(50),
+    m_speedVariation(50),
     // Default particle are just 1 pixel
     m_textureRect(0, 0, 1, 1)
 {
@@ -46,28 +46,28 @@ void ParticleEmitter::setTimeToLive(float duration)
 
 void ParticleEmitter::setParticleColor(const sf::Color& color)
 {
-    m_start_color = color;
+    m_startColor = color;
 }
 
 
 void ParticleEmitter::setParticleColor(const sf::Color& start, const sf::Color& end)
 {
-    m_start_color = start;
-    m_end_color = end;
+    m_startColor = start;
+    m_endColor = end;
 }
 
 
 void ParticleEmitter::setAngle(float angle, float variation)
 {
     m_angle = angle;
-    m_angle_variation = variation;
+    m_angleVariation = variation;
 }
 
 
 void ParticleEmitter::setSpeed(float speed, float variation)
 {
     m_speed = speed;
-    m_speed_variation = variation;
+    m_speedVariation = variation;
 }
 
 
@@ -91,13 +91,13 @@ void ParticleEmitter::clearParticles() const
 
 void ParticleEmitter::setParticleCount(int count)
 {
-    m_particle_count = count;
+    m_particleCount = count;
 }
 
 
 int ParticleEmitter::getParticleCount() const
 {
-    return m_particle_count;
+    return m_particleCount;
 }
 
 
@@ -117,20 +117,19 @@ sf::Vector2f ParticleEmitter::getSpawnPosition() const
 {
     return sf::Vector2f(
         math::rand(m_spawnArea.left, m_spawnArea.left + m_spawnArea.width),
-        math::rand(m_spawnArea.top, m_spawnArea.top + m_spawnArea.height)
-    );
+        math::rand(m_spawnArea.top, m_spawnArea.top + m_spawnArea.height));
 }
 
 
 float ParticleEmitter::getParticleAngle() const
 {
-    return math::rand(m_angle - m_angle_variation, m_angle + m_angle_variation);
+    return math::rand(m_angle - m_angleVariation, m_angle + m_angleVariation);
 }
 
 
 float ParticleEmitter::getParticleSpeed() const
 {
-    return math::rand(m_speed - m_speed_variation, m_speed + m_speed_variation);
+    return math::rand(m_speed - m_speedVariation, m_speed + m_speedVariation);
 }
 
 

@@ -8,14 +8,14 @@
 #include "Utils/Math.hpp"
 
 // When hitting the pad, the ball bounces from PADDLE_ANGLE to 90 + PADDLE_ANGLE
-#define PADDLE_ANGLE           30 // degrees
+#define PADDLE_ANGLE 30 // degrees
 // The ball velocity starts at BALL_SPEED_STEP, and is increased by BALL_SPEED_STEP
 // every time a brick is hit, until BALL_MAX_SPEED is reached
-#define BALL_START_SPEED      150 // pixels/second
-#define BALL_MAX_SPEED        300 // pixels/second
-#define BALL_SPEED_STEP         3 // pixels/second
-// Remaining number of bricks when Power Ball power-up is activated
-#define POWER_BALL_COUNT       10
+#define BALL_START_SPEED 150 // pixels/second
+#define BALL_MAX_SPEED   300 // pixels/second
+#define BALL_SPEED_STEP  3   // pixels/second
+// Number of bricks when Power Ball power-up is activated
+#define POWER_BALL_COUNT 10
 
 int Ball::s_instance_count = 0;
 
@@ -133,26 +133,19 @@ void Ball::onBrickHit(Brick& brick, const sf::Vector2f& previousPos)
     }
 
     // Get the side of the brick hit by the ball
-    const sf::Vector2f ballCenter(
-        previousPos.x + getWidth() / 2,
-        previousPos.y + getHeight() / 2
-    );
+    const sf::Vector2f ballCenter(previousPos.x + getWidth() / 2, previousPos.y + getHeight() / 2);
     const sf::Vector2f brickCenter(
-        brick.getPosition().x + Brick::WIDTH / 2,
-        brick.getPosition().y + Brick::HEIGHT / 2
-    );
+        brick.getPosition().x + Brick::WIDTH / 2, brick.getPosition().y + Brick::HEIGHT / 2);
 
     // Angle between the ball and the brick before the collision occured
     float ballAngle = math::to_degrees(math::angle(ballCenter, brickCenter));
 
     // Get brick ratio angle
-    float brickRatio = math::to_degrees(
-        std::tan(static_cast<float>(Brick::HEIGHT) / Brick::WIDTH)
-    );
+    float brickAngle = math::to_degrees(std::tan(static_cast<float>(Brick::HEIGHT) / Brick::WIDTH));
 
     // Check if collision was with a vertical side
-    if ((ballAngle > brickRatio       && ballAngle < (180 - brickRatio)) ||
-        (ballAngle > 180 + brickRatio && ballAngle < (360 - brickRatio)))
+    if ((ballAngle > brickAngle && ballAngle < (180 - brickAngle))
+        || (ballAngle > 180 + brickAngle && ballAngle < (360 - brickAngle)))
     {
         // Vertical side, flip Y-axis
         m_angle = -m_angle;

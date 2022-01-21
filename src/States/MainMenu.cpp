@@ -19,18 +19,10 @@ MainMenu::MainMenu():
     m_aboutText.setPosition(0, APP_HEIGHT - m_aboutText.getSize().y);
     m_aboutText.setColor(gui::Theme::textColor);
 
-    m_menu.addButton("New game", []() {
-        Game::getInstance().setCurrentState("Wallbreaker");
-    });
-    m_menu.addButton("Editor", []() {
-        Game::getInstance().setCurrentState("Editor");
-    });
-    m_menu.addButton("Options", []() {
-        Game::getInstance().setCurrentState("OptionsMenu");
-    });
-    m_menu.addButton("Quit", []() {
-        Game::getInstance().quit();
-    });
+    m_menu.addButton("New game", []() { Game::getInstance().setCurrentState("Wallbreaker"); });
+    m_menu.addButton("Editor", []() { Game::getInstance().setCurrentState("Editor"); });
+    m_menu.addButton("Options", []() { Game::getInstance().setCurrentState("OptionsMenu"); });
+    m_menu.addButton("Quit", []() { Game::getInstance().quit(); });
 
     // Center menu horizontally
     m_menu.setPosition((APP_WIDTH - m_menu.getSize().x) / 2, 100);

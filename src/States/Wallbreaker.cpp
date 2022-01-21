@@ -32,10 +32,8 @@ Wallbreaker::Wallbreaker():
     // Sprites used for rendering the game area
     m_levelSprite.setTexture(m_levelTexture.getTexture());
     m_levelSprite.setOrigin(m_width / 2, m_height / 2);
-    m_levelSprite.setPosition(
-        m_width / 2 + LevelManager::BORDER_SIZE + X_OFFSET,
-        m_height / 2 + LevelManager::BORDER_SIZE
-    );
+    m_levelSprite.setPosition(m_width / 2 + LevelManager::BORDER_SIZE + X_OFFSET,
+        m_height / 2 + LevelManager::BORDER_SIZE);
 
     // Align on right
     m_hud.setPosition(APP_WIDTH - HUD::WIDTH, 0);
@@ -48,14 +46,10 @@ Wallbreaker::Wallbreaker():
 
     // Build 'pause' menu
     m_pauseMenu.setPosition(
-        LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::widgetWidth) / 2, 120
-    );
-    m_pauseMenu.addButton("Resume", [this]() {
-        setStatus(PLAYING);
-    });
-    m_pauseMenu.addButton("Options", [this]() {
-        Game::getInstance().setCurrentState("OptionsMenu");
-    });
+        LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::widgetWidth) / 2, 120);
+    m_pauseMenu.addButton("Resume", [this]() { setStatus(PLAYING); });
+    m_pauseMenu.addButton(
+        "Options", [this]() { Game::getInstance().setCurrentState("OptionsMenu"); });
     m_pauseMenu.addButton("Quit", [this]() {
         // Clear game and back to main menu
         resetGame();
@@ -91,106 +85,104 @@ void Wallbreaker::onEvent(const sf::Event& event)
 {
     switch (m_status)
     {
-        case PLAYING:
-            switch (event.type)
+    case PLAYING:
+        switch (event.type)
+        {
+        case sf::Event::KeyPressed:
+            switch (event.key.code)
             {
-                case sf::Event::KeyPressed:
-                    switch (event.key.code)
-                    {
-                        case sf::Keyboard::Escape:
-                            setStatus(PAUSED);
-                            break;
-                        case sf::Keyboard::Space:
-                            if (m_paddle.isSticky())
-                                applyOnEachBall(&Ball::unstick);
-                            else if (m_paddle.hasLaser())
-                                addEntity(m_paddle.shoot());
-                            break;
+            case sf::Keyboard::Escape:
+                setStatus(PAUSED);
+                break;
+            case sf::Keyboard::Space:
+                if (m_paddle.isSticky())
+                    applyOnEachBall(&Ball::unstick);
+                else if (m_paddle.hasLaser())
+                    addEntity(m_paddle.shoot());
+                break;
 #ifdef WALLBREAKER_DEBUG
-                        case sf::Keyboard::R: // Reload level
-                            m_remainingBricks = m_level.reload();
-                            m_hud.setBrickCount(m_remainingBricks);
-                            break;
-                        case sf::Keyboard::N: // Go to next level
-                            loadNextLevel();
-                            break;
-                        case sf::Keyboard::G: // Simulate LARGE_PADDLE
-                            m_paddle.grow();
-                            break;
-                        case sf::Keyboard::S: // Simulate SMALL_PADDLE
-                            m_paddle.shrink();
-                            break;
-                        case sf::Keyboard::Y: // Simulate STICKY_PADDLE
-                            m_paddle.activeSticky();
-                            break;
-                        case sf::Keyboard::L: // Simulate LASER_PADDLE
-                            m_paddle.activeLaser();
-                            break;
-                        case sf::Keyboard::T: // Simulate TRIPLE_BALL
-                            createBall();
-                            createBall();
-                            break;
-                        case sf::Keyboard::P: // Simulate POWER_BALL
-                            applyOnEachBall(&Ball::enablePowerBall);
-                            break;
-                        case sf::Keyboard::E: // Simulate SPEED_RESET
-                            applyOnEachBall(&Ball::resetSpeed);
-                            break;
+            case sf::Keyboard::R: // Reload level
+                m_remainingBricks = m_level.reload();
+                m_hud.setBrickCount(m_remainingBricks);
+                break;
+            case sf::Keyboard::N: // Go to next level
+                loadNextLevel();
+                break;
+            case sf::Keyboard::G: // Simulate LARGE_PADDLE
+                m_paddle.grow();
+                break;
+            case sf::Keyboard::S: // Simulate SMALL_PADDLE
+                m_paddle.shrink();
+                break;
+            case sf::Keyboard::Y: // Simulate STICKY_PADDLE
+                m_paddle.activeSticky();
+                break;
+            case sf::Keyboard::L: // Simulate LASER_PADDLE
+                m_paddle.activeLaser();
+                break;
+            case sf::Keyboard::T: // Simulate TRIPLE_BALL
+                createBall();
+                createBall();
+                break;
+            case sf::Keyboard::P: // Simulate POWER_BALL
+                applyOnEachBall(&Ball::enablePowerBall);
+                break;
+            case sf::Keyboard::E: // Simulate SPEED_RESET
+                applyOnEachBall(&Ball::resetSpeed);
+                break;
 #endif
-                        default:
-                            break;
-                    }
-                    break;
-
-                case sf::Event::MouseMoved:
-                    // Paddle follows the mouse cursor
-                    m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords({
-                        event.mouseMove.x, event.mouseMove.y
-                    }));
-                    break;
-
-                case sf::Event::MouseButtonPressed:
-                    if (m_paddle.isSticky())
-                        applyOnEachBall(&Ball::unstick);
-                    else if (m_paddle.hasLaser())
-                        addEntity(m_paddle.shoot());
-                    break;
-
-                case sf::Event::LostFocus:
-                    setStatus(PAUSED);
-                    break;
-
-                default:
-                    break;
+            default:
+                break;
             }
             break;
 
-        case PAUSED:
-            m_pauseMenu.onEvent(event);
-            // Resume
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-                setStatus(PLAYING);
+        case sf::Event::MouseMoved:
+            // Paddle follows the mouse cursor
+            m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords(
+                {event.mouseMove.x, event.mouseMove.y}));
             break;
 
-        case READY:
-            if (event.type == sf::Event::MouseButtonPressed ||
-                (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space))
-            {
-                applyOnEachBall(&Ball::createParticles);
-                setStatus(PLAYING);
-            }
-            else if (event.type == sf::Event::MouseMoved)
-            {
-                // Paddle follows the mouse cursor
-                m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords({
-                    event.mouseMove.x, event.mouseMove.y
-                }));
-            }
+        case sf::Event::MouseButtonPressed:
+            if (m_paddle.isSticky())
+                applyOnEachBall(&Ball::unstick);
+            else if (m_paddle.hasLaser())
+                addEntity(m_paddle.shoot());
             break;
 
-        case GAME_OVER:
-            m_gameOverMenu.onEvent(event);
+        case sf::Event::LostFocus:
+            setStatus(PAUSED);
             break;
+
+        default:
+            break;
+        }
+        break;
+
+    case PAUSED:
+        m_pauseMenu.onEvent(event);
+        // Resume
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+            setStatus(PLAYING);
+        break;
+
+    case READY:
+        if (event.type == sf::Event::MouseButtonPressed
+            || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space))
+        {
+            applyOnEachBall(&Ball::createParticles);
+            setStatus(PLAYING);
+        }
+        else if (event.type == sf::Event::MouseMoved)
+        {
+            // Paddle follows the mouse cursor
+            m_paddle.onMouseMoved(Game::getInstance().getWindow().mapPixelToCoords(
+                {event.mouseMove.x, event.mouseMove.y}));
+        }
+        break;
+
+    case GAME_OVER:
+        m_gameOverMenu.onEvent(event);
+        break;
     }
 }
 
@@ -225,10 +217,8 @@ void Wallbreaker::update(float frametime)
         {
             Entity* ball = m_entities.front();
             // Keep the ball centered on the player pad
-            ball->setPosition(
-                m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
-                m_paddle.getY() - ball->getHeight()
-            );
+            ball->setPosition(m_paddle.getX() + (m_paddle.getWidth() - ball->getWidth()) / 2,
+                m_paddle.getY() - ball->getHeight());
         }
         m_particles.update(frametime);
     }
@@ -375,9 +365,9 @@ void Wallbreaker::updateEntities(float frametime)
             }
             // Check if entity collides with paddle
             else if ((entity.getY() + entity.getHeight() > m_paddle.getY())
-                  && (entity.getY() < m_paddle.getY())
-                  && (entity.getX() + entity.getWidth() > m_paddle.getX())
-                  && (entity.getX() < m_paddle.getX() + m_paddle.getWidth()))
+                && (entity.getY() < m_paddle.getY())
+                && (entity.getX() + entity.getWidth() > m_paddle.getX())
+                && (entity.getX() < m_paddle.getX() + m_paddle.getWidth()))
             {
                 entity.setY(m_height - m_paddle.getHeight() - entity.getHeight());
                 entity.onPaddleHit(m_paddle);
@@ -386,15 +376,15 @@ void Wallbreaker::updateEntities(float frametime)
             else
             {
                 // Get corners
-                int left =   entity.getX() / Brick::WIDTH;
-                int top =    entity.getY() / Brick::HEIGHT;
-                int right =  (entity.getX() + entity.getWidth())  / Brick::WIDTH;
+                int left = entity.getX() / Brick::WIDTH;
+                int top = entity.getY() / Brick::HEIGHT;
+                int right = (entity.getX() + entity.getWidth()) / Brick::WIDTH;
                 int bottom = (entity.getY() + entity.getHeight()) / Brick::HEIGHT;
 
                 if (checkBrick(entity, top, left, old_pos)
-                 || checkBrick(entity, top, right, old_pos)
-                 || checkBrick(entity, bottom, left, old_pos)
-                 || checkBrick(entity, bottom, right, old_pos))
+                    || checkBrick(entity, top, right, old_pos)
+                    || checkBrick(entity, bottom, left, old_pos)
+                    || checkBrick(entity, bottom, right, old_pos))
                 {
                     if (m_remainingBricks == 0)
                     {
@@ -512,8 +502,7 @@ void Wallbreaker::setStatus(Status status)
     // Center text
     m_titleText.setScale(2, 2);
     m_titleText.setPosition(
-        X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_titleText.getSize().x) / 2, 80
-    );
+        X_OFFSET + LevelManager::BORDER_SIZE + (m_width - m_titleText.getSize().x) / 2, 80);
 }
 
 
@@ -523,8 +512,7 @@ void Wallbreaker::createBall()
     // Center ball on player pad
     ball->setPosition(
         m_paddle.getPosition().x + (m_paddle.getWidth() - ball->getWidth()) / 2,
-        m_height - m_paddle.getHeight() - ball->getHeight()
-    );
+        m_height - m_paddle.getHeight() - ball->getHeight());
     if (m_status == PLAYING)
     {
         ball->createParticles();

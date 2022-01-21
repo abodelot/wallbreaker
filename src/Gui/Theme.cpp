@@ -1,6 +1,7 @@
 #include "Theme.hpp"
 
-namespace gui {
+namespace gui
+{
 
 
 sf::Color Theme::textColor(sf::Color::White);

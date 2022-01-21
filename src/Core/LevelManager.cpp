@@ -109,7 +109,7 @@ int LevelManager::loadNext()
     ++m_current_level;
 #ifdef WALLBREAKER_DEBUG
     std::cout << "level " << m_current_level << "/" << m_level_count << " loaded, contains "
-        << m_brick_count << " bricks" << std::endl;
+              << m_brick_count << " bricks" << std::endl;
 #endif
 
     return m_brick_count;

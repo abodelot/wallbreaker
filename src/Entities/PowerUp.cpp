@@ -7,9 +7,9 @@
 #include "States/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
-#define POWERUP_WIDTH 20
+#define POWERUP_WIDTH  20
 #define POWERUP_HEIGHT 12
-#define POWERUP_SPEED 50
+#define POWERUP_SPEED  50
 
 PowerUp* PowerUp::createRandom()
 {
@@ -32,31 +32,31 @@ void PowerUp::onPaddleHit(Paddle& paddle)
 {
     switch (m_type)
     {
-        case SMALL_PADDLE:
-            paddle.shrink();
-            break;
-        case LARGE_PADDLE:
-            paddle.grow();
-            break;
-        case STICKY_PADDLE:
-            paddle.activeSticky();
-            break;
-        case LASER_PADDLE:
-            paddle.activeLaser();
-            break;
-        case TRIPLE_BALL:
-            Context::get().wallbreaker->createBall();
-            Context::get().wallbreaker->createBall();
-            break;
-        case POWER_BALL:
-            Context::get().wallbreaker->applyOnEachBall(&Ball::enablePowerBall);
-            break;
-        case EXTRA_LIFE:
-            Context::get().wallbreaker->addPlayerLife();
-            break;
-        case SPEED_RESET:
-            Context::get().wallbreaker->applyOnEachBall(&Ball::resetSpeed);
-            break;
+    case SMALL_PADDLE:
+        paddle.shrink();
+        break;
+    case LARGE_PADDLE:
+        paddle.grow();
+        break;
+    case STICKY_PADDLE:
+        paddle.activeSticky();
+        break;
+    case LASER_PADDLE:
+        paddle.activeLaser();
+        break;
+    case TRIPLE_BALL:
+        Context::get().wallbreaker->createBall();
+        Context::get().wallbreaker->createBall();
+        break;
+    case POWER_BALL:
+        Context::get().wallbreaker->applyOnEachBall(&Ball::enablePowerBall);
+        break;
+    case EXTRA_LIFE:
+        Context::get().wallbreaker->addPlayerLife();
+        break;
+    case SPEED_RESET:
+        Context::get().wallbreaker->applyOnEachBall(&Ball::resetSpeed);
+        break;
     }
     kill();
     SoundSystem::playSound("power-up.ogg");
