@@ -1,0 +1,25 @@
+on: push
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt install clang-format
+      - name: Run clang-format
+        run: make lint
+  build:
+    name: Compile
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [clang++, g++]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt install build-essential libsfml-dev
+      - name: Build
+        run: make CC=${{ matrix.cc }}

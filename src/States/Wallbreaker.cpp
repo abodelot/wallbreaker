@@ -48,8 +48,7 @@ Wallbreaker::Wallbreaker():
     m_pauseMenu.setPosition(
         LevelManager::BORDER_SIZE + X_OFFSET + (m_width - gui::Theme::widgetWidth) / 2, 120);
     m_pauseMenu.addButton("Resume", [this]() { setStatus(PLAYING); });
-    m_pauseMenu.addButton(
-        "Options", [this]() { Game::getInstance().setCurrentState("OptionsMenu"); });
+    m_pauseMenu.addButton("Options", []() { Game::getInstance().setCurrentState("OptionsMenu"); });
     m_pauseMenu.addButton("Quit", [this]() {
         // Clear game and back to main menu
         resetGame();

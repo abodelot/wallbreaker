@@ -15,7 +15,7 @@ public:
 
     void onEvent(const sf::Event& event) override;
 
-    void onFocus();
+    void onFocus() override;
 
     void update(float frametime) override;
 

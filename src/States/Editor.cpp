@@ -89,7 +89,7 @@ Editor::Editor():
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
     form->addRow("Show grid:", m_ck_grid);
 
-    m_menu.addButton("Back", [this]() { Game::getInstance().restorePreviousState(); });
+    m_menu.addButton("Back", []() { Game::getInstance().restorePreviousState(); });
 }
 
 

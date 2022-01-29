@@ -40,7 +40,7 @@ OptionsMenu::OptionsMenu():
 
     // Back button
     gui::Button* btnBack = new gui::Button("Back");
-    btnBack->setCallback([this]() { Game::getInstance().restorePreviousState(); });
+    btnBack->setCallback([]() { Game::getInstance().restorePreviousState(); });
 
     // Add widgets in form
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);

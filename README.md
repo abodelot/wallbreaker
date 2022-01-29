@@ -1,5 +1,7 @@
 # Wallbreaker
 
+![workflow](https://github.com/abodelot/wallbreaker/actions/workflows/ci.yml/badge.svg)
+
 Wallbreaker is a clone of the famous Arkanoid/Breakout games, written in C++ with SFML.
 
 ![game](screenshots/game.png)

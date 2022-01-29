@@ -18,7 +18,7 @@ public:
      */
     static int getCount() { return s_instance_count; };
 
-    Ball* toBall();
+    Ball* toBall() override;
 
     /**
      * Unstick ball if glued to a paddle

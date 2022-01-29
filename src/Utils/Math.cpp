@@ -25,7 +25,7 @@ int rand(int begin, int end)
 
 float rand(float begin, float end)
 {
-    return static_cast<float>(std::rand()) / RAND_MAX * (end - begin) + begin;
+    return static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * (end - begin) + begin;
 }
 
 
