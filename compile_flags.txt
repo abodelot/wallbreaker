@@ -1,1 +1,4 @@
 -I./src
+-std=c++17
+-Wall
+-Wextra

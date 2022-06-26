@@ -1,7 +1,8 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
-#include "Paddle.hpp"
 #include "Context.hpp"
+#include "Paddle.hpp"
+
 #include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"

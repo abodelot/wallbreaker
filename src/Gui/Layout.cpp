@@ -1,8 +1,8 @@
-#include <stdexcept>
 #include "Layout.hpp"
-#include "Theme.hpp"
 #include "Button.hpp"
 #include "Label.hpp"
+#include "Theme.hpp"
+#include <stdexcept>
 
 using namespace gui;
 

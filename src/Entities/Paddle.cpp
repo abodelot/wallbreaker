@@ -1,11 +1,11 @@
 #include <SFML/Window.hpp>
 
-#include "Paddle.hpp"
-#include "LaserBeam.hpp"
 #include "Ball.hpp"
-#include "Entities/Context.hpp"
-#include "Core/SoundSystem.hpp"
 #include "Core/Resources.hpp"
+#include "Core/SoundSystem.hpp"
+#include "Entities/Context.hpp"
+#include "LaserBeam.hpp"
+#include "Paddle.hpp"
 #include "States/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 

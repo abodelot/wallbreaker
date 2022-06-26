@@ -1,15 +1,15 @@
 #include "PowerUp.hpp"
-#include "Paddle.hpp"
 #include "Brick.hpp"
-#include "Entities/Context.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
+#include "Entities/Context.hpp"
+#include "Paddle.hpp"
 #include "States/Wallbreaker.hpp"
 #include "Utils/Math.hpp"
 
-#define POWERUP_WIDTH  20
-#define POWERUP_HEIGHT 12
-#define POWERUP_SPEED  50
+static constexpr int POWERUP_WIDTH = 20;
+static constexpr int POWERUP_HEIGHT = 12;
+static constexpr int POWERUP_SPEED = 50;
 
 PowerUp* PowerUp::createRandom()
 {

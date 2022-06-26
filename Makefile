@@ -6,7 +6,7 @@ OBJ     := $(SRC:%.cpp=$(OBJDIR)/%.o)
 DEP     := $(SRC:%.cpp=$(OBJDIR)/%.d)
 
 CC      := g++
-CFLAGS  := -MMD -MP -I$(SRCDIR) -std=c++11 -pedantic -O2
+CFLAGS  := -MMD -MP -I$(SRCDIR) -std=c++17 -pedantic -O2
 WFLAGS  := -Wall -Wextra -Wold-style-cast -Wshadow -Wwrite-strings
 LDFLAGS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 

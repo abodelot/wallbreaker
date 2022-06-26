@@ -1,8 +1,8 @@
 #ifndef EFFECT_HPP
 #define EFFECT_HPP
 
-#include <list>
 #include <SFML/Graphics.hpp>
+#include <list>
 
 /**
  * Static class for managing animations based on sprite transformations.

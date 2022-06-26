@@ -1,5 +1,5 @@
-#include <ctime>
 #include "Math.hpp"
+#include <ctime>
 
 namespace math
 {

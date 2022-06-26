@@ -1,11 +1,11 @@
-#include <iostream>
 #include "Editor.hpp"
-#include "Core/Resources.hpp"
 #include "Core/Game.hpp"
-#include "Gui/OptionsBox.hpp"
+#include "Core/Resources.hpp"
 #include "Gui/Button.hpp"
 #include "Gui/CheckBox.hpp"
 #include "Gui/Label.hpp"
+#include "Gui/OptionsBox.hpp"
+#include <iostream>
 
 
 Editor::Editor():

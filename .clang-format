@@ -12,4 +12,3 @@ Cpp11BracedListStyle: true
 MaxEmptyLinesToKeep: 2
 SpaceBeforeCtorInitializerColon: false
 SpaceBeforeRangeBasedForLoopColon: false
-SortIncludes: false

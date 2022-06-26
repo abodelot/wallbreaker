@@ -1,5 +1,5 @@
-#include <cstdio>
 #include "BitmapFont.hpp"
+#include <cstdio>
 
 
 BitmapFont::BitmapFont():

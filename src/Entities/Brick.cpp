@@ -1,7 +1,7 @@
 #include "Brick.hpp"
+#include "Core/Effect.hpp"
 #include "Core/Resources.hpp"
 #include "Core/SoundSystem.hpp"
-#include "Core/Effect.hpp"
 #include "Entities/Context.hpp"
 #include "Utils/Math.hpp"
 

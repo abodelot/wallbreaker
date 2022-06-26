@@ -1,5 +1,5 @@
-#include <iostream>
 #include "LevelManager.hpp"
+#include <iostream>
 
 /**
  * Number of bytes for each level in the levels file

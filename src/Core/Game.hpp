@@ -20,9 +20,10 @@ public:
     static Game& getInstance();
 
     /**
-     * Init application and set current working directory
+     * Init application and set application directory
+     * @param command: argv[0]
      */
-    void init(const std::string& path);
+    void init(const std::string& command);
 
     /**
      * Enter application main loop

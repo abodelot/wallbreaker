@@ -28,13 +28,21 @@ See *How to build from source* section for Linux support.
 
 ![editor](screenshots/editor.png)
 
+## Where is the configuration file?
+
+- Linux: `$HOME/.config/wallbreaker/settings.ini`
+- MacOS: `$HOME/Library/Application Support/wallbreaker/settings.ini`
+- Windows: `$APPDATA\wallbreaker\settings.ini`
+
 ## How to build from source?
 
 1. Install SFML (www.sfml-dev.org). For Debian/Ubuntu, install `libsfml-dev` package.
 2. Run the make command: `make`
 3. Run game: `./wallbreaker`
 
-If you want to use another build system or an IDE, add the `src` directory to the list of directories to be searched for header files.
+If you want to use another build system or an IDE:
+- add the `src` directory to the list of directories to be searched for header files.
+- c++17 is required
 
 ## About development
 
@@ -43,7 +51,7 @@ If you want to use another build system or an IDE, add the `src` directory to th
 
 Contributions are welcome!
 
-Credits :
+Credits:
 
 - Sounds by Cabeeno Rossley: www.freesound.org/people/Cabeeno%20Rossley/
 - Background music by Joshua Hardin

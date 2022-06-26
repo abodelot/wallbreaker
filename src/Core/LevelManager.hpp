@@ -1,16 +1,16 @@
 #ifndef LEVEL_MANAGER_HPP
 #define LEVEL_MANAGER_HPP
 
-#include <fstream>
 #include "Config.hpp"
 #include "Entities/Brick.hpp"
+#include <fstream>
 
 class LevelManager: public sf::Drawable, public sf::Transformable, sf::NonCopyable
 {
 public:
-    static const int NB_BRICK_LINES = 29; // number of lines
-    static const int NB_BRICK_COLS  = 13; // number of columns
-    static const int BORDER_SIZE    = 8;  // size of the frame around the game scene
+    static constexpr int NB_BRICK_LINES = 29; // number of lines
+    static constexpr int NB_BRICK_COLS  = 13; // number of columns
+    static constexpr int BORDER_SIZE    = 8;  // size of the frame around the game scene
 
     static LevelManager& getInstance();
 

@@ -3,14 +3,14 @@
 
 // Application hard-coded global properties
 
-#define APP_TITLE         "Wallbreaker"
-#define APP_WIDTH         320
-#define APP_HEIGHT        240
-#define APP_FPS           60
+#define APP_TITLE  "Wallbreaker"
+#define APP_WIDTH  320
+#define APP_HEIGHT 240
+#define APP_FPS    60
 
-#define APP_AUTHOR        "Alexandre Bodelot"
-#define APP_VERSION       "0.3"
-#define APP_URL           "https://github.com/abodelot/wallbreaker"
+#define APP_AUTHOR  "Alexandre Bodelot"
+#define APP_VERSION "0.3"
+#define APP_URL     "https://github.com/abodelot/wallbreaker"
 
 // Paths
 
@@ -20,6 +20,6 @@
 
 // Game
 
-#define MAX_PLAYER_LIVES  5
+#define MAX_PLAYER_LIVES 5
 
 #endif // CONFIG_HPP

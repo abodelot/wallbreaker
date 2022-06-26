@@ -1,13 +1,14 @@
 #include "Game.hpp"
 #include "Config.hpp"
-#include "Resources.hpp"
+#include "Gui/Theme.hpp"
 #include "LevelManager.hpp"
+#include "Resources.hpp"
 #include "Settings.hpp"
 #include "SoundSystem.hpp"
 #include "States/State.hpp"
-#include "Gui/Theme.hpp"
 #include "Utils/IniParser.hpp"
-#include "Utils/FileSystem.hpp"
+#include "Utils/Os.hpp"
+#include <filesystem>
 #include <iostream>
 
 
@@ -32,30 +33,40 @@ Game::~Game()
 }
 
 
-void Game::init(const std::string& path)
+void Game::init(const std::string& command)
 {
-    // Set application directory: compute dirname from path
-    m_appDir = filesystem::dirname(path);
+    // Get dirname from the command and set application directory
+    m_appDir = std::filesystem::path(command).parent_path().string() + "/";
 
     // Init resources search directory
     Resources::setSearchPath(m_appDir + "/resources/");
 
     // Init levels
-    std::cout << "* loading levels from " << APP_LEVEL_FILE << std::endl;
-    LevelManager::getInstance().openFromFile(m_appDir + APP_LEVEL_FILE);
+    std::string levelPath = m_appDir + APP_LEVEL_FILE;
+    std::cout << "* loading levels: \"" << levelPath << '"' << std::endl;
+    LevelManager::getInstance().openFromFile(levelPath);
 
     initGuiTheme();
 
     SoundSystem::openMusicFromFile(m_appDir + "/resources/musics/evolution_sphere.ogg");
 
-    // Load configuration from settings file
-    IniParser config;
-    if (config.load(m_appDir + APP_SETTINGS_FILE))
+    // Init application config directory
+    std::filesystem::path configPath = os::config_path("wallbreaker");
+    if (!std::filesystem::is_directory(configPath))
     {
-        std::cout << "* loading settings from " << APP_SETTINGS_FILE << std::endl;
+        std::cout << "* create directory: " << configPath << std::endl;
+        std::filesystem::create_directory(configPath);
+    }
+
+    // Load configuration from settings file
+    configPath.append(APP_SETTINGS_FILE);
+    IniParser config;
+    if (config.load(configPath.string()))
+    {
+        std::cout << "* loading config: " << configPath << std::endl;
         config.seek_section("Wallbreaker");
-        size_t app_width = config.get("app_width", APP_WIDTH * 2);
-        size_t app_height = config.get("app_height", APP_HEIGHT * 2);
+        unsigned int app_width = config.get("app_width", APP_WIDTH * 2);
+        unsigned int app_height = config.get("app_height", APP_HEIGHT * 2);
         m_fullscreen = config.get("fullscreen", false);
         if (m_fullscreen)
             setFullscreen();
@@ -141,7 +152,10 @@ void Game::quit()
     config.set("fullscreen", m_fullscreen);
     config.set("sound", SoundSystem::isSoundEnabled());
     config.set("music", SoundSystem::isMusicEnabled());
-    config.save(m_appDir + APP_SETTINGS_FILE);
+
+    std::filesystem::path configPath = os::config_path("wallbreaker") / APP_SETTINGS_FILE;
+    std::cout << "* save config to: " << configPath << std::endl;
+    config.save(configPath.string());
 
     SoundSystem::stopAll();
 }
@@ -232,10 +246,8 @@ void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
     std::string screenshotPath = m_appDir + APP_SCREENSHOT_DIR;
-    if (!filesystem::is_directory(screenshotPath))
-    {
-        filesystem::create_directory(screenshotPath);
-    }
+    if (!std::filesystem::is_directory(screenshotPath))
+        std::filesystem::create_directory(screenshotPath);
 
     char currentTime[20]; // YYYY-MM-DD_HH-MM-SS + \0
     time_t t = time(nullptr);

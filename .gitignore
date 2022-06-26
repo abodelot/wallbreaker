@@ -1,9 +1,6 @@
 # Executable
 wallbreaker
 
-# Settings file
-settings.ini
-
 # Code::Blocks non-mandatory files
 wallbreaker.layout
 wallbreaker.depend

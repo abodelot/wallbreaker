@@ -1,6 +1,6 @@
 #include "Wallbreaker.hpp"
-#include "Core/Game.hpp"
 #include "Core/Effect.hpp"
+#include "Core/Game.hpp"
 #include "Core/LevelManager.hpp"
 #include "Core/Resources.hpp"
 #include "Core/Settings.hpp"
@@ -8,8 +8,8 @@
 #include "Entities/Context.hpp"
 #include "Entities/LaserBeam.hpp"
 #include "Entities/PowerUp.hpp"
-#include "Gui/Theme.hpp"
 #include "Gui/Label.hpp"
+#include "Gui/Theme.hpp"
 #include "Utils/Math.hpp"
 
 #define X_OFFSET 32
