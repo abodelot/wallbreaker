@@ -50,9 +50,16 @@ public:
     void restorePreviousState();
 
     /**
-     * Set application window dimension
+     * Create window (windowed mode), with given dimension
      */
-    void setResolution(size_t width, size_t height);
+    void setResolution(unsigned int width, unsigned int height);
+
+    /**
+     * Create window (fullscreen mode)
+     */
+    void setFullscreen();
+
+    bool isFullscreen() const;
 
     /**
      * Get application render window
@@ -71,7 +78,10 @@ private:
 
     void initGuiTheme();
 
+    void setWindowProperties();
+
     sf::RenderWindow m_window;
+    bool             m_fullscreen;
     bool             m_running;
     std::string      m_appDir;
     sf::View         m_view;

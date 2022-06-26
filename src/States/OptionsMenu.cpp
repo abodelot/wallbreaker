@@ -14,28 +14,37 @@ OptionsMenu::OptionsMenu():
     m_menu.addLabel("Options")->setCharacterSize(2);
 
     // Create checkbox for turning music on/off
-    m_ck_music = new gui::CheckBox(SoundSystem::isMusicEnabled());
-    m_ck_music->setCallback([this]() { SoundSystem::enableMusic(m_ck_music->isChecked()); });
+    m_ckMusic = new gui::CheckBox(SoundSystem::isMusicEnabled());
+    m_ckMusic->setCallback([this]() { SoundSystem::enableMusic(m_ckMusic->isChecked()); });
 
     // Create checkbox for turning sound on/off
-    m_ck_sound = new gui::CheckBox(SoundSystem::isSoundEnabled());
-    m_ck_sound->setCallback([this]() {
-        SoundSystem::enableSound(m_ck_sound->isChecked());
-        if (m_ck_sound->isChecked())
+    m_ckSound = new gui::CheckBox(SoundSystem::isSoundEnabled());
+    m_ckSound->setCallback([this]() {
+        SoundSystem::enableSound(m_ckSound->isChecked());
+        if (m_ckSound->isChecked())
         {
             SoundSystem::playSound("ball.ogg");
         }
     });
 
     // Create options box for selecting a resolution
-    m_opt_resolution = new gui::OptionsBox<sf::Vector2u>;
-    addResolution({APP_WIDTH, APP_HEIGHT});
-    addResolution({APP_WIDTH * 2, APP_HEIGHT * 2});
-    addResolution({APP_WIDTH * 3, APP_HEIGHT * 3});
-    addResolution({APP_WIDTH * 4, APP_HEIGHT * 4});
-    m_opt_resolution->setCallback([this]() {
-        const sf::Vector2u& res = m_opt_resolution->getSelectedValue();
-        Game::getInstance().setResolution(res.x, res.y);
+    m_optResolution = new gui::OptionsBox<sf::Vector2u>;
+
+    const sf::VideoMode& desktop = sf::VideoMode::getDesktopMode();
+    sf::Vector2u resolution(APP_WIDTH, APP_HEIGHT);
+    while (resolution.x < desktop.width && resolution.y < desktop.height)
+    {
+        addResolution(resolution);
+        resolution.x += APP_WIDTH;
+        resolution.y += APP_HEIGHT;
+    }
+    m_optResolution->addItem("Fullscreen", {0, 0}, Game::getInstance().isFullscreen());
+    m_optResolution->setCallback([this]() {
+        const sf::Vector2u& res = m_optResolution->getSelectedValue();
+        if (res.x == 0 && res.y == 0)
+            Game::getInstance().setFullscreen();
+        else
+            Game::getInstance().setResolution(res.x, res.y);
     });
 
     // Back button
@@ -44,9 +53,9 @@ OptionsMenu::OptionsMenu():
 
     // Add widgets in form
     gui::Layout* form = m_menu.addLayout(gui::Layout::Form);
-    form->addRow("Music:", m_ck_music);
-    form->addRow("Sound:", m_ck_sound);
-    form->addRow("Resolution:", m_opt_resolution);
+    form->addRow("Music:", m_ckMusic);
+    form->addRow("Sound:", m_ckSound);
+    form->addRow("Resolution:", m_optResolution);
     form->addRow("", btnBack);
 }
 
@@ -67,7 +76,7 @@ void OptionsMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void OptionsMenu::addResolution(const sf::Vector2u& res)
 {
     sf::Vector2u current = Game::getInstance().getWindow().getSize();
-    m_opt_resolution->addItem(std::to_string(res.x) + "x" + std::to_string(res.y), res,
+    m_optResolution->addItem(std::to_string(res.x) + "x" + std::to_string(res.y), res,
         res == current // Default selection is current resolution
     );
 }

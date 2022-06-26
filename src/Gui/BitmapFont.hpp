@@ -40,8 +40,8 @@ private:
     sf::Texture m_texture;
     int         m_width;
     int         m_height;
-    int         m_glyph_width;
-    int         m_glyph_height;
+    int         m_glyphWidth;
+    int         m_glyphHeight;
 };
 
 

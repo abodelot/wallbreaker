@@ -29,28 +29,29 @@ Box<T>::Box(const T& item):
 template <class T>
 const sf::Vector2f& Box<T>::getPosition() const
 {
-    return m_background[0].position;
+    return m_topLeftBorder[0].position;
 }
 
 
 template <class T>
-void Box<T>::move(float dx, float dy)
+void Box<T>::setPosition(float x, float y)
 {
-    const sf::Vector2f delta(dx, dy);
+    const sf::Vector2f delta = sf::Vector2f(x, y) - getPosition();
     for (size_t i = 0; i < 4; ++i)
     {
         m_background[i].position += delta;
         m_topLeftBorder[i].position += delta;
         m_bottomRightBorder[i].position += delta;
     }
-
-    m_item.move(dx, dy);
+    m_item.move(delta.x, delta.y);
 }
 
 
 template <class T>
 void Box<T>::setSize(float width, float height)
 {
+    const sf::Vector2f pos = getPosition();
+
     // Borders
     m_topLeftBorder[0].position = {0, 0};
     m_topLeftBorder[1].position = {width, 0};
@@ -71,6 +72,9 @@ void Box<T>::setSize(float width, float height)
     m_background[3].position = {Theme::borderSize, innerHeight};
 
     centerItem();
+
+    // Restore position
+    setPosition(pos.x, pos.y);
 }
 
 

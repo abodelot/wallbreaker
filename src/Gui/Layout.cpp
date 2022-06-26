@@ -87,9 +87,9 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget)
 
     // Widget on the right side
     float width = label->getSize().x + Theme::margin;
-    if (width > m_form.label_width)
+    if (width > m_form.labelWidth)
     {
-        m_form.label_width = width;
+        m_form.labelWidth = width;
         size_t i = 0;
         for (Widget* w = m_first; w != nullptr; w = w->m_next)
         {
@@ -101,7 +101,7 @@ Widget* Layout::addRow(const sf::String& str, Widget* widget)
     }
 
     widget->setPosition(
-        m_form.label_width,
+        m_form.labelWidth,
         // Align bottom of widget with bottom of label
         pos.y + (Theme::font.getGlyphHeight() + Theme::padding - widget->getSize().y));
     push(widget);

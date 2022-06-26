@@ -8,14 +8,8 @@ OptionsBox<T>::OptionsBox():
     m_currentIndex(-1),
     m_box(BitmapText(Theme::font))
 {
-    sf::Vector2f size(Theme::widgetWidth, Theme::getBaseHeight());
-
     // Build visual components
-    m_box.setSize(
-        Theme::widgetWidth - Theme::getBaseHeight() * 2,
-        Theme::getBaseHeight()
-    );
-    m_box.move(Theme::getBaseHeight(), 0);
+    m_box.setPosition(Theme::getBaseHeight(), 0);
     m_box.item().setColor(Theme::textColor);
 
     // Pack left arrow
@@ -28,10 +22,9 @@ OptionsBox<T>::OptionsBox():
     m_arrowRight.item().build(arrowSize, Arrow::Right);
     m_arrowRight.item().setColor(Theme::textColor);
     m_arrowRight.setSize(Theme::getBaseHeight(), Theme::getBaseHeight());
-    m_arrowRight.move(Theme::widgetWidth - Theme::getBaseHeight(), 0);
 
-    // Widget local bounds
-    setSize(size);
+    // Content box will grow automatically when adding items
+    resizeContentBox(16);
 }
 
 
@@ -39,6 +32,11 @@ template <class T>
 void OptionsBox<T>::addItem(const sf::String& label, const T& value, bool select)
 {
     m_items.push_back(Item(label, value));
+
+    // Compute the label width when it will be rendered to a BitmapText
+    const int contentWidth = label.getSize() * Theme::font.getGlyphWidth() + Theme::padding * 2;
+    if (contentWidth > m_box.getSize().x)
+        resizeContentBox(contentWidth);
 
     // First inserted item is default selection
     if (m_items.size() == 1)
@@ -209,6 +207,21 @@ void OptionsBox<T>::onKeyReleased(sf::Keyboard::Key key)
     {
         m_arrowRight.release();
     }
+}
+
+
+template <class T>
+void OptionsBox<T>::resizeContentBox(float width)
+{
+    // Resize the content box
+    const float height = Theme::getBaseHeight();
+    m_box.setSize(width, height);
+
+    // Move right arrow after the content box
+    m_arrowRight.setPosition(m_arrowLeft.getSize().x + width, 0);
+
+    // Update widget local bounds
+    setSize({m_arrowRight.getPosition().x + m_arrowRight.getSize().x, height});
 }
 
 

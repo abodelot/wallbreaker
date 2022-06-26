@@ -82,11 +82,11 @@ private:
     struct FormInfo // Layout::Form
     {
         FormInfo():
-            label_width(0.f)
+            labelWidth(0.f)
         {
         }
 
-        float label_width;
+        float labelWidth;
     };
     FormInfo m_form;
 };

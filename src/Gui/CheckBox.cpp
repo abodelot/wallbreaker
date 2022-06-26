@@ -62,7 +62,7 @@ void CheckBox::onMouseReleased(const sf::Vector2f& pos)
 
 void CheckBox::onKeyPressed(sf::Keyboard::Key key)
 {
-    if (key == sf::Keyboard::Space)
+    if (key == sf::Keyboard::Space || key == sf::Keyboard::Return)
     {
         check(!m_checked);
         triggerCallback();

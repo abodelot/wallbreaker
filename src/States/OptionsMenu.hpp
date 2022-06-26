@@ -28,9 +28,9 @@ private:
     sf::Sprite m_background;
     // Gui elements
     gui::Menu                      m_menu;
-    gui::CheckBox*                 m_ck_music;
-    gui::CheckBox*                 m_ck_sound;
-    gui::OptionsBox<sf::Vector2u>* m_opt_resolution;
+    gui::CheckBox*                 m_ckMusic;
+    gui::CheckBox*                 m_ckSound;
+    gui::OptionsBox<sf::Vector2u>* m_optResolution;
 };
 
 #endif // OPTIONSMENU_HPP

@@ -19,7 +19,9 @@ Game& Game::getInstance()
 
 
 Game::Game():
+    m_fullscreen(false),
     m_running(true),
+    m_view(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT)),
     m_currentState(nullptr)
 {
 }
@@ -54,7 +56,11 @@ void Game::init(const std::string& path)
         config.seek_section("Wallbreaker");
         size_t app_width = config.get("app_width", APP_WIDTH * 2);
         size_t app_height = config.get("app_height", APP_HEIGHT * 2);
-        setResolution(app_width, app_height);
+        m_fullscreen = config.get("fullscreen", false);
+        if (m_fullscreen)
+            setFullscreen();
+        else
+            setResolution(app_width, app_height);
 
         Settings::highscore = config.get("highscore", 0);
 
@@ -132,6 +138,7 @@ void Game::quit()
     config.set("highscore", Settings::highscore);
     config.set("app_width", m_window.getSize().x);
     config.set("app_height", m_window.getSize().y);
+    config.set("fullscreen", m_fullscreen);
     config.set("sound", SoundSystem::isSoundEnabled());
     config.set("music", SoundSystem::isMusicEnabled());
     config.save(m_appDir + APP_SETTINGS_FILE);
@@ -169,24 +176,49 @@ void Game::restorePreviousState()
 }
 
 
-void Game::setResolution(size_t width, size_t height)
+void Game::setResolution(unsigned int width, unsigned int height)
 {
-    if (m_window.isOpen())
+    if (m_window.isOpen() && !m_fullscreen)
     {
-        m_window.close();
+        m_window.setSize({width, height});
     }
-    m_window.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
-    m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
-    m_window.setView(m_view);
-    m_window.setFramerateLimit(APP_FPS);
-    m_window.setKeyRepeatEnabled(false);
+    else
+    {
+        m_window.create(sf::VideoMode(width, height), APP_TITLE, sf::Style::Close);
+    }
+    std::cout << "* set resolution: " << width << "x" << height << std::endl;
+
+    m_fullscreen = false;
+    setWindowProperties();
 
     // Center window on desktop
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     m_window.setPosition(sf::Vector2i((desktop.width - width) / 2, (desktop.height - height) / 2));
+
     // Set application icon
     sf::Image icon = Resources::getTexture("application-icon.png").copyToImage();
     m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+}
+
+
+void Game::setFullscreen()
+{
+    const sf::VideoMode& desktop = sf::VideoMode::getDesktopMode();
+    // Preserve aspect ratio
+    const int ratio = std::min(desktop.width / APP_WIDTH, desktop.height / APP_HEIGHT);
+    sf::VideoMode mode(APP_WIDTH * ratio, APP_HEIGHT * ratio);
+    m_window.create(mode, APP_TITLE, sf::Style::Fullscreen);
+
+    std::cout << "* set resolution: " << mode.width << "x" << mode.height << " (fullscreen)"
+              << std::endl;
+    m_fullscreen = true;
+    setWindowProperties();
+}
+
+
+bool Game::isFullscreen() const
+{
+    return m_fullscreen;
 }
 
 
@@ -206,7 +238,7 @@ void Game::takeScreenshot() const
     }
 
     char currentTime[20]; // YYYY-MM-DD_HH-MM-SS + \0
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     strftime(currentTime, sizeof currentTime, "%Y-%m-%d_%H-%M-%S", localtime(&t));
     std::string filename = screenshotPath + "/" + currentTime + ".png";
 
@@ -217,4 +249,12 @@ void Game::takeScreenshot() const
     {
         std::cout << "screenshot saved to " << filename << std::endl;
     }
+}
+
+
+void Game::setWindowProperties()
+{
+    m_window.setView(m_view);
+    m_window.setFramerateLimit(APP_FPS);
+    m_window.setKeyRepeatEnabled(false);
 }

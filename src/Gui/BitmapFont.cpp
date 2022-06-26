@@ -5,8 +5,8 @@
 BitmapFont::BitmapFont():
     m_width(0),
     m_height(0),
-    m_glyph_width(0),
-    m_glyph_height(0)
+    m_glyphWidth(0),
+    m_glyphHeight(0)
 {
 }
 
@@ -19,8 +19,8 @@ bool BitmapFont::loadFromFile(const std::string& image_path, int width, int heig
         m_height = height;
 
         // Compute character area from image dimensions
-        m_glyph_width = m_texture.getSize().x / m_width;
-        m_glyph_height = m_texture.getSize().y / m_height;
+        m_glyphWidth = m_texture.getSize().x / m_width;
+        m_glyphHeight = m_texture.getSize().y / m_height;
         return true;
     }
     return false;
@@ -43,21 +43,21 @@ sf::IntRect BitmapFont::getGlyphRect(char character) const
     character -= FIRST_CHAR;
 
     sf::IntRect subrect;
-    subrect.left = (character % m_width) * m_glyph_width;
-    subrect.width = m_glyph_width;
-    subrect.top = (character / m_width) * m_glyph_height;
-    subrect.height = m_glyph_height;
+    subrect.left = (character % m_width) * m_glyphWidth;
+    subrect.width = m_glyphWidth;
+    subrect.top = (character / m_width) * m_glyphHeight;
+    subrect.height = m_glyphHeight;
     return subrect;
 }
 
 
 int BitmapFont::getGlyphHeight() const
 {
-    return m_glyph_height;
+    return m_glyphHeight;
 }
 
 
 int BitmapFont::getGlyphWidth() const
 {
-    return m_glyph_width;
+    return m_glyphWidth;
 }

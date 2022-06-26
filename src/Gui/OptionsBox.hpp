@@ -68,6 +68,8 @@ private:
 
     void updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos);
 
+    void resizeContentBox(float width);
+
     struct Item
     {
         Item(const sf::String& string, const T& value);

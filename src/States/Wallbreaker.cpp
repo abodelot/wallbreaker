@@ -306,7 +306,7 @@ void Wallbreaker::applyOnEachBall(Ball::ActionPointer action)
     for (Entity*& entity: m_entities)
     {
         Ball* ball = entity->toBall();
-        if (ball != NULL)
+        if (ball != nullptr)
         {
             (ball->*action)();
         }

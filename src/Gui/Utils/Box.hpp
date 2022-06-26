@@ -22,7 +22,8 @@ public:
      */
     const sf::Vector2f& getPosition() const;
 
-    void move(float dx, float dy);
+    void setPosition(float x, float y);
+
 
     /**
      * Set the box dimensions

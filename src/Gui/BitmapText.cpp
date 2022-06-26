@@ -147,10 +147,10 @@ void BitmapText::updateGeometry()
         float v2 = static_cast<float>(glyph.top + glyph.height);
 
         // Add a quad for the current character
-        m_vertices.append(sf::Vertex(sf::Vector2f(x, y), m_color, sf::Vector2f(u1, v1)));
-        m_vertices.append(sf::Vertex(sf::Vector2f(x + right, y), m_color, sf::Vector2f(u2, v1)));
-        m_vertices.append(sf::Vertex(sf::Vector2f(x + right, y + bottom), m_color, sf::Vector2f(u2, v2)));
-        m_vertices.append(sf::Vertex(sf::Vector2f(x, y + bottom), m_color, sf::Vector2f(u1, v2)));
+        m_vertices.append(sf::Vertex({x, y}, m_color, {u1, v1}));
+        m_vertices.append(sf::Vertex({x + right, y}, m_color, {u2, v1}));
+        m_vertices.append(sf::Vertex({x + right, y + bottom}, m_color, {u2, v2}));
+        m_vertices.append(sf::Vertex({x, y + bottom}, m_color, {u1, v2}));
 
         // Advance to the next character
         x += glyph.width;
