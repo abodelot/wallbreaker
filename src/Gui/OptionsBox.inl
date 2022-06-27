@@ -99,7 +99,7 @@ void OptionsBox<T>::selectPrevious()
 template <class T>
 void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    transformStates(states);
+    states.transform *= getTransform();
     target.draw(m_box, states);
     target.draw(m_arrowLeft, states);
     target.draw(m_arrowRight, states);
@@ -107,19 +107,19 @@ void OptionsBox<T>::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 
 template <class T>
-void OptionsBox<T>:: updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos)
+bool OptionsBox<T>::updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos)
 {
     if (arrow.containsPoint(pos))
     {
+        setCursor(sf::Cursor::Hand);
         if (isFocused() && sf::Mouse::isButtonPressed(sf::Mouse::Left))
             arrow.press();
         else
             arrow.prelight();
+        return true;
     }
-    else
-    {
-        arrow.applyState(isFocused() ? StateFocused : StateDefault);
-    }
+    arrow.applyState(isFocused() ? StateFocused : StateDefault);
+    return false;
 }
 
 
@@ -139,10 +139,19 @@ void OptionsBox<T>::onStateChanged(State state)
 
 
 template <class T>
+void OptionsBox<T>::onMouseLeave()
+{
+    // Because only the arrows are clickable, the cursor is reset via onMouseMoved,
+    // not via onMouseEnter
+    setCursor(sf::Cursor::Arrow);
+}
+
+
+template <class T>
 void OptionsBox<T>::onMouseMoved(const sf::Vector2f& pos)
 {
-    updateArrow(m_arrowLeft, pos);
-    updateArrow(m_arrowRight, pos);
+    if (!updateArrow(m_arrowLeft, pos) && !updateArrow(m_arrowRight, pos))
+        setCursor(sf::Cursor::Arrow);
 }
 
 

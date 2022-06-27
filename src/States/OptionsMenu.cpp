@@ -69,7 +69,7 @@ void OptionsMenu::onEvent(const sf::Event& event)
 void OptionsMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(m_background, states);
-    m_menu.show();
+    target.draw(m_menu, states);
 }
 
 

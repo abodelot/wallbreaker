@@ -10,15 +10,12 @@ namespace gui
 class Menu: public gui::Layout
 {
 public:
-    Menu(sf::RenderTarget& window);
+    Menu(sf::RenderWindow& window);
 
     /**
-     * Handle event and send it to widgets
-     * @return triggered widget ID, or -1 if none
+     * Handle event and propagate it to widgets
      */
     void onEvent(const sf::Event& event);
-
-    void show(sf::RenderStates states = sf::RenderStates::Default) const;
 
 private:
     /**
@@ -29,7 +26,10 @@ private:
      */
     sf::Vector2f convertMousePosition(int x, int y) const;
 
-    sf::RenderTarget& m_window;
+    void setCursor(sf::Cursor::Type cursorType) override;
+
+    sf::RenderWindow& m_window;
+    sf::Cursor::Type m_cursorType;
 };
 
 }

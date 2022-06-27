@@ -176,15 +176,15 @@ void Editor::onFocus()
 }
 
 
-void Editor::draw(sf::RenderTarget& target, sf::RenderStates) const
+void Editor::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(m_background);
-    target.draw(m_borders_sprite);
-    target.draw(m_level_sprite);
-    target.draw(m_cursor);
+    target.draw(m_background, states);
+    target.draw(m_borders_sprite, states);
+    target.draw(m_level_sprite, states);
+    target.draw(m_cursor, states);
 
     // Draw GUI menu
-    m_menu.show();
+    target.draw(m_menu, states);
 }
 
 

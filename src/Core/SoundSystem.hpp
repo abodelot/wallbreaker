@@ -1,8 +1,8 @@
 #ifndef SOUNDSYSTEM_HPP
 #define SOUNDSYSTEM_HPP
 
-#include <string>
 #include <SFML/Audio.hpp>
+#include <string>
 
 /**
  * Static class for playing sound effects and music
@@ -53,15 +53,15 @@ public:
     static void stopAll();
 
 private:
-    static const int MAX_SOUNDS = 20;
+    static constexpr int MAX_SOUNDS = 20;
 
-    static sf::Sound   m_sounds[MAX_SOUNDS];
-    static int         m_lastSoundPlayed;
-    static sf::Music   m_music;
-    static int         m_musicVolume;
-    static int         m_soundVolume;
-    static bool        m_enableMusic;
-    static bool        m_enableSound;
+    static sf::Sound m_sounds[MAX_SOUNDS];
+    static int m_lastSoundPlayed;
+    static sf::Music m_music;
+    static int m_musicVolume;
+    static int m_soundVolume;
+    static bool m_enableMusic;
+    static bool m_enableSound;
 };
 
 #endif // SOUNDSYSTEM_HPP

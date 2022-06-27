@@ -56,6 +56,6 @@ void Label::setCharacterSize(int size)
 
 void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    transformStates(states);
+    states.transform *= getTransform();
     target.draw(m_text, states);
 }

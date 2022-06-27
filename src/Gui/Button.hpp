@@ -26,6 +26,8 @@ public:
     // callbacks ---------------------------------------------------------------
 
     void onStateChanged(State state) override;
+    void onMouseEnter() override;
+    void onMouseLeave() override;
     void onMouseMoved(const sf::Vector2f& pos) override;
     void onMousePressed(const sf::Vector2f& pos) override;
     void onMouseReleased(const sf::Vector2f& pos) override;

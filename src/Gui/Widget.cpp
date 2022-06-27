@@ -10,12 +10,14 @@ Widget::Widget():
     m_state(StateDefault),
     m_selectable(true)
 {
+    updateTransform();
 }
 
 
 void Widget::setPosition(const sf::Vector2f& pos)
 {
     m_position = pos;
+    updateTransform();
 }
 
 
@@ -23,6 +25,7 @@ void Widget::setPosition(float x, float y)
 {
     m_position.x = x;
     m_position.y = y;
+    updateTransform();
 }
 
 
@@ -109,9 +112,23 @@ State Widget::getState() const
 }
 
 
-void Widget::transformStates(sf::RenderStates& states) const
+void Widget::setCursor(sf::Cursor::Type cursorType)
 {
-    states.transform *= sf::Transform(
+    if (m_parent)
+        m_parent->setCursor(cursorType);
+}
+
+
+const sf::Transform& Widget::getTransform() const
+{
+    return m_transform;
+}
+
+
+void Widget::updateTransform()
+{
+    // Position is the only transformation
+    m_transform = sf::Transform(
         1, 0, m_position.x,
         0, 1, m_position.y,
         0, 0, 1);

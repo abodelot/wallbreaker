@@ -1,6 +1,6 @@
 #include "SoundSystem.hpp"
 #include "Resources.hpp"
-
+#include "Utils/Math.hpp"
 
 sf::Sound SoundSystem::m_sounds[MAX_SOUNDS];
 int SoundSystem::m_lastSoundPlayed = 0;
@@ -9,16 +9,6 @@ int SoundSystem::m_musicVolume = 100;
 int SoundSystem::m_soundVolume = 100;
 bool SoundSystem::m_enableMusic = true;
 bool SoundSystem::m_enableSound = true;
-
-template <class T>
-static inline void clamp(T& value, T min, T max)
-{
-    if (value > max)
-        value = max;
-    else if (value < min)
-        value = min;
-}
-
 
 bool SoundSystem::openMusicFromFile(const std::string& path)
 {
@@ -77,8 +67,7 @@ void SoundSystem::playSound(const std::string& filename, float pitch)
 
 void SoundSystem::setMusicVolume(int volume)
 {
-    clamp(volume, 0, 100);
-    m_musicVolume = volume;
+    m_musicVolume = math::clamp(volume, 0, 100);
     m_music.setVolume(volume);
 }
 
@@ -91,8 +80,7 @@ int SoundSystem::getMusicVolume()
 
 void SoundSystem::setSoundVolume(int volume)
 {
-    clamp(volume, 0, 100);
-    m_soundVolume = volume;
+    m_soundVolume = math::clamp(volume, 0, 100);
     for (int i = 0; i < MAX_SOUNDS; ++i)
     {
         m_sounds[i].setVolume(volume);

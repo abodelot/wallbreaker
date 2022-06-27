@@ -129,6 +129,7 @@ void Game::initGuiTheme()
     // Load assets for GUI
     gui::Theme::font.loadFromFile(m_appDir + "/resources/images/font.png");
     gui::Theme::clickSound.setBuffer(Resources::getSoundBuffer("click.ogg"));
+    gui::Theme::cursor.loadFromSystem(sf::Cursor::Arrow);
 
     gui::Theme::textColor = gui::hexToColor("#d9d9f5");
     gui::Theme::backgroundColor = gui::hexToColor("#573062");
@@ -269,4 +270,6 @@ void Game::setWindowProperties()
     m_window.setView(m_view);
     m_window.setFramerateLimit(APP_FPS);
     m_window.setKeyRepeatEnabled(false);
+    m_window.setMouseCursorGrabbed(true);
+    m_window.setMouseCursor(gui::Theme::cursor);
 }

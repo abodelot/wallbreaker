@@ -20,6 +20,7 @@ float Theme::margin(7.f);
 sf::Sound Theme::clickSound;
 
 BitmapFont Theme::font;
+sf::Cursor Theme::cursor;
 
 float Theme::getBaseHeight()
 {

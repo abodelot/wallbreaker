@@ -57,6 +57,7 @@ public:
     // callbacks ---------------------------------------------------------------
 
     void onStateChanged(State state) override;
+    void onMouseLeave() override;
     void onMouseMoved(const sf::Vector2f& pos) override;
     void onMousePressed(const sf::Vector2f& pos) override;
     void onMouseReleased(const sf::Vector2f& pos) override;
@@ -66,7 +67,12 @@ public:
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos);
+    /**
+     * Update the visual state of the arrow
+     * @param pos: relative mouse position
+     * @return true is mouse is hovering the arrow
+     */
+    bool updateArrow(Box<Arrow>& arrow, const sf::Vector2f& pos);
 
     void resizeContentBox(float width);
 
@@ -79,13 +85,13 @@ private:
     };
 
     typedef std::vector<Item> ItemVector;
-    ItemVector         m_items;
-    size_t             m_currentIndex;
+    ItemVector m_items;
+    size_t m_currentIndex;
 
     // Visual components
-    Box<BitmapText>    m_box;
-    Box<Arrow>         m_arrowLeft;
-    Box<Arrow>         m_arrowRight;
+    Box<BitmapText> m_box;
+    Box<Arrow> m_arrowLeft;
+    Box<Arrow> m_arrowRight;
 };
 
 }

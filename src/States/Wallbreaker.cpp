@@ -241,11 +241,11 @@ void Wallbreaker::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(m_titleText);
         if (m_status == PAUSED)
         {
-            m_pauseMenu.show();
+            target.draw(m_pauseMenu, states);
         }
         else if (m_status == GAME_OVER)
         {
-            m_gameOverMenu.show();
+            target.draw(m_gameOverMenu, states);
         }
     }
 }

@@ -26,8 +26,6 @@ public:
     Layout(Type type = Vertical);
     ~Layout();
 
-    Layout* addLayout(Type type);
-
     /**
      * Add a new widget in the container
      * The container will take care of widget deallocation
@@ -35,7 +33,10 @@ public:
      */
     Widget* add(Widget* widget);
 
-    // Shortcut for add(new Label)
+    /// Shortcut for: (Layout*)add(new Layout(type))
+    Layout* addLayout(Type type);
+
+    /// Shortcut for: (Label*)add(new Label())
     Label* addLabel(const sf::String& string);
 
     /**
@@ -43,10 +44,16 @@ public:
      *   gui::Button* btn = new gui::Button(label);
      *   btn->setCallback(callback);
      *   layout.add(btn);
+     * @return created button
      */
     Button* addButton(const sf::String& label, std::function<void(void)> callback);
 
-    // Add a label and a widget in a new horizontal row
+    /**
+     * Add a new horizontal row in a Form layout
+     * @param str: label (left column)
+     * @param widget: widget to add (right column)
+     * @return added widget
+     */
     Widget* addRow(const sf::String& str, Widget* widget);
 
 protected:
@@ -62,7 +69,11 @@ protected:
     void onKeyReleased(sf::Keyboard::Key key) override;
     void onTextEntered(sf::Uint32 unicode) override;
 
-    Layout* toLayout() override { return this; }
+    Layout* toLayout() override
+    {
+        return this;
+    }
+
     bool focusNextWidget();
     bool focusPreviousWidget();
 
@@ -75,7 +86,7 @@ private:
 
     Widget* m_first;
     Widget* m_last;
-    Type    m_type;
+    Type m_type;
     Widget* m_hover;
     Widget* m_focus;
 

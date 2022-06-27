@@ -31,7 +31,7 @@ void CheckBox::check(bool checked)
 
 void CheckBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    transformStates(states);
+    states.transform *= getTransform();
     target.draw(m_box, states);
 }
 
@@ -41,12 +41,24 @@ void CheckBox::onStateChanged(State state)
 {
     if (state == State::StateFocused)
     {
-        m_box.setBodyColor(sf::Color(255, 200, 180));
+        m_box.setBodyColor(sf::Color(0xff, 0xff, 0x88));
     }
     else
     {
         m_box.setBodyColor(sf::Color::White);
     }
+}
+
+
+void CheckBox::onMouseEnter()
+{
+    setCursor(sf::Cursor::Hand);
+}
+
+
+void CheckBox::onMouseLeave()
+{
+    setCursor(sf::Cursor::Arrow);
 }
 
 

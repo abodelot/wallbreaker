@@ -69,5 +69,5 @@ void MainMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_particles, states);
     target.draw(m_title, states);
     target.draw(m_aboutText, states);
-    m_menu.show();
+    target.draw(m_menu);
 }

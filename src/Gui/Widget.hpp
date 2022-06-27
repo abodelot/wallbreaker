@@ -61,6 +61,8 @@ public:
     // Callbacks ---------------------------------------------------------------
 
     virtual void onStateChanged(State state) { (void) state; }
+    virtual void onMouseEnter() {}
+    virtual void onMouseLeave() {}
     virtual void onMouseMoved(const sf::Vector2f& pos) { (void) pos; }
     virtual void onMousePressed(const sf::Vector2f& pos) { (void) pos; }
     virtual void onMouseReleased(const sf::Vector2f& pos) { (void) pos; }
@@ -80,9 +82,10 @@ protected:
     void triggerCallback();
 
     void setState(State state);
+
     State getState() const;
 
-    void transformStates(sf::RenderStates& states) const;
+    const sf::Transform& getTransform() const;
 
     /**
      * Set the widget's container (parent)
@@ -91,15 +94,20 @@ protected:
 
     virtual Layout* toLayout() { return nullptr; }
 
+    virtual void setCursor(sf::Cursor::Type cursorType);
+
 private:
-    Layout*      m_parent;
-    Widget*      m_previous;
-    Widget*      m_next;
-    State        m_state;
+    void updateTransform();
+
+    Layout* m_parent;
+    Widget* m_previous;
+    Widget* m_next;
+    State m_state;
     sf::Vector2f m_position;
     sf::Vector2f m_size;
-    bool         m_selectable;
+    sf::Transform m_transform;
 
+    bool m_selectable;
     std::function<void(void)> m_callback;
 };
 

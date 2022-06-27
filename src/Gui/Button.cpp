@@ -30,7 +30,7 @@ const sf::String& Button::getString() const
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    transformStates(states);
+    states.transform *= getTransform();
     target.draw(m_box, states);
 }
 
@@ -39,6 +39,18 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Button::onStateChanged(State state)
 {
     m_box.applyState(state);
+}
+
+
+void Button::onMouseEnter()
+{
+    setCursor(sf::Cursor::Hand);
+}
+
+
+void Button::onMouseLeave()
+{
+    setCursor(sf::Cursor::Arrow);
 }
 
 

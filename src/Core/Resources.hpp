@@ -1,12 +1,12 @@
 #ifndef RESOURCES_HPP
 #define RESOURCES_HPP
 
-#include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Image.hpp>
 
-#include <string>
 #include <map>
+#include <string>
 
 /**
  * Static class for loading and managing resources

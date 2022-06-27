@@ -1,10 +1,10 @@
 #ifndef GUI_THEME_HPP
 #define GUI_THEME_HPP
 
+#include "BitmapFont.hpp"
+#include <SFML/Audio/Sound.hpp>
 #include <map>
 #include <string>
-#include <SFML/Audio/Sound.hpp>
-#include "BitmapFont.hpp"
 
 namespace gui
 {
@@ -29,6 +29,8 @@ public:
 
     // The GUI global font
     static BitmapFont font;
+
+    static sf::Cursor cursor;
 
     /**
      * Widget height based on text height

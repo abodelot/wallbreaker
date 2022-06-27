@@ -24,6 +24,8 @@ public:
     // callbacks ---------------------------------------------------------------
 
     void onStateChanged(State state) override;
+    void onMouseEnter() override;
+    void onMouseLeave() override;
     void onMouseReleased(const sf::Vector2f& pos) override;
     void onKeyPressed(sf::Keyboard::Key key) override;
 
@@ -31,7 +33,7 @@ private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     Box<Cross> m_box;
-    bool       m_checked;
+    bool m_checked;
 };
 
 }
