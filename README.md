@@ -17,7 +17,7 @@ See *How to build from source* section for Linux support.
 - Move the paddle with the mouse to catch the ball, or use the left/right arrow keys.
 - Click or press `Space` to release balls glued to sticky paddle.
 - Click or press `Space` to shoot lasers with laser paddle.
-- Press `F2` to take a screenshot.
+- Press `F2` to take a screenshot (saved to app config directory).
 
 ## How to use the editor?
 
@@ -29,9 +29,13 @@ See *How to build from source* section for Linux support.
 
 ## Where is the configuration file?
 
+The configuration is saved in the app config directory:
+
 - Linux: `$HOME/.config/wallbreaker/settings.ini`
 - MacOS: `$HOME/Library/Application Support/wallbreaker/settings.ini`
 - Windows: `$APPDATA\wallbreaker\settings.ini`
+
+This directory also contains screenshots.
 
 ## How to build from source?
 

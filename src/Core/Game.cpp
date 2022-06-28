@@ -246,14 +246,15 @@ sf::RenderWindow& Game::getWindow()
 void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
-    std::string screenshotPath = m_appDir + APP_SCREENSHOT_DIR;
+    std::filesystem::path screenshotPath = os::config_path("wallbreaker");
+    screenshotPath.append(APP_SCREENSHOT_DIR);
     if (!std::filesystem::is_directory(screenshotPath))
         std::filesystem::create_directory(screenshotPath);
 
     char currentTime[20]; // YYYY-MM-DD_HH-MM-SS + \0
     time_t t = time(nullptr);
     strftime(currentTime, sizeof currentTime, "%Y-%m-%d_%H-%M-%S", localtime(&t));
-    std::string filename = screenshotPath + "/" + currentTime + ".png";
+    std::string filename = screenshotPath.string() + "/" + currentTime + ".png";
 
     sf::Texture texture;
     texture.create(m_window.getSize().x, m_window.getSize().y);
