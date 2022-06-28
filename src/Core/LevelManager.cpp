@@ -118,6 +118,7 @@ int LevelManager::loadNext()
 
 void LevelManager::save()
 {
+    std::cout << "* save levels to file" << std::endl;
     // Set stream cursor before current level
     m_level_file.seekp(LEVEL_BYTES * (m_current_level - 1));
     for (int i = 0; i < NB_BRICK_LINES; ++i)

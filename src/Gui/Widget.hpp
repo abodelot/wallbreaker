@@ -81,6 +81,11 @@ protected:
      */
     void triggerCallback();
 
+    /**
+     * Check if a callback has been defined with setCallback
+     */
+    bool hasCallback() const;
+
     void setState(State state);
 
     State getState() const;

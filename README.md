@@ -24,7 +24,6 @@ See *How to build from source* section for Linux support.
 - Mouse wheel up/down: change current brick type
 - Left click: add brick
 - Right click: remove brick
-- G: show/hide the grid
 
 ![editor](screenshots/editor.png)
 

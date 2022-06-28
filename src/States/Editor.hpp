@@ -12,6 +12,7 @@ namespace gui
 template <class T>
 class OptionsBox;
 class CheckBox;
+class Image;
 }
 
 class Editor: public State
@@ -39,30 +40,32 @@ private:
     /**
      * Put or remove a brick at grid index
      */
-    void setBrick(const sf::Vector2i& index);
+    void putBrick(const sf::Vector2i& index);
 
-    static const int  m_width  = LevelManager::NB_BRICK_COLS  * Brick::WIDTH;
-    static const int  m_height = LevelManager::NB_BRICK_LINES * Brick::HEIGHT;
+    void setCursorBrick(Brick::Type type);
+
+    static constexpr int m_width = LevelManager::NB_BRICK_COLS * Brick::WIDTH;
+    static constexpr int m_height = LevelManager::NB_BRICK_LINES * Brick::HEIGHT;
 
     sf::Sprite        m_background;
     LevelManager&     m_level;
     Brick             m_cursor;
-    sf::Vertex        m_cursor_prelight[4];
-    sf::Vector2i      m_cursor_coords;
+    bool              m_cursorOnBrick;
+    sf::Vector2i      m_cursorCoords;
 
-    sf::RenderTexture m_level_texture;
-    sf::Sprite        m_level_sprite;
-    sf::Sprite        m_borders_sprite;
+    sf::RenderTexture m_levelTexture;
+    sf::Sprite        m_levelSprite;
+    sf::Sprite        m_bordersSprite;
 
-    // 2 vertices per line
-    sf::Vertex        m_grid_cols[LevelManager::NB_BRICK_COLS * 2];
-    sf::Vertex        m_grid_lines[LevelManager::NB_BRICK_LINES * 2];
-    bool              m_show_grid;
+    // Grid: 2 vertices per line
+    sf::Vertex m_gridCols[LevelManager::NB_BRICK_COLS * 2];
+    sf::Vertex m_gridLines[LevelManager::NB_BRICK_LINES * 2];
 
     // GUI elements
-    gui::Menu                m_menu;
-    gui::OptionsBox<size_t>* m_opt_levels;
-    gui::CheckBox*           m_ck_grid;
+    gui::Menu m_menu;
+    gui::OptionsBox<size_t>* m_optLevels;
+    gui::CheckBox* m_ckGrid;
+    gui::Image* m_imgBrick;
 };
 
 #endif // EDITOR_HPP

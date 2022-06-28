@@ -93,6 +93,12 @@ void Widget::triggerCallback()
 }
 
 
+bool Widget::hasCallback() const
+{
+    return m_callback != nullptr;
+}
+
+
 void Widget::setParent(Layout* parent)
 {
     m_parent = parent;
